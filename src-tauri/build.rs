@@ -1,6 +1,8 @@
 fn main() {
     #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
     build_apple_intelligence_bridge();
+    #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+    build_apple_speech_bridge();
 
     generate_tray_translations();
 
@@ -539,6 +541,112 @@ fn build_apple_intelligence_bridge() {
     }
 
     println!("cargo:rustc-link-arg=-Wl,-rpath,/usr/lib/swift");
+}
+
+/// Builds the SpeechAnalyzer (macOS 26+) bridge. Unlike FoundationModels it
+/// needs no macro plugin, so a Command Line Tools-only toolchain can build the
+/// real implementation; the stub is used only when the SDK predates it.
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+fn build_apple_speech_bridge() {
+    use std::env;
+    use std::path::{Path, PathBuf};
+    use std::process::Command;
+
+    const REAL_SWIFT_FILE: &str = "swift/apple_speech.swift";
+    const STUB_SWIFT_FILE: &str = "swift/apple_speech_stub.swift";
+    const BRIDGE_HEADER: &str = "swift/apple_speech_bridge.h";
+
+    println!("cargo:rerun-if-changed={REAL_SWIFT_FILE}");
+    println!("cargo:rerun-if-changed={STUB_SWIFT_FILE}");
+    println!("cargo:rerun-if-changed={BRIDGE_HEADER}");
+    println!("cargo:rerun-if-env-changed=HANDY_FORCE_SPEECH_STUB");
+
+    let out_dir = PathBuf::from(env::var("OUT_DIR").expect("OUT_DIR not set"));
+    let object_path = out_dir.join("apple_speech.o");
+    let static_lib_path = out_dir.join("libapple_speech.a");
+
+    let sdk_path =
+        env::var("SDKROOT").unwrap_or_else(|_| xcrun(&["--sdk", "macosx", "--show-sdk-path"]));
+    let swiftc_path = env::var("SWIFTC").unwrap_or_else(|_| xcrun(&["--find", "swiftc"]));
+
+    // SpeechAnalyzer ships in the macOS 26 SDK's Speech module interface.
+    let interface = Path::new(&sdk_path).join(
+        "System/Library/Frameworks/Speech.framework/Modules/Speech.swiftmodule/arm64e-apple-macos.swiftinterface",
+    );
+    let sdk_has_analyzer = std::fs::read_to_string(&interface)
+        .map(|text| text.contains("class SpeechAnalyzer") || text.contains("actor SpeechAnalyzer"))
+        .unwrap_or(false);
+    let force_stub = env::var("HANDY_FORCE_SPEECH_STUB").as_deref() == Ok("1");
+    let has_speech_analyzer = sdk_has_analyzer && !force_stub;
+
+    let source_file = if has_speech_analyzer {
+        REAL_SWIFT_FILE
+    } else {
+        println!("cargo:warning=SpeechAnalyzer not in this SDK. Building Apple speech with stubs.");
+        STUB_SWIFT_FILE
+    };
+
+    let status = Command::new(&swiftc_path)
+        .args([
+            "-parse-as-library",
+            "-target",
+            "arm64-apple-macosx11.0",
+            "-sdk",
+            &sdk_path,
+            "-O",
+            "-import-objc-header",
+            BRIDGE_HEADER,
+            "-c",
+            source_file,
+            "-o",
+            object_path
+                .to_str()
+                .expect("Failed to convert object path to string"),
+        ])
+        .status()
+        .expect("Failed to invoke swiftc for Apple speech bridge");
+    if !status.success() {
+        panic!("swiftc failed to compile {source_file}");
+    }
+
+    let status = Command::new("libtool")
+        .args([
+            "-static",
+            "-o",
+            static_lib_path
+                .to_str()
+                .expect("Failed to convert static lib path to string"),
+            object_path
+                .to_str()
+                .expect("Failed to convert object path to string"),
+        ])
+        .status()
+        .expect("Failed to create static library for Apple speech bridge");
+    if !status.success() {
+        panic!("libtool failed for Apple speech bridge");
+    }
+
+    // Search paths and the Swift runtime rpath come from the Apple Intelligence bridge.
+    println!("cargo:rustc-link-search=native={}", out_dir.display());
+    println!("cargo:rustc-link-lib=static=apple_speech");
+    println!("cargo:rustc-link-lib=framework=AVFoundation");
+    if has_speech_analyzer {
+        // Weak so the app still launches where Speech lacks the macOS 26 symbols.
+        println!("cargo:rustc-link-arg=-weak_framework");
+        println!("cargo:rustc-link-arg=Speech");
+    }
+}
+
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+fn xcrun(args: &[&str]) -> String {
+    let output = std::process::Command::new("xcrun")
+        .args(args)
+        .output()
+        .unwrap_or_else(|e| panic!("Failed to run xcrun {args:?}: {e}"));
+    String::from_utf8(output.stdout)
+        .expect("xcrun output is not valid UTF-8")
+        .trim()
+        .to_string()
 }
 
 /// Returns true when the active developer directory is the standalone Command
