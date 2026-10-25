@@ -2,6 +2,7 @@ pub mod audio;
 pub mod chunking;
 pub mod constants;
 pub mod lang_id;
+pub mod spoken_format;
 pub mod text;
 pub mod utils;
 pub mod vad;

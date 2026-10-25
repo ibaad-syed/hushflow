@@ -16,8 +16,27 @@ import { getLanguageDirection } from "@/lib/utils/rtl";
 type OverlayState = "recording" | "streaming" | "transcribing" | "processing";
 
 // Number of reactive bars in the waveform (the simple, smoothed style shared by
-// every overlay form). Mic levels arrive as 16 FFT buckets; we take the first N.
+// every overlay form).
 const WAVE_BARS = 9;
+const WAVE_CENTER = (WAVE_BARS - 1) / 2;
+// Mic levels arrive as 16 FFT buckets, but speech sits in the low ones, so
+// drawing buckets as bars only ever moved the left side. Instead one loudness
+// level drives a mirrored shape: tallest in the middle, tapering to the edges.
+const WAVE_ENVELOPE = Array.from({ length: WAVE_BARS }, (_, i) => {
+  const x = (i - WAVE_CENTER) / WAVE_CENTER;
+  return 0.3 + 0.7 * Math.exp(-2.4 * x * x);
+});
+// Buckets that carry most speech energy.
+const VOICE_BUCKETS = 10;
+
+/** Bar heights (0–1) for a loudness at animation tick `t`: symmetric, with a
+ *  little per-bar motion so a steady voice still looks alive. */
+const waveShape = (loudness: number, t: number) =>
+  WAVE_ENVELOPE.map((envelope, i) => {
+    const fromCenter = Math.abs(i - WAVE_CENTER);
+    const wobble = 0.78 + 0.22 * Math.sin(t * 0.5 + fromCenter * 1.4);
+    return loudness * envelope * wobble;
+  });
 
 // Only call out a model load in the Live preview once it has run this long.
 // Warm loads finish in well under this (~0.2s on Apple Silicon, ~1.5s on a
@@ -62,7 +81,8 @@ const RecordingOverlay: React.FC = () => {
   // while overflowing, so the resting first line stays crisp flush under the pill.
   const [overflowing, setOverflowing] = useState(false);
 
-  const smoothedLevelsRef = useRef<number[]>(Array(16).fill(0));
+  const loudnessRef = useRef(0);
+  const tickRef = useRef(0);
   // Live-text scroll-back: the text region "sticks" to the newest line while the
   // user is at the bottom; if they scroll up to read history, auto-follow pauses
   // until they scroll back down.
@@ -79,7 +99,7 @@ const RecordingOverlay: React.FC = () => {
         // them would overwrite that event and leave the overlay stuck arming.
         if (overlayState === "recording" || overlayState === "streaming") {
           setCaptureReady(false);
-          smoothedLevelsRef.current = Array(16).fill(0);
+          loudnessRef.current = 0;
           setLevels(Array(WAVE_BARS).fill(0));
           setStreamText({ committed: "", tentative: "" });
         }
@@ -119,15 +139,20 @@ const RecordingOverlay: React.FC = () => {
       });
 
       const unlistenLevel = await listen<number[]>("mic-level", (event) => {
-        const newLevels = event.payload as number[];
-        // Exponential smoothing across the 16 buckets, then take the first N
-        // bars for the shared waveform.
-        const smoothed = smoothedLevelsRef.current.map((prev, i) => {
-          const target = newLevels[i] || 0;
-          return prev * 0.7 + target * 0.3;
-        });
-        smoothedLevelsRef.current = smoothed;
-        setLevels(smoothed.slice(0, WAVE_BARS));
+        const voice = (event.payload as number[])
+          .slice(0, VOICE_BUCKETS)
+          .map((v) => v || 0);
+        // Mostly the loudest band, so ordinary speech moves the bars a lot.
+        const peak = Math.max(...voice);
+        const mean = voice.reduce((sum, v) => sum + v, 0) / voice.length;
+        const raw = Math.min(1, 1.7 * (0.65 * peak + 0.35 * mean));
+        // Rise quickly with the voice, settle slowly between words.
+        const prev = loudnessRef.current;
+        const loudness =
+          raw > prev ? prev * 0.4 + raw * 0.6 : prev * 0.82 + raw * 0.18;
+        loudnessRef.current = loudness;
+        tickRef.current += 1;
+        setLevels(waveShape(loudness, tickRef.current));
       });
 
       const unlistenStream = await events.streamTextEvent.listen((event) => {

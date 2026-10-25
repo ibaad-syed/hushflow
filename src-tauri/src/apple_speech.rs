@@ -175,3 +175,40 @@ mod tests {
         assert!(partials.load(std::sync::atomic::Ordering::Relaxed) > 0);
     }
 }
+
+#[cfg(test)]
+mod stress {
+    use super::*;
+
+    /// Long dictation streamed in recorder-sized frames, as the app does.
+    /// Run with: cargo test --lib apple_speech::stress -- --ignored --nocapture
+    #[test]
+    #[ignore]
+    fn long_stream_survives() {
+        let wav = std::env::var("APPLE_STRESS_WAV").expect("APPLE_STRESS_WAV");
+        let samples: Vec<f32> = hound::WavReader::open(wav)
+            .unwrap()
+            .into_samples::<i16>()
+            .map(|s| s.unwrap() as f32 / 32768.0)
+            .collect();
+        let updates = std::sync::Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let seen = updates.clone();
+        let stream = AppleStream::begin(move |_, _| {
+            seen.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        })
+        .unwrap();
+        for _round in 0..3 {
+            for chunk in samples.chunks(512) {
+                stream.feed(chunk);
+                std::thread::sleep(std::time::Duration::from_millis(4));
+            }
+        }
+        let text = stream.finish().unwrap();
+        eprintln!(
+            "updates={} chars={}",
+            updates.load(std::sync::atomic::Ordering::Relaxed),
+            text.len()
+        );
+        assert!(text.len() > 500);
+    }
+}

@@ -300,19 +300,21 @@
 .swave {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 3px;
-  padding-right: 8px;
+  padding: 0 4px;
   height: 18px;
   flex: none;
 }
 .swave i {
-  width: 4px;
+  width: 3px;
   min-height: 3px;
   max-height: 18px;
-  border-radius: 2px;
-  background: var(--s-accent);
+  border-radius: 999px;
+  /* The app icon's soundwave colors. */
+  background: linear-gradient(to bottom, #5eead4, #a78bfa);
   transition:
-    height 80ms linear,
+    height 90ms ease-out,
     background-color 180ms ease,
     opacity 180ms ease;
 }

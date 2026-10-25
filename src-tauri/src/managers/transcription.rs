@@ -1598,7 +1598,10 @@ fn post_process_transcription_text(
             settings.filler_word_removal_enabled,
         );
 
-        normalize_transcription_output(&without_fillers)
+        // Last, so collapsing whitespace above can't undo the line breaks.
+        crate::audio_toolkit::spoken_format::apply_spoken_formatting(
+            &normalize_transcription_output(&without_fillers),
+        )
     })
 }
 
