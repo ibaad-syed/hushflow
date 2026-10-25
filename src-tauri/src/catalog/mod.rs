@@ -419,6 +419,15 @@ pub fn rank_of(model_id: &str) -> u32 {
     RANK_BY_ID.get(model_id).copied().unwrap_or(u32::MAX)
 }
 
+/// Registry id of the top-ranked model: the one Automatic mode downloads.
+pub fn default_model_id() -> Option<&'static str> {
+    CATALOG
+        .iter()
+        .filter(|d| d.recommended_rank.is_some())
+        .min_by_key(|d| d.recommended_rank)
+        .map(|d| d.id.as_str())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -427,6 +436,12 @@ mod tests {
     #[test]
     fn catalog_parses_and_offers_models() {
         assert!(!CATALOG.is_empty(), "bundled catalog should offer models");
+    }
+
+    #[test]
+    fn default_model_is_parakeet_english() {
+        let id = default_model_id().expect("a ranked model");
+        assert!(id.contains("parakeet-unified-en-0.6b"), "default was {id}");
     }
 
     #[test]

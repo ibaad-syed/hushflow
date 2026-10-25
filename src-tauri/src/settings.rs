@@ -185,6 +185,18 @@ pub enum ShortcutActivation {
     HoldOrToggle,
 }
 
+/// How the transcription model is chosen.
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum TranscriptionEngineMode {
+    /// Start on the OS's built-in engine where there is one, download Parakeet
+    /// in the background, and switch to it once it loads.
+    Automatic,
+    /// Keep whatever model the user picked.
+    #[default]
+    Manual,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type, Default)]
 #[serde(rename_all = "snake_case")]
 pub enum ClipboardHandling {
@@ -543,6 +555,10 @@ pub struct AppSettings {
     /// `overlay_position` (position `none` → style `None`).
     #[serde(default = "default_overlay_style")]
     pub overlay_style: OverlayStyle,
+    /// Who picks the transcription model. Stores written before this setting
+    /// existed read as `Manual`, so an existing choice is never overridden.
+    #[serde(default)]
+    pub transcription_engine_mode: TranscriptionEngineMode,
 }
 
 fn default_model() -> String {
@@ -1052,6 +1068,7 @@ pub fn get_default_settings() -> AppSettings {
         vad_backend: VadBackend::default(),
         long_form_chunking: default_long_form_chunking(),
         overlay_style: default_overlay_style(),
+        transcription_engine_mode: TranscriptionEngineMode::Automatic,
     }
 }
 

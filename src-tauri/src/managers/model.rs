@@ -39,6 +39,9 @@ pub enum ModelSource {
     /// Already present on disk — a user-provided custom model, or one discovered
     /// in a shared cache. Nothing to download.
     Local,
+    /// Provided by the operating system (Apple's SpeechAnalyzer). No file;
+    /// always installed, never downloaded or deleted by Handy.
+    System,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
@@ -61,6 +64,40 @@ pub struct ModelInfo {
     pub is_custom: bool,            // Whether this is a user-provided custom model
     pub supports_streaming: bool, // Whether this model supports live streaming preview (transcribe-cpp)
     pub supports_language_detection: bool, // Whether the model can auto-detect language (gates the "Auto" option)
+}
+
+/// Registry id of Apple's built-in speech engine (a [`ModelSource::System`] model).
+pub const APPLE_SPEECH_MODEL_ID: &str = crate::managers::transcription::apple::MODEL_ID;
+
+/// Whether this Mac has Apple's on-device speech engine (macOS 26+).
+pub fn system_speech_available() -> bool {
+    #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+    return crate::apple_speech::is_available();
+    #[cfg(not(all(target_os = "macos", target_arch = "aarch64")))]
+    false
+}
+
+fn apple_speech_model_info() -> ModelInfo {
+    ModelInfo {
+        id: APPLE_SPEECH_MODEL_ID.to_string(),
+        name: "Apple Built-in".to_string(),
+        description: "Built into macOS. Works instantly, no download.".to_string(),
+        filename: String::new(),
+        source: ModelSource::System,
+        size_mb: 0,
+        is_downloaded: true,
+        is_downloading: false,
+        partial_size: 0,
+        accuracy_score: 0.65,
+        speed_score: 0.85,
+        supports_translation: false,
+        is_recommended: false,
+        supported_languages: vec!["en".to_string()],
+        supports_language_selection: false,
+        is_custom: false,
+        supports_streaming: true,
+        supports_language_detection: false,
+    }
 }
 
 const CHINESE_LANGUAGE_CODE: &str = "zh";
@@ -1019,6 +1056,10 @@ impl ModelManager {
         // Auto-discover transcribe-cpp GGUF models already in the shared HF cache.
         Self::discover_hf_cache_models(&mut available_models);
 
+        if system_speech_available() {
+            available_models.insert(APPLE_SPEECH_MODEL_ID.to_string(), apple_speech_model_info());
+        }
+
         let manager = Self {
             app_handle: app_handle.clone(),
             models_dir,
@@ -1266,6 +1307,12 @@ impl ModelManager {
         let mut vanished_models: Vec<String> = Vec::new();
 
         for model in models.values_mut() {
+            if matches!(model.source, ModelSource::System) {
+                model.is_downloaded = true;
+                model.is_downloading = false;
+                model.partial_size = 0;
+                continue;
+            }
             if let ModelSource::HuggingFace { repo_id, revision } = &model.source {
                 // A models-dir copy counts too: mirror-fallback downloads land
                 // there, and it makes manual drop-ins of catalog files work.
@@ -2072,7 +2119,7 @@ impl ModelManager {
                     .download_hf_model(&model_info, repo_id.clone(), revision.clone())
                     .await;
             }
-            ModelSource::Local => {
+            ModelSource::Local | ModelSource::System => {
                 return Err(anyhow::anyhow!("No download source for model"));
             }
         };
@@ -2175,6 +2222,13 @@ impl ModelManager {
             model_info.ok_or_else(|| anyhow::anyhow!("Model not found: {}", model_id))?;
 
         debug!("ModelManager: Found model info: {:?}", model_info);
+
+        if matches!(model_info.source, ModelSource::System) {
+            return Err(anyhow::anyhow!(
+                "{} is part of the operating system and can't be deleted",
+                model_info.name
+            ));
+        }
 
         if let ModelSource::HuggingFace { repo_id, revision } = &model_info.source {
             // Only this entry's own file, every cached copy of it. Other
@@ -2300,6 +2354,15 @@ impl ModelManager {
         // still be usable, and re-downloading this model should restore it.
         // Startup and explicit Rescan perform the broader selection cleanup.
         let _ = self.app_handle.emit("models-updated", ());
+    }
+
+    /// Whether the model can transcribe right now: a system engine, or a
+    /// model whose file is fully on disk.
+    pub fn ensure_usable(&self, model_id: &str) -> Result<()> {
+        match self.get_model_info(model_id) {
+            Some(info) if matches!(info.source, ModelSource::System) => Ok(()),
+            _ => self.get_model_path(model_id).map(|_| ()),
+        }
     }
 
     pub fn get_model_path(&self, model_id: &str) -> Result<PathBuf> {

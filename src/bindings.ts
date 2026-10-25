@@ -391,6 +391,14 @@ async changeLongFormChunkingSetting(enabled: boolean) : Promise<Result<null, str
     else return { status: "error", error: e  as any };
 }
 },
+async changeTranscriptionEngineModeSetting(mode: TranscriptionEngineMode) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("change_transcription_engine_mode_setting", { mode }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
 async changeVadBackendSetting(backend: VadBackend) : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("change_vad_backend_setting", { backend }) };
@@ -1092,7 +1100,12 @@ long_form_chunking?: boolean;
  * not gated on this — that follows model capability. Migrated from the old
  * `overlay_position` (position `none` → style `None`).
  */
-overlay_style?: OverlayStyle }
+overlay_style?: OverlayStyle; 
+/**
+ * Who picks the transcription model. Stores written before this setting
+ * existed read as `Manual`, so an existing choice is never overridden.
+ */
+transcription_engine_mode?: TranscriptionEngineMode }
 export type AudioDevice = { index: string; name: string; is_default: boolean }
 export type AutoSubmitKey = "enter" | "ctrl_enter" | "cmd_enter"
 export type AvailableAccelerators = { transcribe: string[]; gpu_devices: GpuDeviceOption[] }
@@ -1165,7 +1178,12 @@ sha256: string | null } } |
  * Already present on disk — a user-provided custom model, or one discovered
  * in a shared cache. Nothing to download.
  */
-"Local"
+"Local" | 
+/**
+ * Provided by the operating system (Apple's SpeechAnalyzer). No file;
+ * always installed, never downloaded or deleted by Handy.
+ */
+"System"
 export type ModelUnloadTimeout = "never" | "immediately" | "min_2" | "min_5" | "min_10" | "min_15" | "hour_1" | "sec_15"
 export type OverlayPosition = "top" | "bottom"
 /**
@@ -1314,6 +1332,19 @@ export type TranscribeAcceleratorSetting = "auto" | "cpu" | "gpu"
  * Emitted when a dictation finishes (not on cancel); onboarding uses it to measure speed.
  */
 export type TranscriptionCompleteEvent = { outcome: TranscriptionOutcome; audio_seconds: number; wait_seconds: number }
+/**
+ * How the transcription model is chosen.
+ */
+export type TranscriptionEngineMode = 
+/**
+ * Start on the OS's built-in engine where there is one, download Parakeet
+ * in the background, and switch to it once it loads.
+ */
+"automatic" | 
+/**
+ * Keep whatever model the user picked.
+ */
+"manual"
 /**
  * A background transcription of one History entry.
  */

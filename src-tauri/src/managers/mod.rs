@@ -1,4 +1,5 @@
 pub mod audio;
+pub mod engine_policy;
 pub mod gguf_meta;
 pub mod history;
 pub mod model;

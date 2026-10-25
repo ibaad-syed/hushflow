@@ -219,6 +219,10 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     app_handle.manage(tray::TrayState::new());
     app_handle.manage(TranscriptionJobManager::new(app_handle));
 
+    // Pick the transcription engine (built-in now, Parakeet once downloaded)
+    // when the user hasn't chosen one themselves.
+    managers::engine_policy::apply(app_handle);
+
     // Note: Shortcuts are NOT initialized here.
     // The frontend is responsible for calling the `initialize_shortcuts` command
     // after permissions are confirmed (on macOS) or after onboarding completes.
@@ -332,7 +336,7 @@ fn initialize_core_logic(app_handle: &AppHandle) {
                 }
                 let app_clone = app.clone();
                 std::thread::spawn(move || {
-                    match commands::models::switch_active_model(&app_clone, &model_id) {
+                    match commands::models::choose_model(&app_clone, &model_id) {
                         Ok(()) => {
                             log::info!("Model switched to {} via tray.", model_id);
                         }
@@ -705,6 +709,7 @@ pub fn run(cli_args: CliArgs) {
             shortcut::change_lazy_stream_close_setting,
             shortcut::change_vad_enabled_setting,
             shortcut::change_long_form_chunking_setting,
+            shortcut::change_transcription_engine_mode_setting,
             shortcut::change_vad_backend_setting,
             shortcut::change_filler_word_removal_enabled_setting,
             shortcut::change_chinese_script_setting,

@@ -1,6 +1,6 @@
 use crate::managers::model::{ModelInfo, ModelManager, RetiredModel};
 use crate::managers::transcription::{ModelStateEvent, TranscriptionManager};
-use crate::settings::{get_settings, write_settings, ModelUnloadTimeout};
+use crate::settings::{get_settings, write_settings, ModelUnloadTimeout, TranscriptionEngineMode};
 use log::error;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter, Manager, State};
@@ -189,7 +189,18 @@ pub async fn set_active_model(
     _transcription_manager: State<'_, Arc<TranscriptionManager>>,
     model_id: String,
 ) -> Result<(), String> {
-    switch_active_model(&app_handle, &model_id)
+    choose_model(&app_handle, &model_id)
+}
+
+/// A model the user picked themselves: Automatic mode must not replace it.
+pub fn choose_model(app: &AppHandle, model_id: &str) -> Result<(), String> {
+    switch_active_model(app, model_id)?;
+    let mut settings = get_settings(app);
+    if settings.transcription_engine_mode != TranscriptionEngineMode::Manual {
+        settings.transcription_engine_mode = TranscriptionEngineMode::Manual;
+        write_settings(app, settings);
+    }
+    Ok(())
 }
 
 #[tauri::command]

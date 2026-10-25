@@ -1390,6 +1390,21 @@ pub fn change_long_form_chunking_setting(app: AppHandle, enabled: bool) -> Resul
 
 #[tauri::command]
 #[specta::specta]
+pub fn change_transcription_engine_mode_setting(
+    app: AppHandle,
+    mode: settings::TranscriptionEngineMode,
+) -> Result<(), String> {
+    let mut settings = settings::get_settings(&app);
+    settings.transcription_engine_mode = mode;
+    settings::write_settings(&app, settings);
+    if mode == settings::TranscriptionEngineMode::Automatic {
+        crate::managers::engine_policy::apply(&app);
+    }
+    Ok(())
+}
+
+#[tauri::command]
+#[specta::specta]
 pub async fn change_vad_backend_setting(app: AppHandle, backend: VadBackend) -> Result<(), String> {
     if settings::get_settings(&app).vad_backend == backend {
         return Ok(());

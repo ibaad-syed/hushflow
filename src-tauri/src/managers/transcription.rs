@@ -29,6 +29,7 @@ use tauri::{AppHandle, Emitter, Manager};
 use tauri_specta::Event;
 use transcribe_cpp::{Backend, RunOptions, Task, Transcript};
 
+pub mod apple;
 mod chunked;
 mod job;
 mod live;
@@ -269,6 +270,9 @@ pub struct TranscriptionManager {
     /// True while a background job is queued or running. It holds the model,
     /// so one transcript is never written by two models.
     job_active: Arc<AtomicBool>,
+    /// True while Apple's SpeechAnalyzer is the active engine instead of the
+    /// transcribe-cpp worker; see [`apple`].
+    apple_loaded: Arc<AtomicBool>,
 }
 
 impl TranscriptionManager {
@@ -289,6 +293,7 @@ impl TranscriptionManager {
             next_stream_worker_id: Arc::new(AtomicU64::new(1)),
             active_stream_worker: Arc::new(AtomicU64::new(0)),
             job_active: Arc::new(AtomicBool::new(false)),
+            apple_loaded: Arc::new(AtomicBool::new(false)),
         };
 
         // Start the idle watcher
@@ -368,7 +373,16 @@ impl TranscriptionManager {
     pub fn is_model_loaded(&self) -> bool {
         // A transcribe-cpp model stays loaded while it is busy, so a batch
         // run or stream in progress never reads as "unloaded".
-        self.engine.loaded().is_some()
+        self.loaded_info().is_some()
+    }
+
+    /// The active engine's model: Apple's, or the transcribe-cpp worker's.
+    fn loaded_info(&self) -> Option<LoadedInfo> {
+        if self.apple_loaded.load(Ordering::Acquire) {
+            Some(apple::loaded_info())
+        } else {
+            self.engine.loaded()
+        }
     }
 
     /// Accelerator changes should not disturb the current transcription. Mark
@@ -456,6 +470,7 @@ impl TranscriptionManager {
     /// its load is queued behind this unload, so the unload can never affect
     /// it. Only the worker's exit is left to wait for.
     fn begin_unload(&self) -> Unloading {
+        self.apple_loaded.store(false, Ordering::Release);
         let unloading = self.engine.unload();
         {
             let mut current_model = self.current_model_id.lock().unwrap();
@@ -569,6 +584,34 @@ impl TranscriptionManager {
             emit_loading_failed(error_msg);
             return Err(anyhow::anyhow!(error_msg));
         }
+
+        if model_id == apple::MODEL_ID {
+            apple::prepare().map_err(|e| {
+                let error_msg = format!("Failed to load model {}: {}", model_id, e);
+                emit_loading_failed(&error_msg);
+                anyhow::anyhow!(error_msg)
+            })?;
+            // The OS runs the model; free the transcribe-cpp worker's memory.
+            drop(self.engine.unload());
+            self.apple_loaded.store(true, Ordering::Release);
+            *self.current_model_id.lock().unwrap() = Some(model_id.to_string());
+            self.touch_activity();
+            let _ = self.app_handle.emit(
+                "model-state-changed",
+                ModelStateEvent {
+                    event_type: "loading_completed".to_string(),
+                    model_id: Some(model_id.to_string()),
+                    model_name: Some(model_info.name.clone()),
+                    error: None,
+                },
+            );
+            info!(
+                "Loaded Apple SpeechAnalyzer engine (took {}ms)",
+                load_start.elapsed().as_millis()
+            );
+            return Ok(());
+        }
+        self.apple_loaded.store(false, Ordering::Release);
 
         let model_path = self
             .model_manager
@@ -713,7 +756,7 @@ impl TranscriptionManager {
     /// diagnostics (e.g. confirming `--device-index` actually bound a GPU rather
     /// than falling back to CPU/auto); `None` when no model is loaded.
     pub fn current_backend(&self) -> Option<String> {
-        self.engine.loaded().map(|info| info.backend)
+        self.loaded_info().map(|info| info.backend)
     }
 
     /// Whether a file job is queued or running, which holds the model.
@@ -799,6 +842,11 @@ impl TranscriptionManager {
         }
 
         let model_id = self.get_current_model().unwrap_or_default();
+
+        if self.apple_loaded.load(Ordering::Acquire) {
+            apple::run_stream(self, rx, cancelled, &model_id);
+            return;
+        }
 
         // The loaded model (not the ModelManager copy) is the source of truth
         // for run-path capabilities.
@@ -1007,7 +1055,7 @@ impl TranscriptionManager {
                 is_loading = self.loading_condvar.wait(is_loading).unwrap();
             }
         }
-        let Some(info) = self.engine.loaded() else {
+        let Some(info) = self.loaded_info() else {
             return Err(anyhow::anyhow!("Model is not loaded for transcription."));
         };
 
@@ -1089,6 +1137,9 @@ impl TranscriptionManager {
         active_model: &str,
     ) -> Result<Transcript, EngineError> {
         self.touch_activity();
+        if self.apple_loaded.load(Ordering::Acquire) {
+            return apple::transcribe(&pcm);
+        }
         self.engine
             .transcribe_since(mark, pcm, run_options.clone())
             .inspect_err(|e| {
