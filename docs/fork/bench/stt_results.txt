@@ -1,0 +1,18 @@
+parakeet-unified-en-0.6b short dev=0 3s first=122 best=48 load=234 backend=MTL0 | Hey, can you send me the deck before the meeting tomorrow
+parakeet-unified-en-0.6b short dev=1 3s first=90 best=64 load=268 backend=CPU | Hey, can you send me the deck before the meeting tomorrow
+parakeet-unified-en-0.6b medium dev=0 12s first=142 best=104 load=224 backend=MTL0 | So I think we should, move the launch to Thursday, no wait, Friday, be
+parakeet-unified-en-0.6b medium dev=1 12s first=297 best=297 load=250 backend=CPU | So I think we should, move the launch to Thursday, no wait, Friday, be
+parakeet-unified-en-0.6b long dev=0 29s first=389 best=251 load=227 backend=MTL0 | Okay so here's the update for the week. First, we shipped the new bill
+parakeet-unified-en-0.6b long dev=1 29s first=661 best=661 load=277 backend=CPU | Okay so here's the update for the week. First, we shipped the new bill
+parakeet-tdt-0.6b-v3 short dev=0 3s first=101 best=45 load=258 backend=MTL0 | Hey, can you send me the deck before the meeting tomorrow?
+parakeet-tdt-0.6b-v3 short dev=1 3s first=159 best=89 load=302 backend=CPU | Hey, can you send me the deck before the meeting tomorrow?
+parakeet-tdt-0.6b-v3 medium dev=0 12s first=151 best=112 load=237 backend=MTL0 | So I think we should, move the launch to Thursday, no wait, Friday, be
+parakeet-tdt-0.6b-v3 medium dev=1 12s first=274 best=267 load=285 backend=CPU | So I think we should, move the launch to Thursday, no wait, Friday, be
+parakeet-tdt-0.6b-v3 long dev=0 29s first=302 best=249 load=234 backend=MTL0 | Okay so here's the update for the week. First, we shipped the new bill
+parakeet-tdt-0.6b-v3 long dev=1 29s first=809 best=691 load=282 backend=CPU | Okay so here's the update for the week. First, we shipped the new bill
+whisper-large-v3-turbo short dev=0 3s first=952 best=569 load=325 backend=MTL0 | Hey, can you send me the deck before the meeting tomorrow?
+whisper-large-v3-turbo short dev=1 3s first=2511 best=2499 load=286 backend=CPU | Hey, can you send me the deck before the meeting tomorrow?
+whisper-large-v3-turbo medium dev=0 12s first=687 best=656 load=284 backend=MTL0 | So I think we should, move the launch to Thursday, no wait, Friday, be
+whisper-large-v3-turbo medium dev=1 12s first=2671 best=2671 load=287 backend=CPU | So I think we should, move the launch to Thursday, no wait, Friday, be
+whisper-large-v3-turbo long dev=0 29s first=822 best=790 load=278 backend=MTL0 | Okay so here's the update for the week. First, we shipped the new bill
+whisper-large-v3-turbo long dev=1 29s first=2896 best=2896 load=287 backend=CPU | Okay so here's the update for the week. First, we shipped the new bill

@@ -1,0 +1,40 @@
+[
+  {
+    "model": "Qwen3.5-0.8B-Q4_K_M.gguf",
+    "load_ms": 4552,
+    "rows": [
+      {
+        "sample": "short_question",
+        "wall_ms": 93,
+        "prompt_ms": 26,
+        "gen_tokens": 12,
+        "gen_tok_s": 168,
+        "output": "hey can you send me the deck before the meeting tomorrow"
+      },
+      {
+        "sample": "self_correction",
+        "wall_ms": 265,
+        "prompt_ms": 42,
+        "gen_tokens": 40,
+        "gen_tok_s": 176,
+        "output": "so i think we should move the launch to thursday no wait friday because the design team still needs a couple of days to finish the onboarding screens and you know qa hasn't signed off yet"
+      },
+      {
+        "sample": "instruction_trap",
+        "wall_ms": 198,
+        "prompt_ms": 26,
+        "gen_tokens": 32,
+        "gen_tok_s": 182,
+        "output": "A wave that breaks the shore,\nA tide that washes the land,\nA silent, vast and deep,\nWhere silence meets the sea."
+      },
+      {
+        "sample": "list",
+        "wall_ms": 569,
+        "prompt_ms": 56,
+        "gen_tokens": 93,
+        "gen_tok_s": 180,
+        "output": "okay so here's the update for the week first we shipped the new billing page and conversion is up about three percent second the mobile app crash rate went down after the hotfix from two percent to like half a percent third we're still blocked on the salesforce integration because their api keys expired so i pinged their team this morning and finally i'd like to schedule a retro for friday afternoon maybe around three thirty to talk about what went wrong with the last release"
+      }
+    ]
+  }
+]

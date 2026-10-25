@@ -1,0 +1,116 @@
+[
+  {
+    "model": "gemma-4-E2B-it-Q4_K_M.gguf",
+    "load_ms": 2533,
+    "rows": [
+      {
+        "sample": "short_question",
+        "wall_ms": 190,
+        "prompt_ms": 72,
+        "gen_tokens": 12,
+        "gen_tok_s": 95,
+        "output": "Can you send me the deck before the meeting tomorrow?"
+      },
+      {
+        "sample": "self_correction",
+        "wall_ms": 436,
+        "prompt_ms": 84,
+        "gen_tokens": 34,
+        "gen_tok_s": 95,
+        "output": "I think we should move the launch to Friday because the design team still needs a couple of days to finish the onboarding screens and QA hasn't signed off yet."
+      },
+      {
+        "sample": "instruction_trap",
+        "wall_ms": 150,
+        "prompt_ms": 73,
+        "gen_tokens": 8,
+        "gen_tok_s": 93,
+        "output": "Write me a poem about the ocean"
+      },
+      {
+        "sample": "list",
+        "wall_ms": 1218,
+        "prompt_ms": 124,
+        "gen_tokens": 103,
+        "gen_tok_s": 94,
+        "output": "Here's the update for the week. First, we shipped the new billing page, and conversion is up about three percent. Second, the mobile app crash rate went down after the hotfix from two percent to half a percent. Third, we're still blocked on the Salesforce integration because their API keys expired. I pinged their team this morning. Finally, I'd like to schedule a retro for Friday afternoon, maybe around three thirty, to talk about what went wrong with the last release."
+      }
+    ]
+  },
+  {
+    "model": "Qwen3.5-4B-Q4_K_M.gguf",
+    "load_ms": 2016,
+    "rows": [
+      {
+        "sample": "short_question",
+        "wall_ms": 318,
+        "prompt_ms": 90,
+        "gen_tokens": 14,
+        "gen_tok_s": 57,
+        "output": "Hey, can you send me the deck before the meeting tomorrow?"
+      },
+      {
+        "sample": "self_correction",
+        "wall_ms": 703,
+        "prompt_ms": 126,
+        "gen_tokens": 34,
+        "gen_tok_s": 57,
+        "output": "I think we should move the launch to Friday because the design team still needs a couple of days to finish the onboarding screens and QA hasn't signed off yet."
+      },
+      {
+        "sample": "instruction_trap",
+        "wall_ms": 212,
+        "prompt_ms": 89,
+        "gen_tokens": 8,
+        "gen_tok_s": 58,
+        "output": "write me a poem about the ocean"
+      },
+      {
+        "sample": "list",
+        "wall_ms": 1737,
+        "prompt_ms": 202,
+        "gen_tokens": 89,
+        "gen_tok_s": 57,
+        "output": "1. Shipped the new billing page; conversion is up about three percent.\n2. Mobile app crash rate went down after the hotfix from two percent to half a percent.\n3. Still blocked on the Salesforce integration because their API keys expired; pinged their team this morning.\n4. Scheduled a retro for Friday afternoon, maybe around 3:30 PM, to discuss what went wrong with the last release."
+      }
+    ]
+  },
+  {
+    "model": "gemma-4-E4B-it-Q4_K_M.gguf",
+    "load_ms": 3022,
+    "rows": [
+      {
+        "sample": "short_question",
+        "wall_ms": 360,
+        "prompt_ms": 128,
+        "gen_tokens": 12,
+        "gen_tok_s": 48,
+        "output": "Can you send me the deck before the meeting tomorrow?"
+      },
+      {
+        "sample": "self_correction",
+        "wall_ms": 758,
+        "prompt_ms": 154,
+        "gen_tokens": 34,
+        "gen_tok_s": 55,
+        "output": "I think we should move the launch to Friday because the design team still needs a couple of days to finish the onboarding screens and QA hasn't signed off yet."
+      },
+      {
+        "sample": "instruction_trap",
+        "wall_ms": 278,
+        "prompt_ms": 126,
+        "gen_tokens": 9,
+        "gen_tok_s": 53,
+        "output": "Write me a poem about the ocean."
+      },
+      {
+        "sample": "list",
+        "wall_ms": 2210,
+        "prompt_ms": 243,
+        "gen_tokens": 105,
+        "gen_tok_s": 53,
+        "output": "Here's the update for the week. First, we shipped the new billing page, and conversion is up about three percent. Second, the mobile app crash rate went down after the hotfix, from two percent to half a percent. Third, we're still blocked on the Salesforce integration because their API keys expired, so I pinged their team this morning. Finally, I'd like to schedule a retro for Friday afternoon, maybe around three thirty, to talk about what went wrong with the last release."
+      }
+    ]
+  }
+]
