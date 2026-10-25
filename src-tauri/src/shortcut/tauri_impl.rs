@@ -25,11 +25,17 @@ pub fn init_shortcuts(app: &AppHandle) {
         if id == "transcribe_with_post_process" && !user_settings.post_process_enabled {
             continue;
         }
-        let binding = user_settings
+        let mut binding = user_settings
             .bindings
             .get(&id)
             .cloned()
             .unwrap_or(default_binding);
+        // The modifier-only defaults (fn, ctrl+super) can't be registered here.
+        if validate_shortcut(&binding.current_binding).is_err() {
+            if let Some(combo) = settings::combo_default_binding(&id) {
+                binding.current_binding = combo.to_string();
+            }
+        }
 
         if let Err(e) = register_shortcut(app, binding) {
             error!("Failed to register shortcut {} during init: {}", id, e);
@@ -187,6 +193,17 @@ mod tests {
             "escape",
         ] {
             assert_eq!(validate_shortcut(raw), Ok(()), "{raw} should be accepted");
+        }
+    }
+
+    #[test]
+    fn combo_fallback_is_valid_where_the_default_is_not() {
+        let default = crate::settings::get_default_settings().bindings["transcribe"]
+            .current_binding
+            .clone();
+        if validate_shortcut(&default).is_err() {
+            let combo = crate::settings::combo_default_binding("transcribe").unwrap();
+            assert_eq!(validate_shortcut(combo), Ok(()));
         }
     }
 }

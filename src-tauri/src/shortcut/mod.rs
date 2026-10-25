@@ -516,8 +516,16 @@ fn register_all_shortcuts_for_implementation(
                 id, binding.current_binding, implementation, e
             );
 
-            // Reset to default
+            // Reset to default, or to its combo form when the backend can't
+            // register the modifier-only default either.
             binding.current_binding = default_binding.current_binding.clone();
+            if validate_shortcut_for_implementation(&binding.current_binding, implementation)
+                .is_err()
+            {
+                if let Some(combo) = settings::combo_default_binding(id) {
+                    binding.current_binding = combo.to_string();
+                }
+            }
             current_settings
                 .bindings
                 .insert(id.clone(), binding.clone());

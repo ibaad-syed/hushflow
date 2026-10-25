@@ -917,11 +917,29 @@ fn ensure_post_process_defaults(settings: &mut AppSettings) -> bool {
 
 pub const SETTINGS_STORE_PATH: &str = "settings_store.json";
 
+/// Combo-style defaults for keyboard backends that need at least one
+/// non-modifier key and can't see `fn` (the Tauri global-shortcut plugin).
+/// The primary defaults below are modifier-only (Wispr Flow style), so a
+/// binding reset under such a backend falls back to these instead.
+pub fn combo_default_binding(id: &str) -> Option<&'static str> {
+    match id {
+        "transcribe" => Some(if cfg!(target_os = "macos") {
+            "option+space"
+        } else {
+            "ctrl+space"
+        }),
+        _ => None,
+    }
+}
+
 pub fn get_default_settings() -> AppSettings {
+    // Hold to talk, tap to keep recording (HoldOrToggle), on the same keys
+    // Wispr Flow uses: Fn on macOS, Ctrl+Win on Windows. handy-keys handles
+    // both, including masking Win so releasing it doesn't open Start.
     #[cfg(target_os = "windows")]
-    let default_shortcut = "ctrl+space";
+    let default_shortcut = "ctrl+super";
     #[cfg(target_os = "macos")]
-    let default_shortcut = "option+space";
+    let default_shortcut = "fn";
     #[cfg(target_os = "linux")]
     let default_shortcut = "ctrl+space";
     #[cfg(not(any(target_os = "windows", target_os = "macos", target_os = "linux")))]

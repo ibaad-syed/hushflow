@@ -527,3 +527,15 @@ pub fn stop_handy_keys_recording(app: AppHandle) -> Result<(), String> {
     super::resume_all_shortcuts(&app);
     result
 }
+
+#[cfg(test)]
+mod tests {
+    use super::validate_shortcut;
+
+    #[test]
+    fn accepts_the_modifier_only_defaults() {
+        for raw in ["fn", "ctrl+super", "fn+space", "ctrl+super+space"] {
+            assert_eq!(validate_shortcut(raw), Ok(()), "{raw} should be accepted");
+        }
+    }
+}
