@@ -797,13 +797,15 @@ pub fn run(cli_args: CliArgs) {
             actions::TranscriptionCompleteEvent,
         ]);
 
-    #[cfg(debug_assertions)] // <- Only export on non-release builds
-    specta_builder
-        .export(
-            Typescript::default().bigint(BigIntExportBehavior::Number),
-            "../src/bindings.ts",
-        )
-        .expect("Failed to export typescript bindings");
+    // Only on non-release builds. Relative to the working directory, so a debug
+    // .app opened from Finder (cwd "/") can't write it; that must not stop it.
+    #[cfg(debug_assertions)]
+    if let Err(e) = specta_builder.export(
+        Typescript::default().bigint(BigIntExportBehavior::Number),
+        "../src/bindings.ts",
+    ) {
+        eprintln!("Skipping TypeScript bindings export: {e:?}");
+    }
 
     let invoke_handler = specta_builder.invoke_handler();
 

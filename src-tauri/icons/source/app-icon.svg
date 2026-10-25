@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Voice becomes text: a soundwave that ends in a text cursor.
+       Drawn on Apple's 1024 icon grid (824 squircle, 100 px margin). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E1B4B"/>
+      <stop offset="1" stop-color="#0B0A1F"/>
+    </linearGradient>
+    <linearGradient id="wave" gradientUnits="userSpaceOnUse" x1="239" y1="277" x2="679" y2="747">
+      <stop offset="0" stop-color="#5EEAD4"/>
+      <stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.6">
+      <stop offset="0" stop-color="#6366F1" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)"/>
+    <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#glow)"/>
+    <rect x="101.5" y="101.5" width="821" height="821" rx="183.5" fill="none"
+          stroke="#FFFFFF" stroke-opacity="0.08" stroke-width="3"/>
+  </g>
+
+  <!-- Soundwave, loudest in the middle, quieting toward the cursor. -->
+  <g fill="url(#wave)">
+    <rect x="239" y="422" width="56" height="180" rx="28"/>
+    <rect x="335" y="342" width="56" height="340" rx="28"/>
+    <rect x="431" y="277" width="56" height="470" rx="28"/>
+    <rect x="527" y="362" width="56" height="300" rx="28"/>
+    <rect x="623" y="432" width="56" height="160" rx="28"/>
+  </g>
+
+  <!-- The text cursor the voice turns into. -->
+  <rect x="749" y="302" width="36" height="420" rx="18" fill="#FFFFFF"/>
+</svg>
