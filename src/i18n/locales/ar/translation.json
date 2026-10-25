@@ -318,7 +318,8 @@
     "modelUnloaded": "تم إلغاء تحميل النموذج",
     "noModelDownloadRequired": "لا يوجد نموذج - التنزيل مطلوب",
     "downloadSpeed": "{{speed}} ميجابايت/ث",
-    "lockedWhileTranscribing": "يمكنك تغيير النموذج بعد انتهاء النسخ في السجل."
+    "lockedWhileTranscribing": "يمكنك تغيير النموذج بعد انتهاء النسخ في السجل.",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "يسجّل أثناء الضغط على الاختصار",
           "toggle": "انقر على الاختصار لبدء التسجيل، وانقر مرة أخرى للإيقاف"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "إعادة الفحص",
         "tooltip": "إعادة الفحص بحثًا عن النماذج المضافة إلى مجلد النماذج أو ذاكرة Hugging Face التخزينية المؤقتة خارج Handy"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

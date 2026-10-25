@@ -318,7 +318,8 @@
     "modelUnloaded": "模型已卸载",
     "noModelDownloadRequired": "无模型 - 需要下载",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "历史记录中的转录完成后才能更换模型。"
+    "lockedWhileTranscribing": "历史记录中的转录完成后才能更换模型。",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "按住快捷键期间录音",
           "toggle": "轻按快捷键开始录音，再次轻按停止"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "重新扫描",
         "tooltip": "重新扫描在 Handy 之外添加到模型文件夹或 Hugging Face 缓存中的模型"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

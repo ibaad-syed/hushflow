@@ -318,7 +318,8 @@
     "modelUnloaded": "Model frigjort",
     "noModelDownloadRequired": "Ingen model - download påkrævet",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "Du kan skifte model, når transskriberingen i Historik er færdig."
+    "lockedWhileTranscribing": "Du kan skifte model, når transskriberingen i Historik er færdig.",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "Optager, mens du holder genvejen nede",
           "toggle": "Tryk på genvejen for at starte optagelsen, tryk igen for at stoppe"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "Søg igen",
         "tooltip": "Søg igen efter modeller, der er tilføjet til modelmappen eller Hugging Face-cachen uden for Handy"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

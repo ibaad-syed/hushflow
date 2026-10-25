@@ -318,7 +318,8 @@
     "modelUnloaded": "モデルがアンロードされました",
     "noModelDownloadRequired": "モデルなし - ダウンロードが必要",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "履歴の文字起こしが終わるとモデルを変更できます。"
+    "lockedWhileTranscribing": "履歴の文字起こしが終わるとモデルを変更できます。",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "ショートカットを押している間だけ録音します",
           "toggle": "ショートカットをタップすると録音を開始し、もう一度タップすると停止します"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "再スキャン",
         "tooltip": "Handy を使わずに models フォルダーまたは Hugging Face キャッシュに追加されたモデルを再スキャンします"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

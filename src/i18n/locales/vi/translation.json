@@ -318,7 +318,8 @@
     "modelUnloaded": "Mô Hình Đã Gỡ",
     "noModelDownloadRequired": "Chưa Có Mô Hình - Cần Tải Xuống",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "Bạn có thể đổi mô hình sau khi việc chép lời trong Lịch sử hoàn tất."
+    "lockedWhileTranscribing": "Bạn có thể đổi mô hình sau khi việc chép lời trong Lịch sử hoàn tất.",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "Ghi âm trong lúc bạn giữ phím tắt",
           "toggle": "Nhấn phím tắt để bắt đầu ghi âm, nhấn lại để dừng"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "Quét lại",
         "tooltip": "Quét lại các mô hình được thêm vào thư mục mô hình hoặc bộ nhớ đệm Hugging Face bên ngoài Handy"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

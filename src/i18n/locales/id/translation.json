@@ -318,7 +318,8 @@
     "modelUnloaded": "Model Dikeluarkan dari Memori",
     "noModelDownloadRequired": "Model Belum Tersedia — Perlu Diunduh",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "Anda bisa mengganti model setelah transkripsi di Riwayat selesai."
+    "lockedWhileTranscribing": "Anda bisa mengganti model setelah transkripsi di Riwayat selesai.",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "Merekam selama Anda menahan pintasan",
           "toggle": "Ketuk pintasan untuk mulai merekam, lalu ketuk lagi untuk berhenti"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "Pindai Ulang",
         "tooltip": "Pindai ulang model yang ditambahkan ke folder model atau cache Hugging Face dari luar Handy"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

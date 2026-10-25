@@ -318,7 +318,8 @@
     "modelUnloaded": "Модель вивантажена",
     "noModelDownloadRequired": "Немає моделі - потрібно завантажити",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "Модель можна буде змінити, коли завершиться розшифрування в Історії."
+    "lockedWhileTranscribing": "Модель можна буде змінити, коли завершиться розшифрування в Історії.",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "Записує, поки комбінація клавіш утримується",
           "toggle": "Натисніть комбінацію клавіш, щоб почати запис, натисніть ще раз, щоб зупинити"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "Пересканувати",
         "tooltip": "Пересканувати моделі, додані до папки моделей або кешу Hugging Face поза межами Handy"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

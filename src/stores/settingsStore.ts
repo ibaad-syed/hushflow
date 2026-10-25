@@ -9,6 +9,7 @@ import type {
   TranscribeAcceleratorSetting,
   ShortcutActivation,
   VadBackend,
+  TranscriptionEngineMode,
 } from "@/bindings";
 import { commands } from "@/bindings";
 import { toast } from "sonner";
@@ -180,6 +181,10 @@ const settingUpdaters: {
   vad_enabled: (value) => commands.changeVadEnabledSetting(value as boolean),
   long_form_chunking: (value) =>
     commands.changeLongFormChunkingSetting(value as boolean),
+  transcription_engine_mode: (value) =>
+    commands.changeTranscriptionEngineModeSetting(
+      value as TranscriptionEngineMode,
+    ),
   vad_backend: async (value) => {
     const result = await commands.changeVadBackendSetting(value as VadBackend);
     if (result.status === "error") {

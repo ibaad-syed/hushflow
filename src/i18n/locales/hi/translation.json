@@ -318,7 +318,8 @@
     "modelUnloaded": "मॉडल अनलोड किया गया",
     "noModelDownloadRequired": "कोई मॉडल नहीं - डाउनलोड करना ज़रूरी है",
     "downloadSpeed": "{{speed}} MB/s",
-    "lockedWhileTranscribing": "इतिहास में ट्रांसक्रिप्शन पूरा होने के बाद आप मॉडल बदल सकते हैं।"
+    "lockedWhileTranscribing": "इतिहास में ट्रांसक्रिप्शन पूरा होने के बाद आप मॉडल बदल सकते हैं।",
+    "builtIn": "Built-in"
   },
   "settings": {
     "modelSettings": {
@@ -377,6 +378,11 @@
           "push_to_talk": "जब तक आप शॉर्टकट दबाए रखते हैं, रिकॉर्डिंग होती है",
           "toggle": "रिकॉर्डिंग शुरू करने के लिए शॉर्टकट टैप करें, रोकने के लिए फिर से टैप करें"
         }
+      },
+      "globeKey": {
+        "title": "The Fn key also opens something else",
+        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Open Keyboard Settings"
       }
     },
     "models": {
@@ -420,6 +426,10 @@
       "rescan": {
         "label": "फिर से स्कैन करें",
         "tooltip": "Handy के बाहर, मॉडल फ़ोल्डर या Hugging Face कैश में जोड़े गए मॉडल के लिए फिर से स्कैन करें"
+      },
+      "automatic": {
+        "title": "Choose automatically",
+        "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
       }
     },
     "languages": {

@@ -994,6 +994,12 @@ async isLaptop() : Promise<Result<boolean, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+/**
+ * Whether the Globe key's own action fires alongside an Fn shortcut.
+ */
+async globeKeyHasSystemAction() : Promise<boolean> {
+    return await TAURI_INVOKE("globe_key_has_system_action");
 }
 }
 

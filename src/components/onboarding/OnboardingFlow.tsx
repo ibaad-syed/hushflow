@@ -53,6 +53,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
   const osType = useOsType();
   const models = useOnboardingModels(store.languages);
   const currentModel = useModelStore((s) => s.currentModel);
+  const modelInfos = useModelStore((s) => s.models);
   const selectModel = useModelStore((s) => s.selectModel);
 
   // Once models load: start from an on-disk model if there is one, or flag a
@@ -125,8 +126,20 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
 
   if (!permissions.checked) return null;
 
+  // Automatic mode already put a built-in engine in use (Apple's, on macOS
+  // 26+) while the recommended model downloads behind it: nothing to pick
+  // or wait for. Picking a model anyway (Try it's "change") still works.
+  const builtIn = modelInfos.find(
+    (m) =>
+      m.source === "System" &&
+      m.id === settings?.selected_model &&
+      settings?.transcription_engine_mode === "automatic",
+  );
+  const skipModel = !preview && !!builtIn && !store.downloadId;
   const steps = STEP_ORDER.filter(
-    (s) => s !== "permissions" || permissions.needed || store.welcomeBack,
+    (s) =>
+      (s !== "permissions" || permissions.needed || store.welcomeBack) &&
+      (s !== "model" || !skipModel || store.step === "model"),
   );
   const step = steps.includes(store.step) ? store.step : steps[0];
   const progress = { index: steps.indexOf(step), count: steps.length };
@@ -174,7 +187,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
   const downloadNow = preview
     ? ({ state: "ready" } as const)
     : models.downloadState(downloaded);
-  const modelReady = downloadNow.state === "ready";
+  const modelReady = skipModel || downloadNow.state === "ready";
 
   const saveLanguages = () => {
     if (preview) return;
@@ -240,6 +253,7 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
           model={
             downloaded ?? models.catalogFor(settings?.selected_model ?? "")
           }
+          modelName={skipModel ? builtIn?.name : undefined}
           ready={modelReady}
           download={<DownloadStatus models={models} model={downloaded} />}
           onChangeModel={() => go("model")}

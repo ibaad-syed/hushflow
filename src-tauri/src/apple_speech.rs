@@ -15,6 +15,9 @@ struct AppleSpeechResult {
 
 type StreamCallback = extern "C" fn(*mut c_void, *const c_char, *const c_char);
 
+/// Receives `(committed, tentative)` live text.
+type TextHandler = Box<dyn Fn(&str, &str) + Send + Sync>;
+
 extern "C" {
     fn apple_speech_available() -> i32;
     fn apple_speech_prepare() -> *mut AppleSpeechResult;
@@ -46,7 +49,7 @@ pub fn transcribe(samples: &[f32]) -> Result<String, String> {
 /// A live session that reports `(committed, tentative)` text as audio arrives.
 pub struct AppleStream {
     session: *mut c_void,
-    callback: *mut Box<dyn Fn(&str, &str) + Send + Sync>,
+    callback: *mut TextHandler,
 }
 
 // The Swift session serializes feeds on its own queue; the handle is safe to move.
@@ -54,7 +57,7 @@ unsafe impl Send for AppleStream {}
 
 impl AppleStream {
     pub fn begin(on_text: impl Fn(&str, &str) + Send + Sync + 'static) -> Result<Self, String> {
-        let boxed: Box<Box<dyn Fn(&str, &str) + Send + Sync>> = Box::new(Box::new(on_text));
+        let boxed: Box<TextHandler> = Box::new(Box::new(on_text));
         let callback = Box::into_raw(boxed);
         let session = unsafe { apple_speech_stream_begin(callback.cast(), trampoline) };
         if session.is_null() {
@@ -87,7 +90,7 @@ impl Drop for AppleStream {
 }
 
 extern "C" fn trampoline(context: *mut c_void, committed: *const c_char, tentative: *const c_char) {
-    let callback = unsafe { &*(context as *const Box<dyn Fn(&str, &str) + Send + Sync>) };
+    let callback = unsafe { &*(context as *const TextHandler) };
     let committed = unsafe { lossy(committed) };
     let tentative = unsafe { lossy(tentative) };
     callback(&committed, &tentative);
