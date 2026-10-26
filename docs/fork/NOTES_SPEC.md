@@ -23,21 +23,22 @@ A notepad for calls that needs no bot in the meeting. The verbatim transcript is
 
 ### Diarization options
 
-| Option | Licence | Size | Accuracy (published) | Speed | Platforms | Path from Rust | Verdict |
-|---|---|---|---|---|---|---|---|
-| **Mic = Me, system = Them** | n/a | 0 | Exact for Me vs Them, as long as there's no echo | free | all | channel tag | **MVP** |
-| **Sortformer 4spk v2.1 via transcribe-cpp** | NVIDIA Open Model (commercial OK, ship the notice) | 139 MB Q8 | DER 14.6–14.7% AMI IHM, 10.1% CALLHOME, 38.9% DIHARD with ≥5 speakers ([NVIDIA card](https://huggingface.co/nvidia/diar_streaming_sortformer_4spk-v2.1)) | RTF 0.002 offline on an RTX 6000; Mac not yet measured | Metal/Vulkan/CPU, via the existing dependency | `Model::diarize_session()`, no new runtime | **Phase 2** |
-| Nemotron-3-Diarization | OpenMDW-1.1 | ~100M params | 14.72% on Diarization-Bench (NVIDIA's own figure) | 0.32 s streaming | NeMo only today | wait for a transcribe.cpp port | Watch (released 2026-09-23, [unite.ai](https://www.unite.ai/nvidia-releases-nemotron-3-diarization-open-weight-speaker-model/)); supports 8 speakers |
-| pyannote community-1 | CC-BY-4.0, gated on Hugging Face | ~30 MB | 17.0% AMI IHM, ~11.2% VoxConverse ([HF](https://huggingface.co/pyannote/speaker-diarization-community-1)) | 24× real time on an M4 Pro (Python) | needs ORT or CoreML | new runtime | No |
-| speakrs 0.6.0 (2026-10-14) | not stated | HF bundle | 7.1% VoxConverse, collar 0 ([docs.rs](https://docs.rs/crate/speakrs/latest)) | 529× real time with CoreML on an M4 Pro | CoreML, CUDA, CPU; no Vulkan or DirectML | pure Rust crate | Fallback if we need more than 4 speakers; licence must be checked |
-| sherpa-onnx (pyannote-seg-3 + embeddings) | Apache-2.0 | ~40 MB | depends on the model pair | fast on CPU | all | official `sherpa-onnx` crate, downloads a prebuilt ORT | No: adds a second inference runtime |
-| FluidAudio | Apache-2.0 (models vary) | – | community-1 / Sortformer ports | ANE | Mac only, Swift | Swift bridge | No: Mac only |
+| Option                                      | Licence                                            | Size         | Accuracy (published)                                                                                                                                     | Speed                                                  | Platforms                                     | Path from Rust                                         | Verdict                                                                                                                                              |
+| ------------------------------------------- | -------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Mic = Me, system = Them**                 | n/a                                                | 0            | Exact for Me vs Them, as long as there's no echo                                                                                                         | free                                                   | all                                           | channel tag                                            | **MVP**                                                                                                                                              |
+| **Sortformer 4spk v2.1 via transcribe-cpp** | NVIDIA Open Model (commercial OK, ship the notice) | 139 MB Q8    | DER 14.6–14.7% AMI IHM, 10.1% CALLHOME, 38.9% DIHARD with ≥5 speakers ([NVIDIA card](https://huggingface.co/nvidia/diar_streaming_sortformer_4spk-v2.1)) | RTF 0.002 offline on an RTX 6000; Mac not yet measured | Metal/Vulkan/CPU, via the existing dependency | `Model::diarize_session()`, no new runtime             | **Phase 2**                                                                                                                                          |
+| Nemotron-3-Diarization                      | OpenMDW-1.1                                        | ~100M params | 14.72% on Diarization-Bench (NVIDIA's own figure)                                                                                                        | 0.32 s streaming                                       | NeMo only today                               | wait for a transcribe.cpp port                         | Watch (released 2026-09-23, [unite.ai](https://www.unite.ai/nvidia-releases-nemotron-3-diarization-open-weight-speaker-model/)); supports 8 speakers |
+| pyannote community-1                        | CC-BY-4.0, gated on Hugging Face                   | ~30 MB       | 17.0% AMI IHM, ~11.2% VoxConverse ([HF](https://huggingface.co/pyannote/speaker-diarization-community-1))                                                | 24× real time on an M4 Pro (Python)                    | needs ORT or CoreML                           | new runtime                                            | No                                                                                                                                                   |
+| speakrs 0.6.0 (2026-10-14)                  | not stated                                         | HF bundle    | 7.1% VoxConverse, collar 0 ([docs.rs](https://docs.rs/crate/speakrs/latest))                                                                             | 529× real time with CoreML on an M4 Pro                | CoreML, CUDA, CPU; no Vulkan or DirectML      | pure Rust crate                                        | Fallback if we need more than 4 speakers; licence must be checked                                                                                    |
+| sherpa-onnx (pyannote-seg-3 + embeddings)   | Apache-2.0                                         | ~40 MB       | depends on the model pair                                                                                                                                | fast on CPU                                            | all                                           | official `sherpa-onnx` crate, downloads a prebuilt ORT | No: adds a second inference runtime                                                                                                                  |
+| FluidAudio                                  | Apache-2.0 (models vary)                           | –            | community-1 / Sortformer ports                                                                                                                           | ANE                                                    | Mac only, Swift                               | Swift bridge                                           | No: Mac only                                                                                                                                         |
 
 ## 3. MVP versus later phases
 
-**Your MVP guess holds, with one refinement.** Granola, the category leader, still bases its labels on "mic = Me, system = Them", and Meetily ships with no diarization at all. Two channels give exact Me/Them labels for free and settle the hardest case, attributing the user's own speech, by construction. The refinement is that Granola's real product is **enhancing the user's own rough notes**. So the MVP's enhancement takes *user bullets + transcript* as input, and the fixed template is only the fallback when the notepad is empty.
+**Your MVP guess holds, with one refinement.** Granola, the category leader, still bases its labels on "mic = Me, system = Them", and Meetily ships with no diarization at all. Two channels give exact Me/Them labels for free and settle the hardest case, attributing the user's own speech, by construction. The refinement is that Granola's real product is **enhancing the user's own rough notes**. So the MVP's enhancement takes _user bullets + transcript_ as input, and the fixed template is only the fallback when the notepad is empty.
 
 **MVP (Phase 1)**
+
 - Manual start/stop. Records mic and system audio as two separate 16 kHz mono tracks on disk. System audio is unavailable on macOS below 14.6, or when permission is denied, and the meeting then falls back to mic only with a banner.
 - Live Me/Them transcript (§4.2): each utterance is a full Parakeet batch run and becomes canonical. Finalize fills gaps after stop, and redoes the whole meeting only when live ran on a different engine or the user asks.
 - A notepad with plain text and bullets, autosaved.
@@ -46,18 +47,21 @@ A notepad for calls that needs no bot in the meeting. The verbatim transcript is
 - Echo protection (§5, risk 1): a "use headphones" hint plus cross-channel suppression.
 
 **Phase 2: who said what**
+
 - Sortformer runs offline on the **system channel only**, with the `VeryHighLatency` preset, producing Them 1–4. "Me" stays exact. The user can rename a speaker once and the rename applies to the whole meeting. This phase is short, since the model, runtime and backends are already in the tree.
 - **In-person mode** (mic only, several people): Sortformer on the mic channel.
 - Re-diarize and re-transcribe old meetings from the stored audio.
 - User-editable templates (1:1, standup, interview, sales call) and an "ask this meeting" chat.
 
 **Phase 3**
+
 - Meeting detection: another process starts using the mic, or Zoom/Teams/Meet is in front; offer a notification, never auto-record.
 - Optional bigger notes model; bring-your-own-key summarization (reusing SPEC phase 3); names from the calendar.
 
 ## 4. Architecture
 
 ### 4.1 Audio capture
+
 - **macOS: Core Audio process taps** through `handy-cpal`'s loopback device (a global tap that excludes no process, plus a private aggregate device). Taps beat ScreenCaptureKit here:
   - They need only the "System Audio Recording" permission, not Screen Recording, which on Sequoia and later re-prompts users monthly ([9to5mac, Aug 2024](https://9to5mac.com/2024/08/14/macos-sequoia-screen-recording-prompt-monthly/)).
   - SCK can't capture audio alone without also setting up a video stream ([Apple forums](https://developer.apple.com/forums/thread/718279)).
@@ -70,12 +74,15 @@ A notepad for calls that needs no bot in the meeting. The verbatim transcript is
 - Each channel is written to its own file (a FLAC or WAV per channel; size and encoding to be decided in a spike). One hour of 16 kHz 16-bit mono is about 115 MB uncompressed, and FLAC brings it to roughly 40–60 MB.
 
 ### 4.2 Transcription
+
 The worker is **single-model** (`Request::Load` replaces what's loaded), and one model can't run two streams at once because of its compute lock. So:
+
 - **Live (becomes canonical):** VAD-segment each channel (reuse `Chunker` and `create_detector`), batch-transcribe each finished utterance with Parakeet, and tag it with its channel and its start time on the meeting clock. Parakeet does 12 s of audio in 104 ms on Metal (SPEC.md), so two channels run comfortably in real time. Captions are delayed by roughly 1–3 s after a pause, which is fine for a side pane. The Apple engine path is the same, utterance by utterance.
 - **Canonical (after stop):** live utterances are already full Parakeet batch runs, so they're near-final. The final pass re-transcribes only the spans the live pass dropped or queued past a deadline, and redoes the whole meeting only when live ran on a different engine (Apple before Parakeet was ready) or the user asks. The re-transcription runs the channel files through chunked transcription, cutting on long pauses and **keeping segment timestamps**. Today `transcribe_in_chunks` joins only `t.text` and discards `segments`, so we add `transcribe_timed_chunks()` that returns `(t0_ms, t1_ms, text)` offset by each chunk's start. Interleave both channels by `t0`. It runs as a background job that yields to dictation through the existing `ChunkControl`. A full re-run (the rare case) should take about 1–2 min for a 60-minute meeting on an M-series Mac (scaled from the SPEC measurements; to be verified); filling gaps takes seconds.
 - **Phase 2 diarization:** add a `Diarize { preset }` request to the worker protocol and load Sortformer in a **second worker instance** (or in-process: it is small and has its own compute lock). Map turns onto segments by maximum time overlap.
 
 ### 4.3 Notes generation (local LLM)
+
 - One hour is about 8–12k words, or roughly 11–16k tokens. The cleanup server runs with `-c 4096 -np 1`, which is tuned for dictation latency.
   - **Map steps during the call run on that existing 4096 server.** A 10-minute block is about 1.5–2k words ≈ 2–2.5k tokens, plus the prompt and ~300 output tokens, which fits. They run at low priority behind dictation cleanup, in the same `-np 1` queue.
   - **After stop, the reduce step (or the single pass) runs on an on-demand `llama-server`** with the same Gemma 4 E2B file and `-c 16384`, which exits afterwards. Alternatively, the one server is restarted with a larger `-c` for the job. E2B supports 128K context with a 512-token sliding window ([HF card](https://huggingface.co/google/gemma-4-E2B-it)), so a 16K KV cache stays small.
@@ -83,13 +90,14 @@ The worker is **single-model** (`Request::Load` replaces what's loaded), and one
 - **Longer meetings: incremental map-reduce.** During the meeting, every ~10 minutes of live-pass text gets a "minutes" extraction (facts, decisions, owners, each with timestamps), so the work is done before stop. After stop, the job processes only the last block and then a reduce step: template + user notes + block minutes. This hides most of the latency. Small models do better on blocks than on one long pass ("lost in the middle"; [Frontiers 2025](https://www.frontiersin.org/journals/artificial-intelligence/articles/10.3389/frai.2025.1604034/pdf)).
 - **Latency estimate (M4 Pro, unmeasured):** decode runs at about 95 tok/s (SPEC.md), so 600–900 output tokens take ≈ 6–10 s. Prefilling 12–16k tokens is the unknown. Google's LiteRT figures for E2B on M4 are about 900 tok/s on CPU and 7,800 tok/s on GPU ([Google, accessed 2026-10-25](https://developers.google.com/edge/litert-lm/models/gemma-4)), which suggests roughly 3–15 s on llama.cpp Metal. **Target: notes 20–40 s after the transcript finishes.** Show progress and stream the output.
 - **Quality expectation:** E2B is fine for summaries and action items, but weak at subtle attribution and long-range reasoning (E2B scores 19.1% on MRCR v2 at 128k). Offer Gemma 4 E4B as the "higher quality notes" option (53 tok/s). The SPEC's 8 GB default (Qwen3.5 2B) applies here too.
-- **Apple Foundation Models** has a 4,096-token *session* window, counting input and output ([TN3193](https://developer.apple.com/tutorials/data/documentation/technotes/tn3193-managing-the-on-device-foundation-model-s-context-window.md)). It could only serve the map step with chunks of ~2.5k tokens, and the background rate limits noted in the SPEC apply. **Not used for notes in the MVP.**
+- **Apple Foundation Models** has a 4,096-token _session_ window, counting input and output ([TN3193](https://developer.apple.com/tutorials/data/documentation/technotes/tn3193-managing-the-on-device-foundation-model-s-context-window.md)). It could only serve the map step with chunks of ~2.5k tokens, and the background rate limits noted in the SPEC apply. **Not used for notes in the MVP.**
 - **Guardrail:** the dictation output guard (paste the raw text when too few of the words are kept) doesn't apply to summaries. Instead:
   - Every decision and action item must cite a `[mm:ss]` that exists in the transcript; items with no anchor are dropped or marked unverified.
   - The user's own bullets must all appear, verbatim or expanded.
   - The UI links each cited time to the transcript.
 
 ### 4.4 UI surfaces
+
 - **Tray and hotkey:** Start/Stop meeting, plus a recording indicator.
 - **Meeting window:** the notepad, the live Me/Them transcript, a timer, and a warning if system audio is missing.
 - **Meeting detail:** tabs for Enhanced / My notes / Transcript. Cited timestamps link into the transcript; there are Regenerate (with version picker), Export Markdown and Copy actions.
@@ -97,6 +105,7 @@ The worker is **single-model** (`Request::Load` replaces what's loaded), and one
 - **Settings → Meetings:** notes model (E2B / E4B), audio retention, system-audio permission status, and the headphones hint.
 
 ### 4.5 Data model (SQLite, new migrations in `history.rs`'s list, or a sibling `meetings.rs` on the same DB)
+
 ```sql
 CREATE TABLE meetings (id INTEGER PRIMARY KEY, title TEXT NOT NULL, started_at INTEGER NOT NULL,
   ended_at INTEGER, status TEXT NOT NULL,            -- recording|transcribing|summarizing|ready|failed
@@ -117,22 +126,24 @@ CREATE TABLE meeting_chunk_minutes (meeting_id INTEGER, block INTEGER, t0_ms INT
   body TEXT, PRIMARY KEY (meeting_id, block));        -- map-step cache
 CREATE VIRTUAL TABLE meeting_fts USING fts5(title, user_notes, ai_notes, transcript, content='');
 ```
+
 FTS5 is compiled into our bundled SQLite (`libsqlite3-sys` sets `-DSQLITE_ENABLE_FTS5`).
 
 ### 4.6 Files to add or change
-| Area | Change |
-|---|---|
-| `src-tauri/Info.plist` | add `NSAudioCaptureUsageDescription` |
-| `audio_toolkit/audio/system.rs` (new) | loopback capture through handy-cpal, permission and zero-buffer detection, device-change recreation; Windows render-device loopback |
-| `managers/meeting/` (new: `mod.rs`, `recorder.rs`, `live.rs`, `finalize.rs`, `notes.rs`, `store.rs`) | session state machine; two-track writer; live utterance transcription; final pass; notes job; SQLite and FTS |
-| `managers/audio.rs` | let a meeting hold the mic alongside dictation (shared stream fan-out), mute feedback sounds during meetings |
-| `managers/transcription/job.rs` | `transcribe_timed_chunks()` that keeps segment times |
-| `managers/cleanup/server.rs`, `prompt.rs` | `ServerOptions.ctx` (configurable `-c`), an on-demand notes-server profile; notes prompts and templates (`cleanup/notes_prompt.rs`) |
-| `engine_supervisor/protocol.rs`, `worker.rs` | Phase 2: `Diarize` request; second-worker support |
-| `managers/model.rs`, catalog | Phase 2: Sortformer GGUF download, plus licence and NOTICE |
-| `commands/meeting.rs` (new), `lib.rs`, `tray.rs`, `shortcut/` | start/stop/list/get/export/regenerate commands; tray item and hotkey |
-| `src/components/meetings/` (new) | meeting list, meeting window (notepad + live transcript), note view (tabs: Enhanced / My notes / Transcript), export |
-| `src/i18n/locales/en/translation.json` | all new strings |
+
+| Area                                                                                                 | Change                                                                                                                              |
+| ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `src-tauri/Info.plist`                                                                               | add `NSAudioCaptureUsageDescription`                                                                                                |
+| `audio_toolkit/audio/system.rs` (new)                                                                | loopback capture through handy-cpal, permission and zero-buffer detection, device-change recreation; Windows render-device loopback |
+| `managers/meeting/` (new: `mod.rs`, `recorder.rs`, `live.rs`, `finalize.rs`, `notes.rs`, `store.rs`) | session state machine; two-track writer; live utterance transcription; final pass; notes job; SQLite and FTS                        |
+| `managers/audio.rs`                                                                                  | let a meeting hold the mic alongside dictation (shared stream fan-out), mute feedback sounds during meetings                        |
+| `managers/transcription/job.rs`                                                                      | `transcribe_timed_chunks()` that keeps segment times                                                                                |
+| `managers/cleanup/server.rs`, `prompt.rs`                                                            | `ServerOptions.ctx` (configurable `-c`), an on-demand notes-server profile; notes prompts and templates (`cleanup/notes_prompt.rs`) |
+| `engine_supervisor/protocol.rs`, `worker.rs`                                                         | Phase 2: `Diarize` request; second-worker support                                                                                   |
+| `managers/model.rs`, catalog                                                                         | Phase 2: Sortformer GGUF download, plus licence and NOTICE                                                                          |
+| `commands/meeting.rs` (new), `lib.rs`, `tray.rs`, `shortcut/`                                        | start/stop/list/get/export/regenerate commands; tray item and hotkey                                                                |
+| `src/components/meetings/` (new)                                                                     | meeting list, meeting window (notepad + live transcript), note view (tabs: Enhanced / My notes / Transcript), export                |
+| `src/i18n/locales/en/translation.json`                                                               | all new strings                                                                                                                     |
 
 ## 5. Risks, unknowns and spikes
 
