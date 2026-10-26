@@ -1047,6 +1047,18 @@ async deleteCleanupModel(id: string) : Promise<Result<null, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+/**
+ * Saves the user's cleanup instructions; empty or unchanged text restores
+ * the built-in ones.
+ */
+async setCleanupPrompt(prompt: string | null) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("set_cleanup_prompt", { prompt }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -1167,7 +1179,11 @@ cleanup_enabled?: boolean;
  * Cleanup engine: a local model id from the cleanup catalog, or
  * "apple-intelligence".
  */
-cleanup_engine?: string }
+cleanup_engine?: string; 
+/**
+ * The user's own cleanup instructions; `None` uses the built-in ones.
+ */
+cleanup_prompt?: string | null }
 export type AudioDevice = { index: string; name: string; is_default: boolean }
 export type AutoSubmitKey = "enter" | "ctrl_enter" | "cmd_enter"
 export type AvailableAccelerators = { transcribe: string[]; gpu_devices: GpuDeviceOption[] }
@@ -1205,7 +1221,11 @@ export type CleanupStatus = { enabled: boolean; engine: string; engines: Cleanup
 /**
  * The selected engine can clean up right now (downloaded and loaded).
  */
-ready: boolean }
+ready: boolean; 
+/**
+ * The instructions in effect, and whether they're the user's own.
+ */
+prompt: string; prompt_is_custom: boolean }
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
 export type GpuDeviceOption = { id: string; name: string; total_vram_mb: number }

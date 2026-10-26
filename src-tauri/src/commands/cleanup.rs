@@ -70,3 +70,25 @@ pub fn delete_cleanup_model(
 ) -> Result<(), String> {
     cleanup.delete_model(&id).map_err(|e| e.to_string())
 }
+
+/// Saves the user's cleanup instructions; empty or unchanged text restores
+/// the built-in ones.
+#[tauri::command]
+#[specta::specta]
+pub fn set_cleanup_prompt(
+    app: AppHandle,
+    cleanup: State<'_, Arc<CleanupManager>>,
+    prompt: Option<String>,
+) -> Result<(), String> {
+    use crate::managers::cleanup::prompt::SYSTEM;
+    let prompt = prompt
+        .map(|p| p.trim().to_string())
+        .filter(|p| !p.is_empty() && p != SYSTEM.trim());
+    let mut settings = get_settings(&app);
+    settings.cleanup_prompt = prompt;
+    write_settings(&app, settings);
+    // Re-prime the server's prompt cache with the new instructions.
+    let cleanup = Arc::clone(&cleanup);
+    tauri::async_runtime::spawn(async move { cleanup.prime().await });
+    Ok(())
+}

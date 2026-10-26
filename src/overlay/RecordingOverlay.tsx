@@ -253,18 +253,19 @@ const RecordingOverlay: React.FC = () => {
     : t("overlay.transcribing");
 
   // ---- Shared building blocks (one visual language for every overlay form) ----
-  const waveform = (
+  const wave = (tall: number) => (
     <div className={`swave ${captureReady ? "ready" : "arming"}`}>
       {levels.map((v, i) => (
         <i
           key={i}
           style={{
-            height: `${Math.max(3, Math.min(18, 3 + Math.pow(v, 0.7) * 15))}px`,
+            height: `${Math.max(2, Math.min(tall, 2 + Math.pow(v, 0.7) * (tall - 2)))}px`,
           }}
         />
       ))}
     </div>
   );
+  const waveform = wave(18);
 
   const cancelBtn = (
     <button
@@ -385,7 +386,21 @@ const RecordingOverlay: React.FC = () => {
       <div
         className={`scard compact ${working && isVisible ? "cworking" : ""}`}
       >
-        {working ? workingRow(workLabel, true) : listeningRow(false, true)}
+        {/* Slim pill: just the wave while listening (the cancel button
+            slides in on hover; Esc works too), a spinner while working. */}
+        <div className="smini">
+          {working ? (
+            <>
+              <span className="sspinner" />
+              <span className="swork-label">{workLabel}</span>
+            </>
+          ) : (
+            <>
+              {wave(12)}
+              {cancelBtn}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

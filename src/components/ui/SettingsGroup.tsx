@@ -17,7 +17,9 @@ export const SettingsGroup: React.FC<SettingsGroupProps> = ({
         <div className="px-4">
           <h2 className="text-[13px] font-semibold text-ink-2">{title}</h2>
           {description && (
-            <p className="mt-0.5 text-[12px] text-ink-3">{description}</p>
+            <p className="mt-0.5 text-[12px] leading-[1.35] text-ink-3">
+              {description}
+            </p>
           )}
         </div>
       )}

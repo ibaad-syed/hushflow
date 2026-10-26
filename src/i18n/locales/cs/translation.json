@@ -930,6 +930,14 @@
         "download": "Download",
         "use": "Use",
         "delete": "Delete {{name}}"
+      },
+      "instructions": {
+        "title": "Instructions",
+        "description": "What the cleanup model is told to do with every dictation.",
+        "defaultNote": "These are the built-in instructions. Edit them to change how your text is polished.",
+        "customNote": "Your own instructions are in use. The check that stops the model answering questions is off, since a rewrite you asked for can look like one.",
+        "save": "Save",
+        "reset": "Reset to default"
       }
     }
   },

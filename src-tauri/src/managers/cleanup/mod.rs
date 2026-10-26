@@ -36,6 +36,9 @@ pub struct CleanupStatus {
     pub engines: Vec<CleanupEngineInfo>,
     /// The selected engine can clean up right now (downloaded and loaded).
     pub ready: bool,
+    /// The instructions in effect, and whether they're the user's own.
+    pub prompt: String,
+    pub prompt_is_custom: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -112,7 +115,11 @@ impl CleanupManager {
                 .ok()
                 .is_some_and(|s| s.as_ref().is_some_and(|s| s.model_id == id)),
         };
+        let prompt_is_custom =
+            prompt::instructions(settings.cleanup_prompt.as_deref()) != prompt::SYSTEM;
         CleanupStatus {
+            prompt: prompt::instructions(settings.cleanup_prompt.as_deref()).to_string(),
+            prompt_is_custom,
             enabled: settings.cleanup_enabled,
             engine: settings.cleanup_engine,
             engines,
@@ -298,8 +305,28 @@ impl CleanupManager {
         *guard = Some(server);
         drop(guard);
         let started = Instant::now();
-        let _ = self.complete(port, "Warm up the cache, please.").await;
+        let custom = get_settings(&self.app).cleanup_prompt;
+        let instructions = prompt::instructions(custom.as_deref());
+        let _ = self
+            .complete(port, instructions, "Warm up the cache, please.")
+            .await;
         debug!("Cleanup prompt cache primed in {:?}", started.elapsed());
+        self.notify();
+    }
+
+    /// Re-primes the server's prompt cache, e.g. after the instructions change.
+    pub async fn prime(&self) {
+        let port = {
+            let mut guard = self.server.lock().await;
+            guard.as_mut().and_then(|s| s.alive().then_some(s.port))
+        };
+        if let Some(port) = port {
+            let custom = get_settings(&self.app).cleanup_prompt;
+            let instructions = prompt::instructions(custom.as_deref());
+            let _ = self
+                .complete(port, instructions, "Warm up the cache, please.")
+                .await;
+        }
         self.notify();
     }
 
@@ -328,10 +355,10 @@ impl CleanupManager {
             .resolve(name, tauri::path::BaseDirectory::Resource)?)
     }
 
-    async fn complete(&self, port: u16, transcript: &str) -> Result<String> {
+    async fn complete(&self, port: u16, instructions: &str, transcript: &str) -> Result<String> {
         let words = transcript.split_whitespace().count();
         let body = serde_json::json!({
-            "messages": prompt::messages(transcript),
+            "messages": prompt::messages(instructions, transcript),
             "temperature": 0,
             "max_tokens": (words * 3 + 64).min(1500),
             "cache_prompt": true,
@@ -360,8 +387,10 @@ impl CleanupManager {
             return None;
         }
         let started = Instant::now();
+        let instructions = prompt::instructions(settings.cleanup_prompt.as_deref()).to_string();
+        let guarded = instructions == prompt::SYSTEM;
         let reply = if settings.cleanup_engine == APPLE_INTELLIGENCE {
-            apple_intelligence_clean(transcript).await
+            apple_intelligence_clean(transcript, &instructions).await
         } else {
             let port = {
                 let mut guard = self.server.lock().await;
@@ -371,7 +400,7 @@ impl CleanupManager {
                     .and_then(|s| s.alive().then_some(s.port))
             };
             match port {
-                Some(port) => self.complete(port, transcript).await,
+                Some(port) => self.complete(port, &instructions, transcript).await,
                 None => {
                     // Not loaded yet (still downloading, or the app just
                     // started): paste the rule-based text, load for next time.
@@ -384,7 +413,7 @@ impl CleanupManager {
             }
         };
         match reply {
-            Ok(reply) => match prompt::accept(transcript, &reply) {
+            Ok(reply) => match prompt::accept(transcript, &reply, guarded) {
                 Some(cleaned) => {
                     info!("Cleanup took {:?}", started.elapsed());
                     Some(cleaned)
@@ -409,17 +438,14 @@ pub fn apple_intelligence_available() -> bool {
     false
 }
 
-async fn apple_intelligence_clean(transcript: &str) -> Result<String> {
+async fn apple_intelligence_clean(transcript: &str, instructions: &str) -> Result<String> {
     #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
     {
         let user = prompt::wrap(transcript);
+        let system = prompt::single_prompt(instructions);
         let max_tokens = (transcript.split_whitespace().count() * 3 + 64) as i32;
         let task = tauri::async_runtime::spawn_blocking(move || {
-            crate::apple_intelligence::process_text_with_system_prompt(
-                &prompt::single_prompt(),
-                &user,
-                max_tokens,
-            )
+            crate::apple_intelligence::process_text_with_system_prompt(&system, &user, max_tokens)
         });
         match tokio::time::timeout(DEADLINE, task).await {
             Ok(Ok(result)) => result.map_err(|e| anyhow!(e)),
@@ -429,7 +455,7 @@ async fn apple_intelligence_clean(transcript: &str) -> Result<String> {
     }
     #[cfg(not(all(target_os = "macos", target_arch = "aarch64")))]
     {
-        let _ = transcript;
+        let _ = (transcript, instructions);
         Err(anyhow!("Apple Intelligence is only available on macOS"))
     }
 }

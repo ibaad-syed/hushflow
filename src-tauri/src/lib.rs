@@ -802,6 +802,7 @@ pub fn run(cli_args: CliArgs) {
             commands::cleanup::set_cleanup_enabled,
             commands::cleanup::set_cleanup_engine,
             commands::cleanup::delete_cleanup_model,
+            commands::cleanup::set_cleanup_prompt,
         ])
         .events(collect_events![
             managers::history::HistoryUpdatePayload,

@@ -15,6 +15,7 @@ import { Legend } from "./Legend";
 import { useModelEntries } from "./modelEntries";
 import { AutomaticEngine } from "./AutomaticEngine";
 import { CleanupModels } from "./CleanupModels";
+import { CleanupInstructions } from "./CleanupInstructions";
 
 /** Past this many models on disk, the rest fold under "Show N more". */
 const YOURS_LIMIT = 5;
@@ -180,8 +181,9 @@ export const ModelsSettings: React.FC<ModelsSettingsProps> = ({
         ))}
       </div>
       {tab === "cleanup" ? (
-        <div className="mx-[12px] flex-none">
+        <div className="mx-[12px] flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto pb-4">
           <CleanupModels />
+          <CleanupInstructions />
         </div>
       ) : (
         <>

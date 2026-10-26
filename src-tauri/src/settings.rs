@@ -566,6 +566,9 @@ pub struct AppSettings {
     /// "apple-intelligence".
     #[serde(default = "default_cleanup_engine")]
     pub cleanup_engine: String,
+    /// The user's own cleanup instructions; `None` uses the built-in ones.
+    #[serde(default)]
+    pub cleanup_prompt: Option<String>,
 }
 
 fn default_model() -> String {
@@ -1083,6 +1086,7 @@ pub fn get_default_settings() -> AppSettings {
         transcription_engine_mode: TranscriptionEngineMode::Automatic,
         cleanup_enabled: false,
         cleanup_engine: default_cleanup_engine(),
+        cleanup_prompt: None,
     }
 }
 

@@ -28,7 +28,7 @@ export const CleanupModels: React.FC = () => {
         return (
           <div
             key={engine.id}
-            className="grid grid-cols-[20px_1fr_auto] items-center gap-3 px-4 py-3"
+            className="grid grid-cols-[20px_1fr_64px_auto] items-center gap-3 px-4 py-2.5"
           >
             <span
               className={`grid size-[18px] place-items-center rounded-full border ${
@@ -46,18 +46,21 @@ export const CleanupModels: React.FC = () => {
                   {engine.name}
                 </span>
                 {engine.recommended && (
-                  <span className="rounded-[5px] bg-logo-primary/20 px-1.5 py-px text-[11px] font-medium text-text">
+                  <span className="rounded-[4px] bg-logo-primary/15 px-1.5 py-px text-[11px] font-medium text-logo-primary">
                     {t("onboarding.cleanup.recommended")}
                   </span>
                 )}
               </div>
-              <p className="m-0 truncate text-[12px] text-ink-3">
+              <p className="m-0 text-[12px] leading-[1.35] text-ink-3">
                 {engine.description}
-                {engine.size_mb
-                  ? ` · ${formatModelSize(engine.size_mb)}`
-                  : ` · ${t("onboarding.cleanup.noDownload")}`}
               </p>
             </div>
+            {/* Its own column, so the size is never cut off. */}
+            <span className="text-end text-[12px] tabular-nums text-ink-2">
+              {engine.size_mb
+                ? formatModelSize(engine.size_mb)
+                : t("onboarding.cleanup.noDownload")}
+            </span>
             <div className="flex items-center gap-2 text-[12px] tabular-nums text-ink-3">
               {state.kind === "downloading" && (
                 <span>

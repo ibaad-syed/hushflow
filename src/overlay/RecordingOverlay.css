@@ -29,6 +29,9 @@
   --ov-work-w: 216px; /* working pill (transcribing / polishing) -- wide enough to
                          center longer labels; shared by Live (collapsed) + minimal */
   --ov-open-w: 392px; /* Live panel, expanded */
+  --ov-mini-w: 64px; /* slim minimal pill while listening */
+  --ov-mini-work-w: 112px; /* slim pill while transcribing / polishing */
+  --ov-mini-h: 22px;
   --ov-base-h: 40px; /* control-row height (.sbase) */
   --ov-cap-max-h: 64px; /* max height of the scrolling live-text region */
 }
@@ -152,10 +155,55 @@
    center the longest label — the .swork-label ellipsis is only a safety net past it. */
 .scard.compact {
   animation: none;
-  width: var(--ov-rest-w);
+  width: var(--ov-mini-w);
+  border-radius: 999px;
+  transition: width 220ms var(--ov-ease, cubic-bezier(0.22, 1, 0.36, 1));
+}
+.scard.compact:hover {
+  width: calc(var(--ov-mini-w) + 22px);
 }
 .scard.compact.cworking {
-  width: var(--ov-work-w);
+  width: var(--ov-mini-work-w);
+}
+
+/* Slim pill row (minimal overlay). */
+.smini {
+  height: var(--ov-mini-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 9px;
+}
+.smini .swave {
+  height: 12px;
+  gap: 2px;
+  padding: 0;
+}
+.smini .swave i {
+  width: 2px;
+}
+.smini .sx {
+  width: 0;
+  height: 16px;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    width 180ms ease,
+    opacity 150ms ease;
+}
+.scard.compact:hover .smini .sx {
+  width: 16px;
+  opacity: 1;
+}
+.smini .sspinner {
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+}
+.smini .swork-label {
+  font-size: 11px;
+  padding: 0;
 }
 
 /* text region — auto-height open via grid-rows trick; region fades as a whole */
