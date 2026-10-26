@@ -1,22 +1,19 @@
 import React from "react";
-import HandyMascot from "../icons/HandyMascot";
+import { HushflowMark } from "../icons/HushflowLogo";
 
 interface MascotProps {
   /** Height in px. */
   size: number;
-  /** Wave once on arrival, or high-five (re-key it to play again). */
+  /** Kept for callers; the mark arrives with one quiet fade-up either way. */
   animation?: "wave" | "slap" | null;
 }
 
-// The design's 357×400 image box, kept so sizes and the wave's pivot match it.
-const BOX_ASPECT = 357 / 400;
-
-/** Handy's mascot glove, optionally animated. */
+/** The app mark where onboarding used to show Handy's mascot. */
 export const Mascot: React.FC<MascotProps> = ({ size, animation = null }) => (
   <span
-    style={{ width: size * BOX_ASPECT, height: size }}
-    className={`relative block origin-[50%_90%] rotate-[-8deg] select-none ${animation === "wave" ? "animate-wave" : animation === "slap" ? "animate-slap" : ""}`}
+    key={animation ?? "still"}
+    className={`block select-none drop-shadow-[0_8px_24px_rgba(0,0,0,0.25)] ${animation ? "animate-rise" : ""}`}
   >
-    <HandyMascot className="absolute start-[12.6%] top-[7.25%] h-[85.25%] w-auto" />
+    <HushflowMark size={size} />
   </span>
 );
