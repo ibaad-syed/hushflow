@@ -14,6 +14,7 @@ import { isChinese } from "@/lib/utils/languageSuggestions";
 import { Welcome } from "./screens/Welcome";
 import { Permissions } from "./screens/Permissions";
 import { Model } from "./screens/Model";
+import { Cleanup } from "./screens/Cleanup";
 import { Demo } from "./screens/Demo";
 import { TryIt } from "./screens/TryIt";
 import { useOsType } from "@/hooks/useOsType";
@@ -225,6 +226,15 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
           models={models}
           onBack={store.returnTo ? () => go(store.returnTo!) : back}
           onChoose={chooseModel}
+        />
+      );
+    case "cleanup":
+      return (
+        <Cleanup
+          progress={progress}
+          preview={preview}
+          onBack={back}
+          onContinue={onward}
         />
       );
     case "demo":

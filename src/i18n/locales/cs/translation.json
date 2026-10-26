@@ -215,6 +215,17 @@
     "linux": {
       "tryIt": "Nefunguje to? <guide>Průvodce nastavením pro Linux</guide>",
       "done": "Nefunguje to v jiných aplikacích? <guide>Průvodce nastavením pro Linux</guide>"
+    },
+    "cleanup": {
+      "title": "Polish what you say",
+      "subtitle": "Removes filler words, applies your corrections, and formats lists and paragraphs. Runs on this computer.",
+      "recommended": "Recommended",
+      "noDownload": "No download",
+      "background": "Downloads in the background. Dictate right away; polishing starts when it's ready.",
+      "off": {
+        "name": "Keep it as I say it",
+        "description": "Only quick fixes: filler words and spoken “new line”."
+      }
     }
   },
   "modelTable": {
@@ -887,6 +898,22 @@
           "details": "Handy používá ggml pro rychlé lokální zpracování řeči na text. Díky skvělé práci Georgiho Gerganova a přispěvatelů."
         }
       }
+    },
+    "cleanup": {
+      "title": "Clean up",
+      "toggle": {
+        "title": "Clean up my text",
+        "description": "Removes filler words, applies your corrections, and formats lists and paragraphs before pasting. Runs on this computer."
+      },
+      "engine": {
+        "title": "Cleanup model",
+        "description": "The model that polishes your text. Bigger models are a little slower and more careful.",
+        "recommendedLabel": "{{name}} (recommended)"
+      },
+      "downloading": "Downloading {{percent}}%",
+      "notDownloaded": "Not downloaded",
+      "loading": "Loading",
+      "ready": "Ready"
     }
   },
   "footer": {

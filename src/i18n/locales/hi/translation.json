@@ -215,6 +215,17 @@
     "linux": {
       "tryIt": "काम नहीं कर रहा? <guide>Linux सेटअप गाइड</guide>",
       "done": "दूसरे ऐप्स में काम नहीं कर रहा? <guide>Linux सेटअप गाइड</guide>"
+    },
+    "cleanup": {
+      "title": "Polish what you say",
+      "subtitle": "Removes filler words, applies your corrections, and formats lists and paragraphs. Runs on this computer.",
+      "recommended": "Recommended",
+      "noDownload": "No download",
+      "background": "Downloads in the background. Dictate right away; polishing starts when it's ready.",
+      "off": {
+        "name": "Keep it as I say it",
+        "description": "Only quick fixes: filler words and spoken “new line”."
+      }
     }
   },
   "modelTable": {
@@ -887,6 +898,22 @@
           "details": "Handy का लोकल स्पीच-टू-टेक्स्ट transcribe.cpp और ggml पर आधारित है. Georgi Gerganov और योगदान देने वालों के शानदार काम के लिए धन्यवाद."
         }
       }
+    },
+    "cleanup": {
+      "title": "Clean up",
+      "toggle": {
+        "title": "Clean up my text",
+        "description": "Removes filler words, applies your corrections, and formats lists and paragraphs before pasting. Runs on this computer."
+      },
+      "engine": {
+        "title": "Cleanup model",
+        "description": "The model that polishes your text. Bigger models are a little slower and more careful.",
+        "recommendedLabel": "{{name}} (recommended)"
+      },
+      "downloading": "Downloading {{percent}}%",
+      "notDownloaded": "Not downloaded",
+      "loading": "Loading",
+      "ready": "Ready"
     }
   },
   "footer": {

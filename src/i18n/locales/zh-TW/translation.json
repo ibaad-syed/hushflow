@@ -215,6 +215,17 @@
     "linux": {
       "tryIt": "沒有作用嗎？<guide>Linux 設定指南</guide>",
       "done": "在其他應用程式中沒有作用嗎？<guide>Linux 設定指南</guide>"
+    },
+    "cleanup": {
+      "title": "Polish what you say",
+      "subtitle": "Removes filler words, applies your corrections, and formats lists and paragraphs. Runs on this computer.",
+      "recommended": "Recommended",
+      "noDownload": "No download",
+      "background": "Downloads in the background. Dictate right away; polishing starts when it's ready.",
+      "off": {
+        "name": "Keep it as I say it",
+        "description": "Only quick fixes: filler words and spoken “new line”."
+      }
     }
   },
   "modelTable": {
@@ -887,6 +898,22 @@
           "details": "Handy 使用 ggml 進行快速的本機語音轉文字處理。感謝 Georgi Gerganov 和貢獻者們的傑出工作"
         }
       }
+    },
+    "cleanup": {
+      "title": "Clean up",
+      "toggle": {
+        "title": "Clean up my text",
+        "description": "Removes filler words, applies your corrections, and formats lists and paragraphs before pasting. Runs on this computer."
+      },
+      "engine": {
+        "title": "Cleanup model",
+        "description": "The model that polishes your text. Bigger models are a little slower and more careful.",
+        "recommendedLabel": "{{name}} (recommended)"
+      },
+      "downloading": "Downloading {{percent}}%",
+      "notDownloaded": "Not downloaded",
+      "loading": "Loading",
+      "ready": "Ready"
     }
   },
   "footer": {
