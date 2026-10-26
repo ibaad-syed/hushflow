@@ -55,7 +55,7 @@ The machine was shared with other agents. A CPU 10k rerun made at a load average
 | 16,384  | 3,830, 90                          | 3,782, 61                           |
 | 32,768  | 3,930, 77                          | 3,842, 78                           |
 
-On CPU at 16k, q8_0 drops the footprint from 3,822 to 3,771 MB, but prefill falls from 131 to 104 tok/s. At 10k words on Metal with mmap, q8_0 gives 381 MB against 450 MB, but decode falls to 66 tok/s from 81. **KV quantization isn't worth it for this model**: it saves 30–90 MB and costs 15–35% of decode speed. `--ubatch 256` saves about 26 MB on Metal and nothing on CPU, with no change in speed.
+On CPU at 16k, q8_0 drops the footprint from 3,822 to 3,771 MB, but prefill falls from 131 to 104 tok/s. At 10k words on Metal with mmap, q8_0 gives 381 MB against 450 MB, but decode falls to 66 tok/s from 81. **KV quantization isn't worth it for this model**: it saves 30–90 MB and costs 15–35% of decode speed. Single runs vary by about ±15% on this shared machine, which explains the slow 32k f16 run; the 8k, 16k and 10k-mmap pairs carry the claim. `--ubatch 256` saves about 26 MB on Metal and nothing on CPU, with no change in speed.
 
 Memory breakdown (`LLAMA_LOG=1`, Q4_K_M):
 
@@ -76,7 +76,7 @@ The 1.76 GB embedding table matters for phones. It is touched one row per token,
 | CPU ×4, mmap   | 10,046 | 59            | 29           | 348.7   | 803               |
 | CPU ×4, no mmap| 1,505  | 69            | 40           | 53.9    | 2,957             |
 
-Q3_K_M saves about 640 MB of resident memory, and it is slower: decode drops 20% on Metal, and CPU prefill halves because Q3_K has no repacked CPU kernels. Its notes are shorter (345–356 words against about 480) but well-formed and correctly cited at 1.5k words. It isn't a good trade, since the 1.76 GB embedding table dominates the size whatever the quant.
+Q3_K_M saves about 640 MB of resident memory, and it is slower: decode drops 20% on Metal, and CPU prefill halves, likely because Q3_K has no repacked CPU kernels. That cause wasn't confirmed from the logs, and the Q3 CPU runs weren't repeated on an idle machine, so some contention may be included; the Metal rows are unaffected. Its notes are shorter (345–356 words against about 480) but well-formed and correctly cited at 1.5k words. It isn't a good trade, since the 1.76 GB embedding table dominates the size whatever the quant.
 
 ## Quality
 
@@ -91,8 +91,8 @@ Q3_K_M saves about 640 MB of resident memory, and it is slower: decode drops 20%
 
 - **`llama-cpp-2` 0.1.160** (utilityai/llama-cpp-rs), released 2026-10-15, about weekly releases, 1.7M downloads. It vendors a llama.cpp that has `gemma4.cpp` and `gemma4-assistant.cpp`, so Gemma 4 support is newer than the desktop's b11887. Alternatives: `llama-cpp-4` (eugenehp fork; 32k downloads, active), `llama_cpp` (edgenai; last release 2024-04, stale), `llama-cpp-rs` (2023, stale). utilityai is the clear choice.
 - Build: about 30 s on the M4 Pro (cmake via the `cmake` crate, plus bindgen, which needs libclang from the Command Line Tools). `target/` is 0.86 GB per profile; three profiles were built for the comparisons.
-- Metal is always on for Apple targets: the `metal` cargo feature changes nothing in `build.rs`, and the Metal library is embedded (`GGML_METAL_EMBED_LIBRARY=ON`), so no `.metallib` needs packaging. Backend init takes about 0.05 s, or about 3 s the first time after a build while the shaders compile into the cache.
-- **The CPU architecture flag matters a lot.** The crate builds ggml with `GGML_NATIVE=OFF` and no `GGML_CPU_ARM_ARCH` on Apple, and with `-march=armv8-a` on Android. That default CPU build managed 73 tok/s prefill at 1.5k words. `GGML_CPU_ARM_ARCH=armv8.6-a+dotprod+i8mm+fp16` gives 130 tok/s, the same as `-C target-cpu=native` (132). A phone build must set it: i8mm needs A15 or later on iPhone and Armv8.6 cores on Android; a build for older phones should use `armv8.2-a+dotprod`.
+- Metal is always on for Apple targets: the `metal` cargo feature changes nothing in `build.rs`, and the Metal library is embedded (`GGML_METAL_EMBED_LIBRARY=ON`), so no `.metallib` needs packaging. Backend init usually takes 0.05 s, and occasionally about 3 s: this happened on the first run after a build and once in the middle of the matrix, presumably while the embedded Metal source was compiling. On a phone, expect that cost at some launches.
+- **The CPU architecture flag matters a lot.** The crate builds ggml with `GGML_NATIVE=OFF` and no `GGML_CPU_ARM_ARCH` on Apple, and with `-march=armv8-a` on Android. That default CPU build managed 73 tok/s prefill at 1.5k words. `GGML_CPU_ARM_ARCH=armv8.6-a+dotprod+i8mm+fp16` gives 130 tok/s, the same as `-C target-cpu=native` (132). A phone build must set it: i8mm is only on recent A-series and Armv8.6+ Android cores (check the minimum device), so a build for older phones should use `armv8.2-a+dotprod`.
 - APIs used: `LlamaModelParams::{with_n_gpu_layers, with_devices, with_use_mmap}`; `LlamaContextParams::{with_n_ctx, with_n_batch, with_n_ubatch, with_n_threads(_batch), with_type_k/v, with_flash_attention_policy, with_swa_full, with_offload_kqv, with_op_offload}`; `LlamaSampler::chain_simple` / `greedy`; `vocab().tokenize`. KV quantization is exposed (`KvCacheType::Q8_0`). The perf counters in `timings()` read zero unless `no_perf` is off, so the spike times the phases itself.
 
 ### Cross-compiling (not tried; from build.rs, docs and issues)
