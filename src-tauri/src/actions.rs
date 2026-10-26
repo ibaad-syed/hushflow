@@ -470,6 +470,12 @@ impl ShortcutAction for TranscribeAction {
         // Load ASR model and VAD model in parallel
         let kickoff_started = Instant::now();
         tm.initiate_model_load();
+        // The cleanup model too, if it slept while idle: it reloads while the
+        // user speaks.
+        if let Some(cleanup) = app.try_state::<Arc<crate::managers::cleanup::CleanupManager>>() {
+            let cleanup = Arc::clone(&cleanup);
+            tauri::async_runtime::spawn(async move { cleanup.wake().await });
+        }
         let rm_clone = Arc::clone(&rm);
         std::thread::spawn(move || {
             if let Err(e) = rm_clone.preload_vad() {

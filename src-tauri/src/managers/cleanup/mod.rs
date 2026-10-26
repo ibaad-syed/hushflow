@@ -16,10 +16,11 @@ use catalog::{CleanupEngineInfo, CleanupModel, APPLE_INTELLIGENCE};
 use futures_util::StreamExt;
 use log::{debug, info, warn};
 use serde::Serialize;
-use server::LlamaServer;
+use server::{LlamaServer, ServerOptions};
 use specta::Type;
 use std::collections::HashMap;
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use tauri::{AppHandle, Emitter, Manager};
@@ -55,6 +56,8 @@ pub struct CleanupManager {
     server: tokio::sync::Mutex<Option<LlamaServer>>,
     /// Model id → bytes downloaded, while downloading.
     downloads: Mutex<HashMap<String, u64>>,
+    /// Set once the GPU backend fails to load a model, for the rest of the run.
+    cpu_only: AtomicBool,
 }
 
 impl CleanupManager {
@@ -70,6 +73,7 @@ impl CleanupManager {
             http: reqwest::Client::new(),
             server: tokio::sync::Mutex::new(None),
             downloads: Mutex::new(HashMap::new()),
+            cpu_only: AtomicBool::new(false),
         })
     }
 
@@ -274,9 +278,10 @@ impl CleanupManager {
         if !self.is_downloaded(model.id) {
             return;
         }
+        let options = self.server_options();
         let mut guard = self.server.lock().await;
         if let Some(server) = guard.as_mut() {
-            if server.model_id == model.id && server.alive() {
+            if server.model_id == model.id && server.options == options && server.alive() {
                 return;
             }
         }
@@ -288,19 +293,30 @@ impl CleanupManager {
                 return;
             }
         };
-        let pid_file = self.dir.join(server::PID_FILE);
-        let mut server =
-            match LlamaServer::start(&binary, &self.model_path(model), model.id, &pid_file) {
-                Ok(server) => server,
-                Err(e) => {
-                    warn!("Cleanup server failed to start: {e}");
-                    return;
+        let server = match self.start_server(&binary, model, options).await {
+            Ok(server) => server,
+            // A GPU driver that can't load the model takes the server down
+            // with it; the CPU is slower but always there. A slow load (a
+            // timeout) isn't a GPU problem, so it doesn't count.
+            Err(e) if !options.cpu_only && e.to_string().contains(server::EXITED) => {
+                warn!("Cleanup server failed on the GPU ({e}); retrying on the CPU");
+                self.cpu_only.store(true, Ordering::Relaxed);
+                match self
+                    .start_server(&binary, model, self.server_options())
+                    .await
+                {
+                    Ok(server) => server,
+                    Err(e) => {
+                        warn!("Cleanup server failed on the CPU too: {e}");
+                        return;
+                    }
                 }
-            };
-        if let Err(e) = server.wait_ready(&self.http, SERVER_START_TIMEOUT).await {
-            warn!("{e}");
-            return;
-        }
+            }
+            Err(e) => {
+                warn!("Cleanup server failed to start: {e}");
+                return;
+            }
+        };
         let port = server.port;
         *guard = Some(server);
         drop(guard);
@@ -312,6 +328,63 @@ impl CleanupManager {
             .await;
         debug!("Cleanup prompt cache primed in {:?}", started.elapsed());
         self.notify();
+    }
+
+    async fn start_server(
+        &self,
+        binary: &std::path::Path,
+        model: &CleanupModel,
+        options: ServerOptions,
+    ) -> Result<LlamaServer> {
+        let pid_file = self.dir.join(server::PID_FILE);
+        let mut server = LlamaServer::start(
+            binary,
+            &self.model_path(model),
+            model.id,
+            &pid_file,
+            options,
+        )?;
+        server.wait_ready(&self.http, SERVER_START_TIMEOUT).await?;
+        Ok(server)
+    }
+
+    /// Follows the speech model's unload setting: after that long idle the
+    /// server releases the weights (VRAM on discrete GPUs), and `wake` brings
+    /// them back while the user is speaking.
+    fn server_options(&self) -> ServerOptions {
+        let timeout = get_settings(&self.app).model_unload_timeout;
+        ServerOptions {
+            // "Immediately" sleeps right after each cleanup; the next
+            // recording wakes it again.
+            idle_sleep: timeout.to_seconds(),
+            cpu_only: self.cpu_only.load(Ordering::Relaxed),
+        }
+    }
+
+    /// At the start of a recording: reloads the weights if the server slept
+    /// or isn't running, so cleanup is ready by the time the user stops.
+    pub async fn wake(&self) {
+        let settings = get_settings(&self.app);
+        if !settings.cleanup_enabled || catalog::find(&settings.cleanup_engine).is_none() {
+            return;
+        }
+        let port = {
+            let mut guard = self.server.lock().await;
+            guard
+                .as_mut()
+                .filter(|s| s.model_id == settings.cleanup_engine)
+                .and_then(|s| s.alive().then_some(s.port))
+        };
+        match port {
+            Some(port) => {
+                if server::is_sleeping(&self.http, port).await {
+                    let started = Instant::now();
+                    self.prime().await;
+                    debug!("Cleanup server woke in {:?}", started.elapsed());
+                }
+            }
+            None => self.warm().await,
+        }
     }
 
     /// Re-primes the server's prompt cache, e.g. after the instructions change.

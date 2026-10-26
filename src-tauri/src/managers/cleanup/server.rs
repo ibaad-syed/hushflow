@@ -4,6 +4,12 @@
 //! links, and a crash there can't take the app down. Prompt-lookup speculative
 //! decoding drafts from the transcript itself, which cleanup output mostly
 //! repeats; in our eval it halved the slow tail (p90 1070 → 431 ms).
+//!
+//! Memory: weights are mmapped, so on Apple Silicon the GPU reads the file in
+//! place (~280 MB of real footprint, the rest reclaimable file cache). On
+//! discrete GPUs they're copied to VRAM, which is what idle sleep gives back.
+//! GPU layers are left to llama.cpp, whose `--fit` keeps a margin free on
+//! small cards instead of failing to load (`-ngl 99` would turn that off).
 
 use anyhow::{anyhow, Result};
 use log::{info, warn};
@@ -16,10 +22,24 @@ use std::time::{Duration, Instant};
 /// next launch instead of holding gigabytes of memory.
 pub const PID_FILE: &str = "llama-server.pid";
 
+/// The error when the process dies before it's ready (a crash, not a timeout).
+pub const EXITED: &str = "cleanup server exited while loading";
+
+/// How a server is started.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct ServerOptions {
+    /// Release the weights after this long without a request; the next
+    /// request reloads them (~1 s on an M4 Pro). `None` keeps them loaded.
+    pub idle_sleep: Option<u64>,
+    /// Run on the CPU only, for when the GPU backend can't load the model.
+    pub cpu_only: bool,
+}
+
 pub struct LlamaServer {
     child: Child,
     pub port: u16,
     pub model_id: String,
+    pub options: ServerOptions,
     pid_file: std::path::PathBuf,
 }
 
@@ -61,7 +81,13 @@ pub fn stop_stale(pid_file: &Path) {
 }
 
 impl LlamaServer {
-    pub fn start(binary: &Path, model: &Path, model_id: &str, pid_file: &Path) -> Result<Self> {
+    pub fn start(
+        binary: &Path,
+        model: &Path,
+        model_id: &str,
+        pid_file: &Path,
+        options: ServerOptions,
+    ) -> Result<Self> {
         if !binary.exists() {
             return Err(anyhow!(
                 "llama-server not found at {} (run `bun scripts/fetch-llama.ts`)",
@@ -79,7 +105,7 @@ impl LlamaServer {
             .args(["--host", "127.0.0.1", "--port", &port.to_string()])
             .arg("-m")
             .arg(model)
-            .args(["-ngl", "99", "-c", "4096", "-np", "1", "--jinja"])
+            .args(["-c", "4096", "-np", "1", "--jinja"])
             .args(["--cache-reuse", "256", "--no-webui"])
             .args(["--spec-type", "ngram-simple"])
             .args([
@@ -91,6 +117,12 @@ impl LlamaServer {
             .stdin(Stdio::null())
             .stdout(Stdio::null())
             .stderr(Stdio::null());
+        if let Some(seconds) = options.idle_sleep {
+            command.args(["--sleep-idle-seconds", &seconds.max(1).to_string()]);
+        }
+        if options.cpu_only {
+            command.args(["--device", "none", "-ngl", "0"]);
+        }
         #[cfg(windows)]
         {
             use std::os::windows::process::CommandExt;
@@ -99,11 +131,12 @@ impl LlamaServer {
         }
         let child = command.spawn()?;
         let _ = std::fs::write(pid_file, child.id().to_string());
-        info!("Started cleanup server for '{model_id}' on port {port}");
+        info!("Started cleanup server for '{model_id}' on port {port} ({options:?})");
         Ok(Self {
             child,
             port,
             model_id: model_id.to_string(),
+            options,
             pid_file: pid_file.to_path_buf(),
         })
     }
@@ -122,7 +155,7 @@ impl LlamaServer {
         let started = Instant::now();
         while started.elapsed() < timeout {
             if !self.alive() {
-                return Err(anyhow!("cleanup server exited while loading"));
+                return Err(anyhow!(EXITED));
             }
             if let Ok(r) = client.get(self.url("/health")).send().await {
                 if r.status().is_success() {
@@ -144,6 +177,22 @@ impl Drop for LlamaServer {
         let _ = self.child.wait();
         let _ = std::fs::remove_file(&self.pid_file);
     }
+}
+
+/// Whether the server has released its weights after being idle.
+pub async fn is_sleeping(client: &reqwest::Client, port: u16) -> bool {
+    let Ok(response) = client
+        .get(format!("http://127.0.0.1:{port}/props"))
+        .timeout(Duration::from_secs(1))
+        .send()
+        .await
+    else {
+        return false;
+    };
+    response
+        .json::<serde_json::Value>()
+        .await
+        .is_ok_and(|props| props["is_sleeping"].as_bool() == Some(true))
 }
 
 fn free_port() -> Result<u16> {

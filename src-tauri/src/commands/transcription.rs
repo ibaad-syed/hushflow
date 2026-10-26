@@ -3,7 +3,7 @@ use crate::settings::{get_settings, write_settings, ModelUnloadTimeout};
 use serde::Serialize;
 use specta::Type;
 use std::sync::Arc;
-use tauri::{AppHandle, State};
+use tauri::{AppHandle, Manager, State};
 
 #[derive(Serialize, Type)]
 pub struct ModelLoadStatus {
@@ -17,6 +17,11 @@ pub fn set_model_unload_timeout(app: AppHandle, timeout: ModelUnloadTimeout) {
     let mut settings = get_settings(&app);
     settings.model_unload_timeout = timeout;
     write_settings(&app, settings);
+    // The cleanup server follows the same setting; restart it to apply.
+    if let Some(cleanup) = app.try_state::<Arc<crate::managers::cleanup::CleanupManager>>() {
+        let cleanup = Arc::clone(&cleanup);
+        tauri::async_runtime::spawn(async move { cleanup.warm().await });
+    }
 }
 
 #[tauri::command]
