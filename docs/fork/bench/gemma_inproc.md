@@ -66,15 +66,15 @@ The 1.76 GB embedding table matters for phones. It is touched one row per token,
 
 ### Smaller quant: Q3_K_M (2.54 GB)
 
-| Mode           | Words  | Prefill tok/s | Decode tok/s | Total s | Peak footprint MB |
-| -------------- | ------ | ------------- | ------------ | ------- | ----------------- |
-| Metal, mmap    | 1,505  | 1,335         | 75           | 10.8    | 362               |
-| Metal, no mmap | 1,505  | 1,407         | 75           | 10.5    | **3,137**         |
-| Metal, mmap    | 10,046 | 1,009         | 67           | 40.3    | 439               |
-| Metal, no mmap | 10,046 | 1,004         | 67           | 40.7    | **3,241**         |
-| CPU ×4, mmap   | 1,505  | 68            | 40           | 54.0    | 733               |
-| CPU ×4, mmap   | 10,046 | 59            | 29           | 348.7   | 803               |
-| CPU ×4, no mmap| 1,505  | 69            | 40           | 53.9    | 2,957             |
+| Mode            | Words  | Prefill tok/s | Decode tok/s | Total s | Peak footprint MB |
+| --------------- | ------ | ------------- | ------------ | ------- | ----------------- |
+| Metal, mmap     | 1,505  | 1,335         | 75           | 10.8    | 362               |
+| Metal, no mmap  | 1,505  | 1,407         | 75           | 10.5    | **3,137**         |
+| Metal, mmap     | 10,046 | 1,009         | 67           | 40.3    | 439               |
+| Metal, no mmap  | 10,046 | 1,004         | 67           | 40.7    | **3,241**         |
+| CPU ×4, mmap    | 1,505  | 68            | 40           | 54.0    | 733               |
+| CPU ×4, mmap    | 10,046 | 59            | 29           | 348.7   | 803               |
+| CPU ×4, no mmap | 1,505  | 69            | 40           | 53.9    | 2,957             |
 
 Q3_K_M saves about 640 MB of resident memory, and it is slower: decode drops 20% on Metal, and CPU prefill halves, likely because Q3_K has no repacked CPU kernels. That cause wasn't confirmed from the logs, and the Q3 CPU runs weren't repeated on an idle machine, so some contention may be included; the Metal rows are unaffected. Its notes are shorter (345–356 words against about 480) but well-formed and correctly cited at 1.5k words. It isn't a good trade, since the 1.76 GB embedding table dominates the size whatever the quant.
 
