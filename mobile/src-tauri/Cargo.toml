@@ -1,0 +1,23 @@
+[package]
+name = "hushflow-mobile"
+version = "0.1.0"
+description = "Hushflow Mobile: offline meeting notes"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[lib]
+# `_lib` keeps the lib name distinct from the bin's (a Windows quirk, see
+# cargo#8519). staticlib for iOS, cdylib for Android, rlib for the desktop
+# dev binary.
+name = "hushflow_mobile_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+hushflow-core = { path = "../../crates/hushflow-core" }
+tauri = { version = "2.11.5", features = [] }
+serde = { version = "1", features = ["derive"] }
+log = "0.4.25"
