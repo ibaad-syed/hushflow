@@ -16,7 +16,9 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Let a running build finish (it takes ~20 min); a newer push waits, and
+  # only the newest waiting one runs.
+  cancel-in-progress: false
 
 jobs:
   build:
