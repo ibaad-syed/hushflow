@@ -625,12 +625,13 @@ fn default_overlay_position() -> OverlayPosition {
 }
 
 fn default_overlay_style() -> OverlayStyle {
-    // Linux hides the overlay by default; other platforms show the live overlay.
+    // Linux hides the overlay by default; other platforms show the slim pill,
+    // as Wispr Flow does (Live, with the words as you speak, is opt-in).
     // Position is independent and only selects top vs. bottom placement.
     #[cfg(target_os = "linux")]
     return OverlayStyle::None;
     #[cfg(not(target_os = "linux"))]
-    return OverlayStyle::Live;
+    return OverlayStyle::Minimal;
 }
 
 fn default_vad_enabled() -> bool {
@@ -1729,9 +1730,9 @@ mod tests {
 
     #[cfg(not(target_os = "linux"))]
     #[test]
-    fn default_overlay_style_is_live_when_overlay_defaults_on() {
+    fn default_overlay_style_is_minimal_when_overlay_defaults_on() {
         let settings = get_default_settings();
-        assert_eq!(settings.overlay_style, OverlayStyle::Live);
+        assert_eq!(settings.overlay_style, OverlayStyle::Minimal);
     }
 
     #[test]
