@@ -993,7 +993,8 @@
     "modelLoadFailedUnknown": "неизвестен модел",
     "pasteFailedTitle": "Неуспешно поставяне на текст",
     "pasteFailed": "Текстът не можа да бъде поставен в активното приложение.",
-    "transcriptionFailedTitle": "Неуспешна транскрипция"
+    "transcriptionFailedTitle": "Неуспешна транскрипция",
+    "speechModelDownloading": "The speech model is still downloading. Dictation will work as soon as it's ready."
   },
   "appLanguage": {
     "title": "Език на приложението",

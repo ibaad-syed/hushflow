@@ -993,7 +993,8 @@
     "modelLoadFailedUnknown": "model desconegut",
     "pasteFailedTitle": "No s'ha pogut enganxar el text",
     "pasteFailed": "No s'ha pogut enganxar el text a l'aplicació activa.",
-    "transcriptionFailedTitle": "La transcripció ha fallat"
+    "transcriptionFailedTitle": "La transcripció ha fallat",
+    "speechModelDownloading": "The speech model is still downloading. Dictation will work as soon as it's ready."
   },
   "appLanguage": {
     "title": "Llengua de l'aplicació",

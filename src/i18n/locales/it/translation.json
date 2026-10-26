@@ -993,7 +993,8 @@
     "modelLoadFailedUnknown": "modello sconosciuto",
     "pasteFailedTitle": "Impossibile incollare il testo",
     "pasteFailed": "Non è stato possibile incollare il testo nell'applicazione attiva.",
-    "transcriptionFailedTitle": "Trascrizione non riuscita"
+    "transcriptionFailedTitle": "Trascrizione non riuscita",
+    "speechModelDownloading": "The speech model is still downloading. Dictation will work as soon as it's ready."
   },
   "appLanguage": {
     "title": "Lingua Applicazione",

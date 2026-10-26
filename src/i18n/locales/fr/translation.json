@@ -993,7 +993,8 @@
     "modelLoadFailedUnknown": "modèle inconnu",
     "pasteFailedTitle": "Échec du collage du texte",
     "pasteFailed": "Le texte n'a pas pu être collé dans l'application active.",
-    "transcriptionFailedTitle": "Échec de la transcription"
+    "transcriptionFailedTitle": "Échec de la transcription",
+    "speechModelDownloading": "The speech model is still downloading. Dictation will work as soon as it's ready."
   },
   "appLanguage": {
     "title": "Langue de l'application",

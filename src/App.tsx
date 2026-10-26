@@ -210,6 +210,13 @@ function App() {
   useEffect(() => {
     const unlisten = listen<ModelStateEvent>("model-state-changed", (event) => {
       if (event.payload.event_type === "loading_failed") {
+        // First run: nothing to load until the speech model downloads.
+        if (event.payload.error === "no_model_yet") {
+          toast.info(t("errors.speechModelDownloading"), {
+            id: "speech-model-downloading",
+          });
+          return;
+        }
         toast.error(
           t("errors.modelLoadFailed", {
             model:

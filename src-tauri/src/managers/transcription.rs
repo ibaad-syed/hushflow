@@ -49,6 +49,10 @@ pub(crate) fn panic_payload_message(payload: &(dyn std::any::Any + Send)) -> Str
     }
 }
 
+/// The `model-state-changed` error when no speech model is ready yet; the UI
+/// shows "still downloading" for it instead of a load failure.
+pub const NO_MODEL_YET: &str = "no_model_yet";
+
 #[derive(Clone, Debug, Serialize)]
 pub struct ModelStateEvent {
     pub event_type: String,
@@ -547,6 +551,21 @@ impl TranscriptionManager {
                 error: None,
             },
         );
+
+        // No model chosen yet: first run, before the speech model has finished
+        // downloading (Windows has no built-in engine to fall back on).
+        if model_id.is_empty() {
+            let _ = self.app_handle.emit(
+                "model-state-changed",
+                ModelStateEvent {
+                    event_type: "loading_failed".to_string(),
+                    model_id: None,
+                    model_name: None,
+                    error: Some(NO_MODEL_YET.to_string()),
+                },
+            );
+            return Err(anyhow::anyhow!("no speech model is ready yet"));
+        }
 
         let model_info = match self.model_manager.get_model_info(model_id) {
             Some(model_info) => model_info,
