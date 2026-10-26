@@ -12,7 +12,15 @@
 // Windows uses the Vulkan build so one binary covers NVIDIA, AMD and Intel GPUs.
 
 import { execFileSync } from "child_process";
-import { existsSync, mkdirSync, readdirSync, rmSync, copyFileSync, writeFileSync, readFileSync } from "fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  rmSync,
+  copyFileSync,
+  writeFileSync,
+  readFileSync,
+} from "fs";
 import { join, resolve } from "path";
 import { tmpdir } from "os";
 
@@ -24,11 +32,15 @@ const stamp = join(outDir, ".build");
 
 const asset = (() => {
   const { platform, arch } = process;
-  if (platform === "darwin" && arch === "arm64") return `llama-${LLAMA_BUILD}-bin-macos-arm64.tar.gz`;
+  if (platform === "darwin" && arch === "arm64")
+    return `llama-${LLAMA_BUILD}-bin-macos-arm64.tar.gz`;
   if (platform === "darwin") return `llama-${LLAMA_BUILD}-bin-macos-x64.tar.gz`;
-  if (platform === "win32" && arch === "arm64") return `llama-${LLAMA_BUILD}-bin-win-vulkan-arm64.zip`;
-  if (platform === "win32") return `llama-${LLAMA_BUILD}-bin-win-vulkan-x64.zip`;
-  if (platform === "linux" && arch === "arm64") return `llama-${LLAMA_BUILD}-bin-ubuntu-vulkan-arm64.tar.gz`;
+  if (platform === "win32" && arch === "arm64")
+    return `llama-${LLAMA_BUILD}-bin-win-vulkan-arm64.zip`;
+  if (platform === "win32")
+    return `llama-${LLAMA_BUILD}-bin-win-vulkan-x64.zip`;
+  if (platform === "linux" && arch === "arm64")
+    return `llama-${LLAMA_BUILD}-bin-ubuntu-vulkan-arm64.tar.gz`;
   return `llama-${LLAMA_BUILD}-bin-ubuntu-vulkan-x64.tar.gz`;
 })();
 
@@ -64,7 +76,8 @@ execFileSync("tar", ["-xf", archive, "-C", work], { stdio: "inherit" });
 
 const findDir = (dir: string): string => {
   const entries = readdirSync(dir, { withFileTypes: true });
-  if (entries.some((e) => e.isFile() && /^llama-server(\.exe)?$/.test(e.name))) return dir;
+  if (entries.some((e) => e.isFile() && /^llama-server(\.exe)?$/.test(e.name)))
+    return dir;
   for (const e of entries) {
     if (e.isDirectory()) {
       const found = findDir(join(dir, e.name));
