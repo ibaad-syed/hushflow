@@ -21,7 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    "font-medium rounded-lg border focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
+    "font-medium rounded-md border focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
 
   const variantClasses = {
     primary:
@@ -29,7 +29,7 @@ export const Button: React.FC<ButtonProps> = ({
     "primary-soft":
       "text-text bg-logo-primary/20 border-transparent hover:bg-logo-primary/20 focus:ring-1 focus:ring-logo-primary",
     secondary:
-      "bg-wash border-line hover:bg-logo-primary/20 hover:border-logo-primary focus:outline-none",
+      "bg-panel border-line-strong hover:bg-wash focus:outline-none focus-visible:ring-1 focus-visible:ring-logo-primary",
     // For screens where secondary's grey fill reads as disabled (onboarding)
     outline:
       "text-text bg-background border-line-strong hover:border-plum focus-visible:ring-1 focus-visible:ring-logo-primary",
@@ -48,7 +48,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   const sizeClasses = {
     sm: "px-2 py-1 text-xs",
-    md: "px-4 py-[5px] text-sm",
+    md: "px-3 py-[5px] text-[13px]",
     lg: "px-4 py-2 text-base",
   };
 

@@ -10,6 +10,8 @@
   --color-background: var(--color-background);
   --color-background-ui: var(--color-background-ui);
   --color-logo-primary: var(--color-logo-primary);
+  --color-panel: var(--color-panel);
+  --color-sidebar: var(--color-sidebar);
   --color-warning: var(--color-warning);
   --color-error: var(--color-error);
   --color-moss: var(--color-moss);
@@ -40,26 +42,26 @@
    Names avoid Tailwind's defaults, which Settings still uses. */
 @theme {
   --font-display:
-    ui-rounded, "SF Pro Rounded", system-ui, -apple-system,
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui,
     "Segoe UI Variable Display", "Segoe UI", sans-serif;
   --font-ui:
-    system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto,
-    "Noto Sans", sans-serif;
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
+    "Segoe UI Variable Text", "Segoe UI", Roboto, "Noto Sans", sans-serif;
   --font-cjk-subset:
     "Handy CJK Subset", -apple-system, "Segoe UI Variable Text", "Segoe UI",
     system-ui, sans-serif;
 
-  --text-title: 26px; /* screen titles */
+  --text-title: 24px; /* screen titles */
   --text-name: 15px; /* the model name on Model's Full card */
-  --text-row: 17px; /* row titles */
-  --text-body: 15px; /* body, subtitles */
+  --text-row: 15px; /* row titles */
+  --text-body: 14px; /* body, subtitles */
   --text-small: 13px; /* buttons, secondary text, hints */
   --text-label: 12px; /* labels */
   --text-tag: 11px; /* tags, column codes, small grade chips */
 
-  --radius-panel: 16px; /* panels, the selected card */
-  --radius-card: 12px;
-  --radius-control: 10px; /* buttons, fields, table rows */
+  --radius-panel: 12px; /* panels, the selected card */
+  --radius-card: 10px;
+  --radius-control: 8px; /* buttons, fields, table rows */
   --radius-chip: 6px; /* grade chips */
 
   /* Onboarding's side gutter. */
