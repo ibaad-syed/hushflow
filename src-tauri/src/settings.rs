@@ -493,7 +493,7 @@ pub struct AppSettings {
     pub post_process_selected_prompt_id: Option<String>,
     #[serde(default)]
     pub mute_while_recording: bool,
-    #[serde(default)]
+    #[serde(default = "default_true")]
     pub append_trailing_space: bool,
     #[serde(default = "default_app_language")]
     pub app_language: String,
@@ -578,7 +578,7 @@ fn default_model() -> String {
     "".to_string()
 }
 
-const CURRENT_SETTINGS_SCHEMA_VERSION: u32 = 3;
+const CURRENT_SETTINGS_SCHEMA_VERSION: u32 = 4;
 
 fn default_settings_schema_version() -> u32 {
     CURRENT_SETTINGS_SCHEMA_VERSION
@@ -1085,7 +1085,7 @@ pub fn get_default_settings() -> AppSettings {
         post_process_prompts: default_post_process_prompts(),
         post_process_selected_prompt_id: None,
         mute_while_recording: false,
-        append_trailing_space: false,
+        append_trailing_space: true,
         app_language: default_app_language(),
         theme: default_theme(),
         experimental_enabled: false,
@@ -1352,6 +1352,13 @@ fn apply_settings_migrations(
         settings.settings_schema_version = CURRENT_SETTINGS_SCHEMA_VERSION;
         updated = true;
     }
+    if stored_schema_version < 4 {
+        // Back-to-back dictations ran together ("…tomorrow.Also…"); the
+        // trailing space now defaults on, and on once for existing installs.
+        settings.append_trailing_space = true;
+        settings.settings_schema_version = CURRENT_SETTINGS_SCHEMA_VERSION;
+        updated = true;
+    }
     if stored_schema_version < 3 {
         // Update checks shipped off while the fork still pointed at Handy's
         // releases; nobody chose that. Turn them on once, now that Hushflow
@@ -1484,7 +1491,7 @@ mod tests {
         assert!(settings.update_checks_enabled);
         // A later "off" is the user's and stays.
         settings.update_checks_enabled = false;
-        let raw = serde_json::json!({"settings_schema_version": 3, "update_checks_enabled": false});
+        let raw = serde_json::json!({"settings_schema_version": 4, "update_checks_enabled": false});
         apply_settings_migrations(&mut settings, &raw);
         assert!(!settings.update_checks_enabled);
     }

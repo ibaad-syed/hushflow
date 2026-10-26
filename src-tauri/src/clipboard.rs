@@ -796,6 +796,14 @@ fn should_send_auto_submit(auto_submit: bool, paste_method: PasteMethod) -> bool
 
 /// Pastes `text` into the focused app. Call from a worker thread, never the main
 /// thread: it sleeps between steps (input injection hops via `with_enigo`).
+fn with_trailing_space(text: String, enabled: bool) -> String {
+    if enabled && !text.is_empty() && !text.ends_with(char::is_whitespace) {
+        format!("{text} ")
+    } else {
+        text
+    }
+}
+
 pub fn paste(text: String, app_handle: AppHandle) -> Result<(), String> {
     let _paste = PASTE_LOCK.lock().unwrap_or_else(PoisonError::into_inner);
     let settings = get_settings(&app_handle);
@@ -803,12 +811,9 @@ pub fn paste(text: String, app_handle: AppHandle) -> Result<(), String> {
     let paste_delay_ms = settings.paste_delay_ms;
     let paste_delay_after_ms = settings.paste_delay_after_ms;
 
-    // Append trailing space if setting is enabled
-    let text = if settings.append_trailing_space {
-        format!("{} ", text)
-    } else {
-        text
-    };
+    // A trailing space keeps the next dictation from running into this one.
+    // Not after a line break (a list's last item) or a space already there.
+    let text = with_trailing_space(text, settings.append_trailing_space);
 
     info!(
         "Using paste method: {:?}, delay before: {}ms, delay after: {}ms",
@@ -895,6 +900,23 @@ pub fn paste(text: String, app_handle: AppHandle) -> Result<(), String> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod trailing_space_tests {
+    use super::with_trailing_space;
+
+    #[test]
+    fn space_only_where_the_next_dictation_would_run_on() {
+        assert_eq!(with_trailing_space("Hi there.".into(), true), "Hi there. ");
+        assert_eq!(
+            with_trailing_space("- Milk\n- Eggs\n".into(), true),
+            "- Milk\n- Eggs\n"
+        );
+        assert_eq!(with_trailing_space("Done ".into(), true), "Done ");
+        assert_eq!(with_trailing_space(String::new(), true), "");
+        assert_eq!(with_trailing_space("Hi.".into(), false), "Hi.");
+    }
 }
 
 #[cfg(test)]
