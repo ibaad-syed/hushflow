@@ -1011,7 +1011,12 @@
   "overlay": {
     "transcribing": "ट्रांसक्राइब हो रहा है...",
     "processing": "प्रोसेस हो रहा है...",
-    "loadingModel": "मॉडल लोड हो रहा है..."
+    "loadingModel": "मॉडल लोड हो रहा है...",
+    "meetingPrompt": {
+      "call": "{{app}} call",
+      "takeNotes": "Take notes",
+      "dismiss": "Not now"
+    }
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} शायद 1 शॉर्टकट को ब्लॉक कर रहा है",
@@ -1070,6 +1075,10 @@
       "empty": "Nothing was transcribed.",
       "echoHidden_one": "{{count}} line the mic picked up from your speakers is hidden.",
       "echoHidden_other": "{{count}} lines the mic picked up from your speakers are hidden."
+    },
+    "detect": {
+      "title": "Ask when a call starts",
+      "description": "When another app (Meet, Zoom, Teams…) starts using your microphone, offer to take notes. Notes started this way stop when the call ends."
     }
   }
 }

@@ -562,6 +562,9 @@ pub struct AppSettings {
     /// Polish every dictation with the cleanup engine before pasting.
     #[serde(default)]
     pub cleanup_enabled: bool,
+    /// Offer to take meeting notes when another app starts using the mic.
+    #[serde(default = "default_true")]
+    pub meeting_detection: bool,
     /// Cleanup engine: a local model id from the cleanup catalog, or
     /// "apple-intelligence".
     #[serde(default = "default_cleanup_engine")]
@@ -616,6 +619,10 @@ fn default_whats_new_last_seen_version() -> String {
 
 fn default_selected_language() -> String {
     "auto".to_string()
+}
+
+fn default_true() -> bool {
+    true
 }
 
 fn default_overlay_position() -> OverlayPosition {
@@ -1102,6 +1109,7 @@ pub fn get_default_settings() -> AppSettings {
         overlay_style: default_overlay_style(),
         transcription_engine_mode: TranscriptionEngineMode::Automatic,
         cleanup_enabled: false,
+        meeting_detection: true,
         cleanup_engine: default_cleanup_engine(),
         cleanup_prompt: None,
     }

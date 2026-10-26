@@ -19,7 +19,10 @@ import {
 import { Button } from "../../ui/Button";
 import { Input } from "../../ui/Input";
 import { Spinner } from "../../ui/Spinner";
+import { ToggleSwitch } from "../../ui/ToggleSwitch";
+import { SettingsGroup } from "../../ui/SettingsGroup";
 import { MarkdownContent } from "../../whats-new/MarkdownContent";
+import { useSettings } from "../../../hooks/useSettings";
 import { copyToClipboard } from "../history/clipboard";
 
 /** The `meeting-segment` event (managers/meeting/mod.rs). */
@@ -387,6 +390,7 @@ const MeetingView: React.FC<{
 
 export const MeetingsSettings: React.FC = () => {
   const { t } = useTranslation();
+  const { getSetting, updateSetting, isUpdating } = useSettings();
   const [meetings, setMeetings] = useState<MeetingSummary[]>([]);
   const [query, setQuery] = useState("");
   const [active, setActive] = useState<ActiveMeeting | null>(null);
@@ -506,6 +510,17 @@ export const MeetingsSettings: React.FC = () => {
           ))
         )}
       </div>
+      <SettingsGroup>
+        <ToggleSwitch
+          checked={getSetting("meeting_detection") ?? true}
+          onChange={(on) => updateSetting("meeting_detection", on)}
+          isUpdating={isUpdating("meeting_detection")}
+          label={t("meetings.detect.title")}
+          description={t("meetings.detect.description")}
+          descriptionMode="inline"
+          grouped
+        />
+      </SettingsGroup>
       <p className="m-0 px-1 text-xs text-ink-3">{t("meetings.consent")}</p>
     </div>
   );

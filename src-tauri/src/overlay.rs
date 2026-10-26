@@ -610,6 +610,18 @@ pub fn emit_recording_ready(app_handle: &AppHandle) {
     });
 }
 
+/// Shows "<app> call · Take notes" in the overlay: another app started using
+/// the mic. Shown even with the recording overlay turned off, since it's a
+/// question, not a recording indicator.
+pub fn show_meeting_prompt(app_handle: &AppHandle, app_name: &str) {
+    let handle = app_handle.clone();
+    let name = app_name.to_string();
+    let _ = app_handle.run_on_main_thread(move || {
+        show_overlay_state_on_main(&handle, "meeting-prompt");
+        let _ = handle.emit_to("recording_overlay", "meeting-prompt", name);
+    });
+}
+
 /// Shows the recording overlay window with fade-in animation
 pub fn show_recording_overlay(app_handle: &AppHandle) {
     show_overlay_state(app_handle, "recording");

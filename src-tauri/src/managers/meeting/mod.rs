@@ -7,6 +7,7 @@
 //! captions can lag but nothing is lost.
 
 mod capture;
+pub mod detect;
 pub mod notes;
 pub mod store;
 
@@ -19,11 +20,14 @@ use capture::{Audio, MicCapture, Segmenter, SystemCapture};
 use log::{error, info, warn};
 use serde::Serialize;
 use specta::Type;
+use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Sender};
 use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use std::time::Duration;
+use std::time::Instant;
 use store::{
     MeetingDetail, MeetingSegment, MeetingSummary, Store, CHANNEL_MIC, CHANNEL_SYSTEM,
     STATUS_READY, STATUS_SUMMARIZING,
@@ -32,6 +36,14 @@ use tauri::{AppHandle, Emitter, Manager};
 
 const RATE: u32 = 16_000;
 const DICTATION_POLL: Duration = Duration::from_millis(200);
+/// Call detection: how often to look, how many looks an app must hold the
+/// mic before we ask (so a quick voice memo doesn't), how long the question
+/// stays up, and how long after the call releases the mic a meeting started
+/// from the question ends on its own.
+const DETECT_EVERY: Duration = Duration::from_secs(2);
+const DETECT_LOOKS: u32 = 2;
+const PROMPT_FOR: Duration = Duration::from_secs(45);
+const AUTO_STOP_AFTER: Duration = Duration::from_secs(15);
 
 /// A new line of transcript, for the live view.
 #[derive(Debug, Clone, Serialize, Type)]
@@ -57,11 +69,26 @@ struct Active {
     threads: Vec<JoinHandle<()>>,
 }
 
+#[derive(Default)]
+struct Detection {
+    /// Looks in a row each app has held the mic.
+    looks: HashMap<String, u32>,
+    /// Apps already asked about during their current mic use.
+    asked: HashSet<String>,
+    /// The question on screen, and since when.
+    showing: Option<(String, Instant)>,
+    /// The last time another app had the mic, during a prompted meeting.
+    last_call_audio: Option<Instant>,
+}
+
 pub struct MeetingManager {
     app: AppHandle,
     dir: PathBuf,
     store: Arc<Store>,
     active: Mutex<Option<Active>>,
+    /// The current meeting was started from the call prompt: it ends when the call does.
+    auto: AtomicBool,
+    detection: Mutex<Detection>,
 }
 
 fn now_ms() -> i64 {
@@ -80,6 +107,8 @@ impl MeetingManager {
             dir,
             store: Arc::new(store),
             active: Mutex::new(None),
+            auto: AtomicBool::new(false),
+            detection: Mutex::new(Detection::default()),
         })
     }
 
@@ -96,6 +125,7 @@ impl MeetingManager {
         if let Some(a) = active.as_ref() {
             return Ok(a.info.clone());
         }
+        self.auto.store(false, Ordering::Relaxed);
         let settings = get_settings(&self.app);
         let started_at = now_ms();
         let stem = format!("meeting-{started_at}");
@@ -386,6 +416,101 @@ impl MeetingManager {
             md.push_str("  \n");
         }
         Ok(md)
+    }
+
+    /// Starts notes from the call prompt; the meeting ends with the call.
+    pub fn accept_prompt(&self) -> Result<ActiveMeeting> {
+        self.hide_prompt();
+        let info = self.start()?;
+        self.auto.store(true, Ordering::Relaxed);
+        self.detection.lock().unwrap().last_call_audio = Some(Instant::now());
+        Ok(info)
+    }
+
+    /// "Not this call": asks again only after the app releases the mic.
+    pub fn dismiss_prompt(&self) {
+        self.hide_prompt();
+    }
+
+    fn hide_prompt(&self) {
+        let was_showing = self.detection.lock().unwrap().showing.take().is_some();
+        // The overlay may be dictation's by now; leave it alone then.
+        if was_showing && !crate::tray::dictation_in_progress(&self.app) {
+            crate::overlay::hide_recording_overlay(&self.app);
+        }
+    }
+
+    /// Watches for calls: another app holding the mic gets one question.
+    pub fn watch(self: &Arc<Self>) {
+        let manager = Arc::clone(self);
+        let _ = std::thread::Builder::new()
+            .name("meeting-detect".into())
+            .spawn(move || loop {
+                std::thread::sleep(DETECT_EVERY);
+                manager.detect_tick();
+            });
+    }
+
+    fn detect_tick(self: &Arc<Self>) {
+        let enabled = get_settings(&self.app).meeting_detection;
+        let recording = self.active().is_some();
+        let auto = recording && self.auto.load(Ordering::Relaxed);
+        if !enabled && !auto {
+            self.hide_prompt();
+            return;
+        }
+        let users = detect::mic_users();
+        let keys: HashSet<&str> = users.iter().map(|u| u.key.as_str()).collect();
+
+        let mut d = self.detection.lock().unwrap();
+        d.looks.retain(|k, _| keys.contains(k.as_str()));
+        d.asked.retain(|k| keys.contains(k.as_str()));
+
+        if recording {
+            if !users.is_empty() {
+                d.last_call_audio = Some(Instant::now());
+            } else if auto
+                && d.last_call_audio
+                    .is_some_and(|t| t.elapsed() >= AUTO_STOP_AFTER)
+            {
+                drop(d);
+                info!("The call ended; stopping its meeting notes");
+                let _ = self.stop();
+                return;
+            }
+            // Users already on a call we're recording count as asked.
+            for u in &users {
+                d.asked.insert(u.key.clone());
+            }
+            let showing = d.showing.is_some();
+            drop(d);
+            if showing {
+                self.hide_prompt();
+            }
+            return;
+        }
+
+        if let Some((key, since)) = d.showing.clone() {
+            if !keys.contains(key.as_str()) || since.elapsed() >= PROMPT_FOR {
+                drop(d);
+                self.hide_prompt();
+            }
+            return;
+        }
+        for u in &users {
+            let looks = d.looks.entry(u.key.clone()).or_insert(0);
+            *looks += 1;
+            if *looks >= DETECT_LOOKS
+                && !d.asked.contains(&u.key)
+                && !crate::tray::dictation_in_progress(&self.app)
+            {
+                info!("{} is using the microphone; offering meeting notes", u.name);
+                d.asked.insert(u.key.clone());
+                d.showing = Some((u.key.clone(), Instant::now()));
+                crate::overlay::show_meeting_prompt(&self.app, &u.name);
+                break;
+            }
+        }
     }
 
     /// On quit: a meeting still recording keeps what it has.

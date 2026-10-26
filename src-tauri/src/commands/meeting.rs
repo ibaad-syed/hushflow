@@ -2,8 +2,9 @@
 
 use crate::managers::meeting::store::{MeetingDetail, MeetingSummary};
 use crate::managers::meeting::{ActiveMeeting, MeetingManager};
+use crate::settings::{get_settings, write_settings};
 use std::sync::Arc;
-use tauri::State;
+use tauri::{AppHandle, State};
 
 type Meetings<'a> = State<'a, Arc<MeetingManager>>;
 
@@ -70,4 +71,24 @@ pub fn delete_meeting(meetings: Meetings<'_>, id: i64) -> Result<(), String> {
 #[specta::specta]
 pub fn meeting_markdown(meetings: Meetings<'_>, id: i64) -> Result<String, String> {
     meetings.markdown(id).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn accept_meeting_prompt(meetings: Meetings<'_>) -> Result<ActiveMeeting, String> {
+    meetings.accept_prompt().map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn dismiss_meeting_prompt(meetings: Meetings<'_>) {
+    meetings.dismiss_prompt();
+}
+
+#[tauri::command]
+#[specta::specta]
+pub fn set_meeting_detection(app: AppHandle, enabled: bool) {
+    let mut settings = get_settings(&app);
+    settings.meeting_detection = enabled;
+    write_settings(&app, settings);
 }

@@ -1011,7 +1011,12 @@
   "overlay": {
     "transcribing": "Transkriberar...",
     "processing": "Bearbetar...",
-    "loadingModel": "Laddar modell..."
+    "loadingModel": "Laddar modell...",
+    "meetingPrompt": {
+      "call": "{{app}} call",
+      "takeNotes": "Take notes",
+      "dismiss": "Not now"
+    }
   },
   "secureInput": {
     "blockedWithCulprit_one": "{{name}} kanske blockerar 1 kortkommando",
@@ -1070,6 +1075,10 @@
       "empty": "Nothing was transcribed.",
       "echoHidden_one": "{{count}} line the mic picked up from your speakers is hidden.",
       "echoHidden_other": "{{count}} lines the mic picked up from your speakers are hidden."
+    },
+    "detect": {
+      "title": "Ask when a call starts",
+      "description": "When another app (Meet, Zoom, Teams…) starts using your microphone, offer to take notes. Notes started this way stop when the call ends."
     }
   }
 }

@@ -1134,6 +1134,20 @@ async meetingMarkdown(id: number) : Promise<Result<string, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async acceptMeetingPrompt() : Promise<Result<ActiveMeeting, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("accept_meeting_prompt") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async dismissMeetingPrompt() : Promise<void> {
+    await TAURI_INVOKE("dismiss_meeting_prompt");
+},
+async setMeetingDetection(enabled: boolean) : Promise<void> {
+    await TAURI_INVOKE("set_meeting_detection", { enabled });
 }
 }
 
@@ -1255,6 +1269,10 @@ transcription_engine_mode?: TranscriptionEngineMode;
  * Polish every dictation with the cleanup engine before pasting.
  */
 cleanup_enabled?: boolean; 
+/**
+ * Offer to take meeting notes when another app starts using the mic.
+ */
+meeting_detection?: boolean; 
 /**
  * Cleanup engine: a local model id from the cleanup catalog, or
  * "apple-intelligence".

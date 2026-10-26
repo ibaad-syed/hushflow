@@ -13,7 +13,12 @@ import i18n, { syncLanguageFromSettings } from "@/i18n";
 import type { ModelStateEvent } from "@/lib/types/events";
 import { getLanguageDirection } from "@/lib/utils/rtl";
 
-type OverlayState = "recording" | "streaming" | "transcribing" | "processing";
+type OverlayState =
+  | "recording"
+  | "streaming"
+  | "transcribing"
+  | "processing"
+  | "meeting-prompt";
 
 // Number of reactive bars in the waveform (the simple, smoothed style shared by
 // every overlay form).
@@ -48,6 +53,8 @@ const RecordingOverlay: React.FC = () => {
   const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [state, setState] = useState<OverlayState>("recording");
+  // The app on a call, while asking whether to take meeting notes.
+  const [callApp, setCallApp] = useState("");
   // `Stream::play()` returning does not mean hardware callbacks are flowing.
   // Stay visually in an arming state until the backend processes the first
   // actual microphone sample chunk.
@@ -133,6 +140,10 @@ const RecordingOverlay: React.FC = () => {
         setCaptureReady(false);
       });
 
+      const unlistenPrompt = await listen<string>("meeting-prompt", (e) =>
+        setCallApp(e.payload),
+      );
+
       const unlistenReady = await listen("recording-ready", () => {
         setElapsed(0);
         setCaptureReady(true);
@@ -195,6 +206,7 @@ const RecordingOverlay: React.FC = () => {
       return () => {
         unlistenShow();
         unlistenHide();
+        unlistenPrompt();
         unlistenReady();
         unlistenLevel();
         unlistenStream();
@@ -374,6 +386,45 @@ const RecordingOverlay: React.FC = () => {
   // ---- Minimal overlay: exactly one row at a time — waveform (recording), or a
   // spinner + label (transcribing / processing). Never both. The pill animates its
   // width between them; the cancel button is in both rows so it stays put.
+  // A call started in another app: one question, in the same pill.
+  if (state === "meeting-prompt") {
+    return (
+      <div
+        dir={direction}
+        className={`ov-stage ${position} ov-fade ${isVisible ? "show" : ""}`}
+      >
+        <div className="scard compact mprompt">
+          <div className="smini">
+            <span className="mprompt-dot" />
+            <span className="mprompt-label">
+              {t("overlay.meetingPrompt.call", { app: callApp })}
+            </span>
+            <button
+              className="mprompt-go"
+              onClick={() => commands.acceptMeetingPrompt()}
+            >
+              {t("overlay.meetingPrompt.takeNotes")}
+            </button>
+            <button
+              className="mprompt-x"
+              aria-label={t("overlay.meetingPrompt.dismiss")}
+              onClick={() => commands.dismissMeetingPrompt()}
+            >
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M4 4 L12 12 M12 4 L4 12"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const working = state === "transcribing" || state === "processing";
   const workLabel =
     state === "processing" ? t("overlay.processing") : transcribingLabel;

@@ -232,7 +232,9 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     // Meeting notes (mic + system audio, transcript, local LLM notes).
     match managers::meeting::MeetingManager::new(app_handle) {
         Ok(meetings) => {
-            app_handle.manage(Arc::new(meetings));
+            let meetings = Arc::new(meetings);
+            meetings.watch();
+            app_handle.manage(meetings);
         }
         Err(e) => log::error!("Meetings unavailable: {e}"),
     }
@@ -821,6 +823,9 @@ pub fn run(cli_args: CliArgs) {
             commands::meeting::regenerate_meeting_notes,
             commands::meeting::delete_meeting,
             commands::meeting::meeting_markdown,
+            commands::meeting::accept_meeting_prompt,
+            commands::meeting::dismiss_meeting_prompt,
+            commands::meeting::set_meeting_detection,
         ])
         .events(collect_events![
             managers::history::HistoryUpdatePayload,

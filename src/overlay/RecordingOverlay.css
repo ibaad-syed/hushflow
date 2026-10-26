@@ -206,6 +206,63 @@
   padding: 0;
 }
 
+/* Call prompt: "<app> call · Take notes · ×", in the window's 256px. */
+.scard.compact.mprompt,
+.scard.compact.mprompt:hover {
+  width: 248px;
+}
+.mprompt .smini {
+  justify-content: flex-start;
+  gap: 7px;
+  padding: 0 4px 0 11px;
+}
+.mprompt-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34c759;
+}
+.mprompt-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  color: var(--color-text);
+  opacity: 0.85;
+}
+.mprompt-go {
+  flex: none;
+  height: 16px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 999px;
+  background: #0a84ff;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mprompt-go:hover {
+  background: #409cff;
+}
+.mprompt-x {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  padding: 2px;
+  border: none;
+  background: none;
+  color: var(--s-muted);
+  opacity: 0.6;
+  cursor: pointer;
+}
+.mprompt-x:hover {
+  opacity: 1;
+}
+
 /* text region — auto-height open via grid-rows trick; region fades as a whole */
 .stext {
   display: grid;
