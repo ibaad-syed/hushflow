@@ -16,7 +16,8 @@
     "postProcessing": "Nachbearbeitung",
     "history": "Verlauf",
     "debug": "Debug",
-    "about": "Info"
+    "about": "Info",
+    "dictionary": "Dictionary"
   },
   "onboarding": {
     "customModelDescription": "Nicht offiziell unterstützt",
@@ -939,6 +940,9 @@
         "save": "Save",
         "reset": "Reset to default"
       }
+    },
+    "dictionary": {
+      "title": "Your words"
     }
   },
   "footer": {

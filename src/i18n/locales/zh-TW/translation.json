@@ -16,7 +16,8 @@
     "postProcessing": "後處理",
     "history": "歷史紀錄",
     "debug": "偵錯",
-    "about": "關於"
+    "about": "關於",
+    "dictionary": "Dictionary"
   },
   "onboarding": {
     "customModelDescription": "官方不支援",
@@ -939,6 +940,9 @@
         "save": "Save",
         "reset": "Reset to default"
       }
+    },
+    "dictionary": {
+      "title": "Your words"
     }
   },
   "footer": {

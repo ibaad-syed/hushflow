@@ -321,10 +321,9 @@ impl CleanupManager {
         *guard = Some(server);
         drop(guard);
         let started = Instant::now();
-        let custom = get_settings(&self.app).cleanup_prompt;
-        let instructions = prompt::instructions(custom.as_deref());
+        let (instructions, _) = self.instructions();
         let _ = self
-            .complete(port, instructions, "Warm up the cache, please.")
+            .complete(port, &instructions, "Warm up the cache, please.")
             .await;
         debug!("Cleanup prompt cache primed in {:?}", started.elapsed());
         self.notify();
@@ -394,10 +393,9 @@ impl CleanupManager {
             guard.as_mut().and_then(|s| s.alive().then_some(s.port))
         };
         if let Some(port) = port {
-            let custom = get_settings(&self.app).cleanup_prompt;
-            let instructions = prompt::instructions(custom.as_deref());
+            let (instructions, _) = self.instructions();
             let _ = self
-                .complete(port, instructions, "Warm up the cache, please.")
+                .complete(port, &instructions, "Warm up the cache, please.")
                 .await;
         }
         self.notify();
@@ -414,6 +412,18 @@ impl CleanupManager {
         if let Ok(mut server) = self.server.try_lock() {
             *server = None;
         }
+    }
+
+    /// The instructions sent to the model (the user's or the built-in ones,
+    /// plus their dictionary), and whether the output guard applies: it's
+    /// tuned for the built-in instructions, so custom ones go unguarded.
+    fn instructions(&self) -> (String, bool) {
+        let settings = get_settings(&self.app);
+        let base = prompt::instructions(settings.cleanup_prompt.as_deref());
+        (
+            prompt::with_dictionary(base, &settings.custom_words),
+            base == prompt::SYSTEM,
+        )
     }
 
     fn server_binary(&self) -> Result<PathBuf> {
@@ -460,8 +470,7 @@ impl CleanupManager {
             return None;
         }
         let started = Instant::now();
-        let instructions = prompt::instructions(settings.cleanup_prompt.as_deref()).to_string();
-        let guarded = instructions == prompt::SYSTEM;
+        let (instructions, guarded) = self.instructions();
         let reply = if settings.cleanup_engine == APPLE_INTELLIGENCE {
             apple_intelligence_clean(transcript, &instructions).await
         } else {

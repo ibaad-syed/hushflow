@@ -16,7 +16,8 @@
     "postProcessing": "Son İşlem",
     "history": "Geçmiş",
     "debug": "Hata Ayıklama",
-    "about": "Hakkında"
+    "about": "Hakkında",
+    "dictionary": "Dictionary"
   },
   "onboarding": {
     "customModelDescription": "Resmi olarak desteklenmiyor",
@@ -939,6 +940,9 @@
         "save": "Save",
         "reset": "Reset to default"
       }
+    },
+    "dictionary": {
+      "title": "Your words"
     }
   },
   "footer": {

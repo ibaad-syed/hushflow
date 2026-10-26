@@ -16,7 +16,8 @@
     "postProcessing": "Naverwerking",
     "history": "Geschiedenis",
     "debug": "Probleemoplossing",
-    "about": "Over Hushflow"
+    "about": "Over Hushflow",
+    "dictionary": "Dictionary"
   },
   "onboarding": {
     "customModelDescription": "Niet officieel ondersteund",
@@ -939,6 +940,9 @@
         "save": "Save",
         "reset": "Reset to default"
       }
+    },
+    "dictionary": {
+      "title": "Your words"
     }
   },
   "footer": {

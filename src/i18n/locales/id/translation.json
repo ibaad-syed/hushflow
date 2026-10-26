@@ -16,7 +16,8 @@
     "postProcessing": "Pascaproses",
     "history": "Riwayat",
     "debug": "Debug",
-    "about": "Tentang"
+    "about": "Tentang",
+    "dictionary": "Dictionary"
   },
   "onboarding": {
     "customModelDescription": "Tidak didukung secara resmi",
@@ -939,6 +940,9 @@
         "save": "Save",
         "reset": "Reset to default"
       }
+    },
+    "dictionary": {
+      "title": "Your words"
     }
   },
   "footer": {

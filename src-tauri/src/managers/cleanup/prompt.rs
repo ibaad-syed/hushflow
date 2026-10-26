@@ -56,6 +56,23 @@ pub fn instructions(custom: Option<&str>) -> &str {
         .unwrap_or(SYSTEM)
 }
 
+/// The instructions plus the user's dictionary, so cleanup keeps those
+/// spellings (speech-to-text has already corrected near-misses to them).
+pub fn with_dictionary(instructions: &str, words: &[String]) -> String {
+    let words: Vec<&str> = words
+        .iter()
+        .map(|w| w.trim())
+        .filter(|w| !w.is_empty())
+        .collect();
+    if words.is_empty() {
+        return instructions.to_string();
+    }
+    format!(
+        "{instructions}\n\nThe speaker's dictionary: spell these exactly as written whenever they appear: {}.",
+        words.join(", ")
+    )
+}
+
 /// OpenAI-style chat messages: instructions, worked examples, then the text.
 pub fn messages(instructions: &str, transcript: &str) -> Vec<serde_json::Value> {
     let mut messages = vec![serde_json::json!({"role": "system", "content": instructions})];
@@ -120,6 +137,19 @@ pub fn accept(transcript: &str, reply: &str, guarded: bool) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn dictionary_is_appended_only_when_present() {
+        assert_eq!(super::with_dictionary("Base.", &[]), "Base.");
+        let words = vec![
+            "ChargeBee".to_string(),
+            " ".to_string(),
+            "Hushflow".to_string(),
+        ];
+        let full = super::with_dictionary("Base.", &words);
+        assert!(full.starts_with("Base.\n\n"));
+        assert!(full.ends_with("ChargeBee, Hushflow."));
+    }
+
     use super::*;
 
     #[test]

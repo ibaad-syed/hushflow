@@ -903,6 +903,13 @@ pub fn update_custom_words(app: AppHandle, words: Vec<String>) -> Result<(), Str
     let mut settings = settings::get_settings(&app);
     settings.custom_words = words;
     settings::write_settings(&app, settings);
+    // Cleanup's prompt includes the dictionary; re-prime its cache.
+    if let Some(cleanup) =
+        app.try_state::<std::sync::Arc<crate::managers::cleanup::CleanupManager>>()
+    {
+        let cleanup = std::sync::Arc::clone(&cleanup);
+        tauri::async_runtime::spawn(async move { cleanup.prime().await });
+    }
     Ok(())
 }
 
