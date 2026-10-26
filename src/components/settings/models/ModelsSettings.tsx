@@ -14,6 +14,7 @@ import { ModelRow } from "./ModelRow";
 import { Legend } from "./Legend";
 import { useModelEntries } from "./modelEntries";
 import { AutomaticEngine } from "./AutomaticEngine";
+import { CleanupModels } from "./CleanupModels";
 
 /** Past this many models on disk, the rest fold under "Show N more". */
 const YOURS_LIMIT = 5;
@@ -180,6 +181,9 @@ export const ModelsSettings: React.FC<ModelsSettingsProps> = ({
         }
         thinEdge
       />
+      <div className="mx-[12px] mt-6 mb-4 flex-none">
+        <CleanupModels />
+      </div>
     </div>
   );
 };

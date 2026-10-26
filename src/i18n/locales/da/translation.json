@@ -918,7 +918,14 @@
       "downloading": "Downloading {{percent}}%",
       "notDownloaded": "Not downloaded",
       "loading": "Loading",
-      "ready": "Ready"
+      "ready": "Ready",
+      "models": {
+        "title": "Cleanup models",
+        "description": "Polish your dictation on this computer. Turn cleanup on or off in General.",
+        "download": "Download",
+        "use": "Use",
+        "delete": "Delete {{name}}"
+      }
     }
   },
   "footer": {

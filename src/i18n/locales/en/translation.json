@@ -912,13 +912,20 @@
       },
       "engine": {
         "title": "Cleanup model",
-        "description": "The model that polishes your text. Bigger models are a little slower and more careful.",
+        "description": "Picked on the Models page. Bigger models are a little slower and more careful.",
         "recommendedLabel": "{{name}} (recommended)"
       },
       "downloading": "Downloading {{percent}}%",
       "notDownloaded": "Not downloaded",
       "loading": "Loading",
-      "ready": "Ready"
+      "ready": "Ready",
+      "models": {
+        "title": "Cleanup models",
+        "description": "Polish your dictation on this computer. Turn cleanup on or off in General.",
+        "download": "Download",
+        "use": "Use",
+        "delete": "Delete {{name}}"
+      }
     }
   },
   "footer": {
