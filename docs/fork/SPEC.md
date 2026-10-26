@@ -34,7 +34,7 @@ Every cleanup call has a deadline (~1.5 s) and a meaning-drift guard; on failure
 ## Phases
 
 1. **Fast speech-to-text, Mac + Windows.**
-   - Hotkeys: Wispr-style defaults. Mac: Fn (hold to talk), Fn+Space (hands-free). Windows: Ctrl+Win, Ctrl+Win+Space.
+   - Hotkeys: Wispr-style defaults. Mac: Fn, Windows: Ctrl+Win. Hold to talk; tap to keep recording hands-free until the next tap.
    - Shortcuts can be remapped; paste-last hotkey; Esc to cancel.
    - Live overlay; reliable paste with clipboard restore.
    - Personal dictionary; history; signed builds.

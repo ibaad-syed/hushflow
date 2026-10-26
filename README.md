@@ -1,6 +1,6 @@
 # Hushflow
 
-**Wispr Flow-style dictation that runs entirely on your computer.**
+**Wispr Flow-style dictation that runs entirely on your computer.** · [hushflow-coral.vercel.app](https://hushflow-coral.vercel.app)
 
 Hold a key, speak, let go: your words appear in whatever app you're typing in, with the fillers, false starts and self-corrections cleaned up. Speech recognition and cleanup both run locally, so nothing you say leaves your machine.
 
