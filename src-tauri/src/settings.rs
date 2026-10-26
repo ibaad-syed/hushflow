@@ -578,7 +578,7 @@ fn default_model() -> String {
     "".to_string()
 }
 
-const CURRENT_SETTINGS_SCHEMA_VERSION: u32 = 2;
+const CURRENT_SETTINGS_SCHEMA_VERSION: u32 = 3;
 
 fn default_settings_schema_version() -> u32 {
     CURRENT_SETTINGS_SCHEMA_VERSION
@@ -605,8 +605,8 @@ fn default_autostart_enabled() -> bool {
 }
 
 fn default_update_checks_enabled() -> bool {
-    // Off until Hushflow publishes its own signed releases.
-    false
+    // Hushflow's own signed releases (github.com/ibaad-syed/hushflow).
+    true
 }
 
 fn default_show_whats_new_on_update() -> bool {
@@ -1352,6 +1352,14 @@ fn apply_settings_migrations(
         settings.settings_schema_version = CURRENT_SETTINGS_SCHEMA_VERSION;
         updated = true;
     }
+    if stored_schema_version < 3 {
+        // Update checks shipped off while the fork still pointed at Handy's
+        // releases; nobody chose that. Turn them on once, now that Hushflow
+        // publishes signed releases.
+        settings.update_checks_enabled = true;
+        settings.settings_schema_version = CURRENT_SETTINGS_SCHEMA_VERSION;
+        updated = true;
+    }
 
     // The generic GPU choice was removed in favor of Auto or an exact device.
     // Normalize settings created by builds that exposed that short-lived option.
@@ -1467,6 +1475,20 @@ pub fn get_recording_retention_period(app: &AppHandle) -> RecordingRetentionPeri
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn schema_3_turns_update_checks_on_once() {
+        let mut settings = get_default_settings();
+        settings.update_checks_enabled = false;
+        let raw = serde_json::json!({"settings_schema_version": 2, "update_checks_enabled": false});
+        assert!(apply_settings_migrations(&mut settings, &raw));
+        assert!(settings.update_checks_enabled);
+        // A later "off" is the user's and stays.
+        settings.update_checks_enabled = false;
+        let raw = serde_json::json!({"settings_schema_version": 3, "update_checks_enabled": false});
+        apply_settings_migrations(&mut settings, &raw);
+        assert!(!settings.update_checks_enabled);
+    }
+
     use super::*;
 
     #[test]
