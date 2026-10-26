@@ -1,0 +1,20 @@
+[package]
+name = "gemma-inproc"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Standalone: deliberately not part of the app's workspace.
+[workspace]
+
+[dependencies]
+llama-cpp-2 = { version = "=0.1.160", default-features = false, features = ["common"] }
+llama-cpp-sys-2 = { version = "=0.1.160", default-features = false }
+anyhow = "1"
+
+[features]
+default = ["metal"]
+metal = ["llama-cpp-2/metal"]
+
+[profile.release]
+debug = false
