@@ -557,7 +557,8 @@ impl TranscriptionManager {
                     ModelStateEvent {
                         event_type: "loading_failed".to_string(),
                         model_id: Some(model_id.to_string()),
-                        model_name: None,
+                        // Name the model even when the registry doesn't know it.
+                        model_name: Some(model_id.to_string()),
                         error: Some(error_msg.clone()),
                     },
                 );

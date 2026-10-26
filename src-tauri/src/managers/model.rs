@@ -856,6 +856,8 @@ pub struct ModelManager {
     models_dir: PathBuf,
     available_models: Mutex<HashMap<String, ModelInfo>>,
     cancel_flags: Arc<Mutex<HashMap<String, CancellationToken>>>,
+    /// Models with a download in flight, claimed atomically in `download_model`.
+    in_flight: Arc<Mutex<HashSet<String>>>,
     /// Single-flight guard for [`Self::rescan_local_models`] so concurrent
     /// refresh requests coalesce instead of scanning the disk in parallel.
     is_rescanning: Arc<AtomicBool>,
@@ -1065,6 +1067,7 @@ impl ModelManager {
             models_dir,
             available_models: Mutex::new(available_models),
             cancel_flags: Arc::new(Mutex::new(HashMap::new())),
+            in_flight: Arc::new(Mutex::new(HashSet::new())),
             is_rescanning: Arc::new(AtomicBool::new(false)),
         };
 
@@ -2104,6 +2107,36 @@ impl ModelManager {
     }
 
     pub async fn download_model(&self, model_id: &str) -> Result<()> {
+        // Single flight: onboarding and the automatic engine policy can both ask
+        // for the same model at startup (on Windows, with no built-in engine,
+        // they always do). Two transfers into one file made progress jump back
+        // and forth and one of them fail; a second caller waits for the first.
+        let claimed = self.in_flight.lock().unwrap().insert(model_id.to_string());
+        if !claimed {
+            info!("Model '{model_id}' is already downloading; waiting for it");
+            while self.in_flight.lock().unwrap().contains(model_id) {
+                tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+            }
+            self.update_download_status()?;
+            let downloaded = self
+                .available_models
+                .lock()
+                .unwrap()
+                .get(model_id)
+                .is_some_and(|m| m.is_downloaded);
+            return if downloaded {
+                Ok(())
+            } else {
+                Err(anyhow::anyhow!("Download of {model_id} did not complete"))
+            };
+        }
+        let result = self.download_model_claimed(model_id).await;
+        self.in_flight.lock().unwrap().remove(model_id);
+        result
+    }
+
+    async fn download_model_claimed(&self, model_id: &str) -> Result<()> {
+        info!("Downloading model '{model_id}'");
         let model_info = {
             let models = self.available_models.lock().unwrap();
             models.get(model_id).cloned()
