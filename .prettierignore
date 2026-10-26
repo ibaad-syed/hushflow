@@ -11,6 +11,7 @@ target
 # Tauri
 src-tauri/target
 src-tauri/gen
+mobile/src-tauri/gen
 
 # Generated files
 src/bindings.ts
