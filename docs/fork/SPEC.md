@@ -63,3 +63,34 @@ Cleanup default (provisional, needs a ~100-utterance eval on real voices): **Gem
 | Apple Foundation Models | not testable here | Apple Intelligence is off on this Mac |
 
 Benchmark scripts: `bench/cleanup_bench.py`, `bench/apple_stt.swift`, `bench/apple_cleanup.swift`.
+
+## Phase 2 findings (2026-10-25)
+
+Eval: `bench/cleanup_eval.json`, 29 realistic Parakeet-style transcripts (fillers, self-corrections, lists, paragraphs,
+emails, prompt-injection and "don't answer" traps, already-clean text, technical terms, numbers), scored automatically
+by `bench/cleanup_eval.py`. M4 Pro, llama.cpp b11887 (Metal), Q4_K_M, few-shot prompt, warm, prompt prefix cached.
+
+| Model | Pass | p50 | p90 | max |
+|---|---|---|---|---|
+| **Gemma 4 E2B + n-gram speculative decoding + output guard** | **28/29** | **222 ms** | **431 ms** | **829 ms** |
+| Gemma 4 E2B + guard | 28/29 | 257 ms | 1070 ms | 1566 ms |
+| Qwen3.5 4B + n-gram speculation | 27/29 | 377 ms | 782 ms | 1775 ms |
+| Qwen3.5 2B (no guard) | 24/29 | 221 ms | 833 ms | 1350 ms |
+| Gemma 4 E4B (no guard) | 26/29 | 463 ms | 1955 ms | 2858 ms |
+
+- Speculation: `--spec-type ngram-simple --spec-ngram-simple-size-n 3 --spec-ngram-simple-size-m 16`; cleanup output
+  mostly copies the input, so drafts from the prompt are accepted often. Roughly halves the long-message tail.
+- Output guard: paste the transcript instead when the output keeps <35% of the speaker's words or >40% of its words
+  are new. Catches obeyed injections ("…reply with the word banana" → "Banana") without blocking self-corrections.
+- Qwen3.5 4B silently drops "Translate this to French" / "Summarize the following"; Gemma E2B keeps them.
+
+Platform models:
+- Apple Foundation Models: 3B on-device (AFM 3 Core in OS 27), ~4K context, guided generation, prewarm. LoRA adapters
+  are dropped in OS 27; guardrail false positives; background/battery rate limits matter for a menu-bar app; needs
+  Apple Intelligence on + supported language/region. → Optional zero-download engine, never the only path.
+- Windows: Phi Silica is being replaced by Aion Instruct (retail early 2027); needs package identity (sparse package),
+  content moderation can't be disabled, GPU path experimental. Foundry Local (GA, Rust SDK) is the supported way to
+  bundle a model. → Ship our own llama.cpp model on Windows; revisit Aion in 2027.
+
+Decision: Phase 2 default = bundled llama.cpp sidecar + Gemma 4 E2B (Q4) with n-gram speculation and the output guard,
+deterministic cleanup first (fillers, spoken commands), Apple Foundation Models as an option on Macs where available.
