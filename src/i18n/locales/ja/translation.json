@@ -359,6 +359,10 @@
           "transcribe_with_post_process": {
             "name": "後処理のショートカット",
             "description": "文字起こしに常に AI 後処理を適用するキーボードショートカット。 (任意)"
+          },
+          "paste_last": {
+            "name": "Paste Last Transcript",
+            "description": "Pastes your last dictation again, e.g. if it went to the wrong window."
           }
         },
         "errors": {

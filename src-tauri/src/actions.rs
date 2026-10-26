@@ -959,6 +959,44 @@ impl ShortcutAction for CancelAction {
     }
 }
 
+// Paste Last Action: pastes the latest dictation again.
+struct PasteLastAction;
+
+impl ShortcutAction for PasteLastAction {
+    fn start(&self, app: &AppHandle, _binding_id: &str, _shortcut_str: &str) {
+        let entry = match app
+            .state::<Arc<HistoryManager>>()
+            .get_latest_completed_entry()
+        {
+            Ok(Some(entry)) => entry,
+            Ok(None) => {
+                debug!("Paste last: no dictation in history yet");
+                return;
+            }
+            Err(e) => {
+                error!("Paste last: couldn't read history: {e}");
+                return;
+            }
+        };
+        let text = crate::tray::last_transcript_text(&entry).to_string();
+        if text.trim().is_empty() {
+            return;
+        }
+        let app = app.clone();
+        // Off the main thread, as for dictation: paste sleeps between steps.
+        let _ = std::thread::Builder::new()
+            .name("paste-last".into())
+            .spawn(move || {
+                if let Err(e) = utils::paste(text, app.clone()) {
+                    error!("Paste last failed: {e}");
+                    let _ = app.emit("paste-error", ());
+                }
+            });
+    }
+
+    fn stop(&self, _app: &AppHandle, _binding_id: &str, _shortcut_str: &str) {}
+}
+
 // Test Action
 struct TestAction;
 
@@ -998,6 +1036,10 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
     map.insert(
         "cancel".to_string(),
         Arc::new(CancelAction) as Arc<dyn ShortcutAction>,
+    );
+    map.insert(
+        "paste_last".to_string(),
+        Arc::new(PasteLastAction) as Arc<dyn ShortcutAction>,
     );
     map.insert(
         "test".to_string(),

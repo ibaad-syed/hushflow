@@ -359,6 +359,10 @@
           "transcribe_with_post_process": {
             "name": "Snabbkommando för efterbearbetning",
             "description": "Valfritt: En dedikerad snabbknapp som alltid tillämpar AI-efterbearbetning på din transkription."
+          },
+          "paste_last": {
+            "name": "Paste Last Transcript",
+            "description": "Pastes your last dictation again, e.g. if it went to the wrong window."
           }
         },
         "errors": {

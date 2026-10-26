@@ -359,6 +359,10 @@
           "transcribe_with_post_process": {
             "name": "Phím tắt xử lý sau",
             "description": "Tùy chọn: Phím tắt chuyên dụng luôn áp dụng xử lý sau bằng AI cho bản chuyển đổi của bạn."
+          },
+          "paste_last": {
+            "name": "Paste Last Transcript",
+            "description": "Pastes your last dictation again, e.g. if it went to the wrong window."
           }
         },
         "errors": {

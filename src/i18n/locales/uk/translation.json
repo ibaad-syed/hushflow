@@ -359,6 +359,10 @@
           "transcribe_with_post_process": {
             "name": "Гаряча клавіша постобробки",
             "description": "Необов'язково: Спеціальна гаряча клавіша, яка завжди застосовує AI-постобробку до вашої транскрипції."
+          },
+          "paste_last": {
+            "name": "Paste Last Transcript",
+            "description": "Pastes your last dictation again, e.g. if it went to the wrong window."
           }
         },
         "errors": {

@@ -1008,6 +1008,22 @@ pub fn get_default_settings() -> AppSettings {
             current_binding: default_post_process_shortcut.to_string(),
         },
     );
+    // Re-pastes the last dictation, e.g. after it landed in the wrong window.
+    // Wispr Flow's keys: Ctrl+Cmd+V on macOS, Alt+Shift+Z on Windows.
+    #[cfg(target_os = "macos")]
+    let default_paste_last_shortcut = "ctrl+command+v";
+    #[cfg(not(target_os = "macos"))]
+    let default_paste_last_shortcut = "alt+shift+z";
+    bindings.insert(
+        "paste_last".to_string(),
+        ShortcutBinding {
+            id: "paste_last".to_string(),
+            name: "Paste last transcript".to_string(),
+            description: "Pastes your last dictation again.".to_string(),
+            default_binding: default_paste_last_shortcut.to_string(),
+            current_binding: default_paste_last_shortcut.to_string(),
+        },
+    );
     bindings.insert(
         "cancel".to_string(),
         ShortcutBinding {
