@@ -171,6 +171,17 @@ where
     }
 }
 
+/// The overlay to show. With cleanup on, the live transcript would show the
+/// raw words and then paste different (cleaned) ones, which reads as a bug;
+/// a quiet waveform and a "Polishing" step set the right expectation instead.
+/// Streaming still runs underneath for speed, it just isn't shown.
+fn effective_overlay_style(settings: &AppSettings) -> OverlayStyle {
+    match settings.overlay_style {
+        OverlayStyle::Live if settings.cleanup_enabled => OverlayStyle::Minimal,
+        style => style,
+    }
+}
+
 fn should_use_streaming_overlay(style: OverlayStyle, is_streaming: bool) -> bool {
     style == OverlayStyle::Live && is_streaming
 }
@@ -525,7 +536,7 @@ impl ShortcutAction for TranscribeAction {
         // doesn't stream (or whose capability is not known yet) gets the compact
         // pill instead of an oversized transparent live window.
         let overlay_started = Instant::now();
-        match settings.overlay_style {
+        match effective_overlay_style(&settings) {
             OverlayStyle::Live if model_supports_streaming => utils::show_streaming_overlay(app),
             OverlayStyle::Live | OverlayStyle::Minimal => show_recording_overlay(app),
             OverlayStyle::None => {} // show_overlay_state no-ops on None anyway
@@ -647,7 +658,7 @@ impl ShortcutAction for TranscribeAction {
         // the larger panel, but it still switches from listening to a working
         // spinner while the stream finalizes. Non-streaming paths use the
         // compact transcribing pill (None no-ops in show_*).
-        let style = get_settings(app).overlay_style;
+        let style = effective_overlay_style(&get_settings(app));
         // Capture this before finalizing the stream so every later working state
         // targets the same overlay that was shown for this transcription.
         let use_streaming_overlay = should_use_streaming_overlay(style, tm.is_streaming());
@@ -992,8 +1003,8 @@ pub static ACTION_MAP: Lazy<HashMap<String, Arc<dyn ShortcutAction>>> = Lazy::ne
 #[cfg(test)]
 mod tests {
     use super::{
-        complete_unless_cancelled, is_blank_transcription, should_use_streaming_overlay,
-        strip_think_block,
+        complete_unless_cancelled, effective_overlay_style, is_blank_transcription,
+        should_use_streaming_overlay, strip_think_block,
     };
     use crate::settings::OverlayStyle;
     use std::future;
@@ -1075,5 +1086,15 @@ mod tests {
         assert!(!should_use_streaming_overlay(OverlayStyle::Live, false));
         assert!(!should_use_streaming_overlay(OverlayStyle::Minimal, true));
         assert!(!should_use_streaming_overlay(OverlayStyle::None, true));
+    }
+
+    #[test]
+    fn cleanup_swaps_the_live_transcript_for_the_compact_overlay() {
+        let mut settings = crate::settings::get_default_settings();
+        settings.overlay_style = OverlayStyle::Live;
+        settings.cleanup_enabled = true;
+        assert_eq!(effective_overlay_style(&settings), OverlayStyle::Minimal);
+        settings.cleanup_enabled = false;
+        assert_eq!(effective_overlay_style(&settings), OverlayStyle::Live);
     }
 }
