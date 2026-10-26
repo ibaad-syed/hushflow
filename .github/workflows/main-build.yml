@@ -5,8 +5,14 @@ name: "Main Branch Build"
 # so any commit on main has a downloadable, testable build.
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
+    # The website and docs don't change the app.
+    paths-ignore:
+      - "site/**"
+      - "docs/**"
+      - "**.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
