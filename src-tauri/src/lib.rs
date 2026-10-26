@@ -224,7 +224,7 @@ fn initialize_core_logic(app_handle: &AppHandle) {
         Ok(cleanup) => {
             let cleanup = Arc::new(cleanup);
             app_handle.manage(cleanup.clone());
-            tauri::async_runtime::spawn(async move { cleanup.warm().await });
+            tauri::async_runtime::spawn(async move { cleanup.resume().await });
         }
         Err(e) => log::error!("Cleanup unavailable: {e}"),
     }

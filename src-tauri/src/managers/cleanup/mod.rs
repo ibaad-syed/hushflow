@@ -162,18 +162,34 @@ impl CleanupManager {
     async fn download(&self, model: &CleanupModel) -> Result<()> {
         let path = self.model_path(model);
         let partial = path.with_extension("gguf.partial");
-        let response = self
-            .http
-            .get(model.url())
-            .send()
-            .await?
-            .error_for_status()?;
+        // Resume an interrupted download instead of starting over.
+        let have = tokio::fs::metadata(&partial)
+            .await
+            .map(|m| m.len())
+            .unwrap_or(0);
+        let mut request = self.http.get(model.url());
+        if have > 0 {
+            request = request.header(reqwest::header::RANGE, format!("bytes={have}-"));
+        }
+        let response = request.send().await?.error_for_status()?;
+        let resumed = have > 0 && response.status() == reqwest::StatusCode::PARTIAL_CONTENT;
+        let mut downloaded = if resumed { have } else { 0 };
+        if resumed {
+            info!("Resuming cleanup model '{}' at {have} bytes", model.id);
+        }
         let total = response
             .content_length()
+            .map(|len| len + downloaded)
             .unwrap_or(model.size_mb * 1_000_000);
-        let mut file = tokio::fs::File::create(&partial).await?;
+        let mut file = if resumed {
+            tokio::fs::OpenOptions::new()
+                .append(true)
+                .open(&partial)
+                .await?
+        } else {
+            tokio::fs::File::create(&partial).await?
+        };
         let mut stream = response.bytes_stream();
-        let mut downloaded = 0u64;
         let mut last_emit = Instant::now();
         while let Some(chunk) = stream.next().await {
             let chunk = chunk?;
@@ -219,6 +235,22 @@ impl CleanupManager {
         }
         self.notify();
         Ok(())
+    }
+
+    /// At launch: fetch the chosen model if cleanup is on but it isn't on disk
+    /// (a download interrupted by quitting resumes), otherwise load it.
+    pub async fn resume(self: &Arc<Self>) {
+        let settings = get_settings(&self.app);
+        if settings.cleanup_enabled
+            && catalog::find(&settings.cleanup_engine).is_some()
+            && !self.is_downloaded(&settings.cleanup_engine)
+        {
+            if let Err(e) = self.start_download(&settings.cleanup_engine) {
+                warn!("Couldn't resume cleanup model download: {e}");
+            }
+            return;
+        }
+        self.warm().await;
     }
 
     /// Loads the selected local model so the first dictation doesn't pay for

@@ -55,6 +55,7 @@ export const ModelsSettings: React.FC<ModelsSettingsProps> = ({
   const { facts, lists } = useModelEntries();
   const { filters, setFilters, searching, matches } = useModelFilters();
   const [more, setMore] = useState(false);
+  const [tab, setTab] = useState<"speech" | "cleanup">("speech");
 
   if (loading) {
     return (
@@ -145,7 +146,7 @@ export const ModelsSettings: React.FC<ModelsSettingsProps> = ({
         <h1 className="m-0 text-[20px] font-bold tracking-[-0.01em]">
           {t("settings.models.title")}
         </h1>
-        {onChangeLanguages && (
+        {onChangeLanguages && tab === "speech" && (
           <button
             type="button"
             onClick={onChangeLanguages}
@@ -155,37 +156,65 @@ export const ModelsSettings: React.FC<ModelsSettingsProps> = ({
           </button>
         )}
       </div>
-      <div className="mx-[12px] mb-[16px] flex-none">
-        <AutomaticEngine />
+      {/* macOS segmented control: speech-to-text models | cleanup models. */}
+      <div
+        role="tablist"
+        aria-label={t("settings.models.title")}
+        className="mx-[12px] mb-[16px] grid flex-none grid-cols-2 self-center rounded-[7px] bg-wash p-[2px] text-[12px] font-medium"
+      >
+        {(["speech", "cleanup"] as const).map((id) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={tab === id}
+            onClick={() => setTab(id)}
+            className={`h-[22px] min-w-[120px] cursor-pointer rounded-[5px] px-3 focus:outline-none focus-visible:ring-1 focus-visible:ring-logo-primary ${
+              tab === id
+                ? "bg-panel text-text shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
+                : "text-ink-2 hover:text-text"
+            }`}
+          >
+            {t(`settings.models.tabs.${id}`)}
+          </button>
+        ))}
       </div>
-      <div className="mx-[12px] mb-[16px] flex-none empty:hidden">
-        <RetiredModelsNotice />
-      </div>
-      <ModelTable
-        grading={facts}
-        filters={filters}
-        setFilters={setFilters}
-        // "Yours" always shows at rest; a search hides empty sections.
-        sections={sections.filter(
-          (s) => s.rows.length || (s.key === "yours" && !searching),
-        )}
-        renderRow={(e) => <ModelRow key={e.id} entry={e} />}
-        actionsHead={<Legend tier={facts.tier} />}
-        footer={
-          !searching &&
-          lists.untested.length > 0 && (
-            <Note>
-              {t("settings.models.untestedHidden", {
-                count: lists.untested.length,
-              })}
-            </Note>
-          )
-        }
-        thinEdge
-      />
-      <div className="mx-[12px] mt-6 mb-4 flex-none">
-        <CleanupModels />
-      </div>
+      {tab === "cleanup" ? (
+        <div className="mx-[12px] flex-none">
+          <CleanupModels />
+        </div>
+      ) : (
+        <>
+          <div className="mx-[12px] mb-[16px] flex-none">
+            <AutomaticEngine />
+          </div>
+          <div className="mx-[12px] mb-[16px] flex-none empty:hidden">
+            <RetiredModelsNotice />
+          </div>
+          <ModelTable
+            grading={facts}
+            filters={filters}
+            setFilters={setFilters}
+            // "Yours" always shows at rest; a search hides empty sections.
+            sections={sections.filter(
+              (s) => s.rows.length || (s.key === "yours" && !searching),
+            )}
+            renderRow={(e) => <ModelRow key={e.id} entry={e} />}
+            actionsHead={<Legend tier={facts.tier} />}
+            footer={
+              !searching &&
+              lists.untested.length > 0 && (
+                <Note>
+                  {t("settings.models.untestedHidden", {
+                    count: lists.untested.length,
+                  })}
+                </Note>
+              )
+            }
+            thinEdge
+          />
+        </>
+      )}
     </div>
   );
 };

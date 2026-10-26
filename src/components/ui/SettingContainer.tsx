@@ -121,7 +121,9 @@ export const SettingContainer: React.FC<SettingContainerProps> = ({
         >
           {title}
         </h3>
-        <p className={`text-[12px] text-ink-3 ${disabled ? "opacity-50" : ""}`}>
+        <p
+          className={`mt-0.5 text-[12px] leading-[1.35] text-ink-3 ${disabled ? "opacity-50" : ""}`}
+        >
           {description}
         </p>
       </div>

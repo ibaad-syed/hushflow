@@ -443,6 +443,10 @@
       "automatic": {
         "title": "Choose automatically",
         "description": "Starts with your computer's built-in speech engine, downloads the recommended model in the background, and switches to it when it's ready. Picking a model yourself turns this off."
+      },
+      "tabs": {
+        "speech": "Speech to text",
+        "cleanup": "Cleanup"
       }
     },
     "languages": {
