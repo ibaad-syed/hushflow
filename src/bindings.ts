@@ -1012,6 +1012,41 @@ async resetAccessibilityPermission() : Promise<Result<null, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async getCleanupStatus() : Promise<CleanupStatus> {
+    return await TAURI_INVOKE("get_cleanup_status");
+},
+/**
+ * Turns cleanup on or off. Turning it on loads the chosen engine, starting
+ * its download if needed; dictation keeps working meanwhile.
+ */
+async setCleanupEnabled(enabled: boolean) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("set_cleanup_enabled", { enabled }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+/**
+ * Picks the cleanup engine (and turns cleanup on), downloading it in the
+ * background if it isn't on disk yet.
+ */
+async setCleanupEngine(engine: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("set_cleanup_engine", { engine }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async deleteCleanupModel(id: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("delete_cleanup_model", { id }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -1123,7 +1158,16 @@ overlay_style?: OverlayStyle;
  * Who picks the transcription model. Stores written before this setting
  * existed read as `Manual`, so an existing choice is never overridden.
  */
-transcription_engine_mode?: TranscriptionEngineMode }
+transcription_engine_mode?: TranscriptionEngineMode; 
+/**
+ * Polish every dictation with the cleanup engine before pasting.
+ */
+cleanup_enabled?: boolean; 
+/**
+ * Cleanup engine: a local model id from the cleanup catalog, or
+ * "apple-intelligence".
+ */
+cleanup_engine?: string }
 export type AudioDevice = { index: string; name: string; is_default: boolean }
 export type AutoSubmitKey = "enter" | "ctrl_enter" | "cmd_enter"
 export type AvailableAccelerators = { transcribe: string[]; gpu_devices: GpuDeviceOption[] }
@@ -1145,6 +1189,23 @@ export type ChineseScript =
  * Traditional, in Hong Kong's standard forms.
  */
 "traditional_hk"
+/**
+ * One choice as the UI shows it.
+ */
+export type CleanupEngineInfo = { id: string; name: string; description: string; 
+/**
+ * 0 for engines that need no download.
+ */
+size_mb: number; recommended: boolean; downloaded: boolean; 
+/**
+ * Bytes so far while downloading.
+ */
+downloading: number | null }
+export type CleanupStatus = { enabled: boolean; engine: string; engines: CleanupEngineInfo[]; 
+/**
+ * The selected engine can clean up right now (downloaded and loaded).
+ */
+ready: boolean }
 export type ClipboardHandling = "dont_modify" | "copy_to_clipboard"
 export type CustomSounds = { start: boolean; stop: boolean }
 export type GpuDeviceOption = { id: string; name: string; total_vram_mb: number }

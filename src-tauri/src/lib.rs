@@ -219,6 +219,16 @@ fn initialize_core_logic(app_handle: &AppHandle) {
     app_handle.manage(tray::TrayState::new());
     app_handle.manage(TranscriptionJobManager::new(app_handle));
 
+    // Local cleanup: load the chosen model in the background if it's on.
+    match managers::cleanup::CleanupManager::new(app_handle) {
+        Ok(cleanup) => {
+            let cleanup = Arc::new(cleanup);
+            app_handle.manage(cleanup.clone());
+            tauri::async_runtime::spawn(async move { cleanup.warm().await });
+        }
+        Err(e) => log::error!("Cleanup unavailable: {e}"),
+    }
+
     // Pick the transcription engine (built-in now, Parakeet once downloaded)
     // when the user hasn't chosen one themselves.
     managers::engine_policy::apply(app_handle);
@@ -788,6 +798,10 @@ pub fn run(cli_args: CliArgs) {
             helpers::clamshell::is_laptop,
             helpers::globe_key::globe_key_has_system_action,
             helpers::accessibility::reset_accessibility_permission,
+            commands::cleanup::get_cleanup_status,
+            commands::cleanup::set_cleanup_enabled,
+            commands::cleanup::set_cleanup_engine,
+            commands::cleanup::delete_cleanup_model,
         ])
         .events(collect_events![
             managers::history::HistoryUpdatePayload,
@@ -1161,6 +1175,12 @@ pub fn run(cli_args: CliArgs) {
                 tray::recreate_tray_icon(app);
             }
             show_main_window(app);
+        }
+        // llama-server doesn't watch its parent, so stop it explicitly.
+        tauri::RunEvent::Exit => {
+            if let Some(cleanup) = app.try_state::<Arc<managers::cleanup::CleanupManager>>() {
+                cleanup.stop_now();
+            }
         }
         // No transcription teardown on exit: transcribe.cpp runs only in the
         // worker process, which exits by itself as soon as this process's end

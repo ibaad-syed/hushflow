@@ -432,6 +432,12 @@ pub(crate) async fn process_transcription_output(
                 }
             }
         }
+    } else if let Some(cleanup) = app.try_state::<Arc<crate::managers::cleanup::CleanupManager>>() {
+        // Local cleanup ("Clean up my text"). `None` keeps the rule-based text.
+        if let Some(cleaned) = cleanup.clean(&final_text).await {
+            post_processed_text = Some(cleaned.clone());
+            final_text = cleaned;
+        }
     }
 
     ProcessedTranscription {
@@ -752,7 +758,10 @@ impl ShortcutAction for TranscribeAction {
                                 utils::redact_text(&transcription)
                             );
 
-                            if post_process {
+                            let cleaning = !post_process
+                                && get_settings(&ah).cleanup_enabled
+                                && crate::managers::cleanup::prompt::worth_cleaning(&transcription);
+                            if post_process || cleaning {
                                 if use_streaming_overlay {
                                     tm.emit_stream_working(StreamWorkKind::Polishing);
                                 } else {
@@ -783,7 +792,7 @@ impl ShortcutAction for TranscribeAction {
                                 if let Err(err) = hm.save_entry(
                                     file_name,
                                     transcription,
-                                    post_process,
+                                    post_process || processed.post_processed_text.is_some(),
                                     processed.post_processed_text.clone(),
                                     processed.post_process_prompt.clone(),
                                 ) {

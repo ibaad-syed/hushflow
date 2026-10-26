@@ -559,6 +559,13 @@ pub struct AppSettings {
     /// existed read as `Manual`, so an existing choice is never overridden.
     #[serde(default)]
     pub transcription_engine_mode: TranscriptionEngineMode,
+    /// Polish every dictation with the cleanup engine before pasting.
+    #[serde(default)]
+    pub cleanup_enabled: bool,
+    /// Cleanup engine: a local model id from the cleanup catalog, or
+    /// "apple-intelligence".
+    #[serde(default = "default_cleanup_engine")]
+    pub cleanup_engine: String,
 }
 
 fn default_model() -> String {
@@ -624,6 +631,10 @@ fn default_overlay_style() -> OverlayStyle {
 
 fn default_vad_enabled() -> bool {
     true
+}
+
+fn default_cleanup_engine() -> String {
+    crate::managers::cleanup::catalog::RECOMMENDED.to_string()
 }
 
 fn default_long_form_chunking() -> bool {
@@ -1069,6 +1080,8 @@ pub fn get_default_settings() -> AppSettings {
         long_form_chunking: default_long_form_chunking(),
         overlay_style: default_overlay_style(),
         transcription_engine_mode: TranscriptionEngineMode::Automatic,
+        cleanup_enabled: false,
+        cleanup_engine: default_cleanup_engine(),
     }
 }
 

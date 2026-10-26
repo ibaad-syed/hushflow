@@ -45,3 +45,6 @@ result
 
 # Python bytecode (scripts/)
 __pycache__/
+
+# llama.cpp server for local cleanup (bun scripts/fetch-llama.ts)
+src-tauri/resources/llama/

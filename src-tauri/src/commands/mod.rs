@@ -205,3 +205,4 @@ pub fn complete_onboarding(app: AppHandle) -> Result<(), String> {
     crate::settings::write_settings(&app, settings);
     Ok(())
 }
+pub mod cleanup;
