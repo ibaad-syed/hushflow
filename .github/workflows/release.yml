@@ -66,3 +66,22 @@ jobs:
       # stale cached native lib can never be linked into a shipped artifact.
       no-cache: true
     secrets: inherit
+
+  # Publish once every platform's installers are attached, so the Releases
+  # page (and the updater's latest.json) only ever shows complete releases.
+  publish-release:
+    permissions:
+      contents: write
+    needs: [create-release, publish-tauri]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish the draft release
+        uses: actions/github-script@v9
+        with:
+          script: |
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: ${{ needs.create-release.outputs.release-id }},
+              draft: false,
+            })
