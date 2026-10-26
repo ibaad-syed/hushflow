@@ -82,7 +82,8 @@
       "hintBoth": "אשר את שתיהן כדי להמשיך",
       "hintMicrophone": "אשר את המיקרופון כדי להמשיך",
       "welcomeBack": "ברוך שובך. ממשיכים מהמקום שבו עצרת.",
-      "relaunch": "קיצור המקשים לא מגיב אחרי זה? <relaunch>הפעל מחדש את Handy</relaunch> ותחזור בדיוק לכאן."
+      "relaunch": "קיצור המקשים לא מגיב אחרי זה? <relaunch>הפעל מחדש את Handy</relaunch> ותחזור בדיוק לכאן.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "חזרה",

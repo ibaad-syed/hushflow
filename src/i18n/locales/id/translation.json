@@ -82,7 +82,8 @@
       "hintBoth": "Izinkan keduanya untuk melanjutkan",
       "hintMicrophone": "Izinkan mikrofon untuk melanjutkan",
       "welcomeBack": "Selamat datang kembali. Kita lanjutkan dari tadi.",
-      "relaunch": "Pintasan tidak merespons setelah ini? <relaunch>Luncurkan ulang Handy</relaunch> dan Anda akan kembali tepat ke sini."
+      "relaunch": "Pintasan tidak merespons setelah ini? <relaunch>Luncurkan ulang Handy</relaunch> dan Anda akan kembali tepat ke sini.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Kembali",

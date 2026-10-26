@@ -82,7 +82,8 @@
       "hintBoth": "Sta beide toe om door te gaan",
       "hintMicrophone": "Sta de microfoon toe om door te gaan",
       "welcomeBack": "Welkom terug. We gaan verder waar je was gebleven.",
-      "relaunch": "Reageert de sneltoets hierna niet? <relaunch>Start Handy opnieuw</relaunch> en je komt direct weer hier uit."
+      "relaunch": "Reageert de sneltoets hierna niet? <relaunch>Start Handy opnieuw</relaunch> en je komt direct weer hier uit.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Terug",

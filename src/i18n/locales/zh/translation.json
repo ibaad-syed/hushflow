@@ -82,7 +82,8 @@
       "hintBoth": "请允许两项权限后继续",
       "hintMicrophone": "请允许使用麦克风后继续",
       "welcomeBack": "欢迎回来，我们接着刚才的步骤继续。",
-      "relaunch": "之后快捷键没有反应？<relaunch>重新启动 Handy</relaunch>，您会直接回到这里。"
+      "relaunch": "之后快捷键没有反应？<relaunch>重新启动 Handy</relaunch>，您会直接回到这里。",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "返回",

@@ -82,7 +82,8 @@
       "hintBoth": "Erlaube beides, um fortzufahren",
       "hintMicrophone": "Erlaube das Mikrofon, um fortzufahren",
       "welcomeBack": "Willkommen zurück. Es geht dort weiter, wo du aufgehört hast.",
-      "relaunch": "Tastenkürzel reagiert danach nicht? <relaunch>Handy neu starten</relaunch> und du landest direkt wieder hier."
+      "relaunch": "Tastenkürzel reagiert danach nicht? <relaunch>Handy neu starten</relaunch> und du landest direkt wieder hier.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Zurück",

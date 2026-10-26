@@ -82,7 +82,8 @@
       "hintBoth": "Дозвольте обидва, щоб продовжити",
       "hintMicrophone": "Дозвольте мікрофон, щоб продовжити",
       "welcomeBack": "З поверненням. Продовжуємо з того місця, де ви зупинилися.",
-      "relaunch": "Комбінація клавіш після цього не реагує? <relaunch>Перезапустіть Handy</relaunch>, і ви повернетеся просто сюди."
+      "relaunch": "Комбінація клавіш після цього не реагує? <relaunch>Перезапустіть Handy</relaunch>, і ви повернетеся просто сюди.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Назад",

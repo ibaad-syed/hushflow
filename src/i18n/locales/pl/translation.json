@@ -82,7 +82,8 @@
       "hintBoth": "Zezwól na oba, aby kontynuować",
       "hintMicrophone": "Zezwól na mikrofon, aby kontynuować",
       "welcomeBack": "Witaj z powrotem. Kontynuujemy od miejsca, w którym skończyliśmy.",
-      "relaunch": "Skrót nadal nie reaguje? <relaunch>Uruchom Handy ponownie</relaunch>, a wrócisz dokładnie tutaj."
+      "relaunch": "Skrót nadal nie reaguje? <relaunch>Uruchom Handy ponownie</relaunch>, a wrócisz dokładnie tutaj.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Wstecz",

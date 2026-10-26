@@ -82,7 +82,8 @@
       "hintBoth": "Allow both to continue",
       "hintMicrophone": "Allow the microphone to continue",
       "welcomeBack": "Welcome back. Picking up where you left off.",
-      "relaunch": "Shortcut not responding after this? <relaunch>Relaunch Handy</relaunch> and you'll land right back here."
+      "relaunch": "Shortcut not responding after this? <relaunch>Relaunch Handy</relaunch> and you'll land right back here.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Back",

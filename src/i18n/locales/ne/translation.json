@@ -82,7 +82,8 @@
       "hintBoth": "जारी राख्न दुवैलाई अनुमति दिनुहोस्",
       "hintMicrophone": "जारी राख्न माइक्रोफोनलाई अनुमति दिनुहोस्",
       "welcomeBack": "फेरि स्वागत छ। जहाँ छोड्नुभएको थियो, त्यहीँबाट सुरु गरौँ।",
-      "relaunch": "यसपछि सर्टकटले काम गरेन? <relaunch>Handy फेरि सुरु गर्नुहोस्</relaunch> र तपाईं ठ्याक्कै यहीँ फर्कनुहुनेछ।"
+      "relaunch": "यसपछि सर्टकटले काम गरेन? <relaunch>Handy फेरि सुरु गर्नुहोस्</relaunch> र तपाईं ठ्याक्कै यहीँ फर्कनुहुनेछ।",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "पछाडि",

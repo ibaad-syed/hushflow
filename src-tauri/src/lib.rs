@@ -787,6 +787,7 @@ pub fn run(cli_args: CliArgs) {
             commands::history::update_recording_retention_period,
             helpers::clamshell::is_laptop,
             helpers::globe_key::globe_key_has_system_action,
+            helpers::accessibility::reset_accessibility_permission,
         ])
         .events(collect_events![
             managers::history::HistoryUpdatePayload,

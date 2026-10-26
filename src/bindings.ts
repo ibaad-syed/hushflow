@@ -1000,6 +1000,18 @@ async isLaptop() : Promise<Result<boolean, string>> {
  */
 async globeKeyHasSystemAction() : Promise<boolean> {
     return await TAURI_INVOKE("globe_key_has_system_action");
+},
+/**
+ * Removes this app's Accessibility entry (only ours) so the next request
+ * starts clean. A no-op elsewhere.
+ */
+async resetAccessibilityPermission() : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("reset_accessibility_permission") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 

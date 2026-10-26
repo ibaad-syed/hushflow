@@ -82,7 +82,8 @@
       "hintBoth": "請允許兩項權限以繼續",
       "hintMicrophone": "請允許麥克風以繼續",
       "welcomeBack": "歡迎回來，我們從上次中斷的地方繼續。",
-      "relaunch": "之後快捷鍵沒有反應嗎？<relaunch>重新啟動 Handy</relaunch>，就會直接回到這裡。"
+      "relaunch": "之後快捷鍵沒有反應嗎？<relaunch>重新啟動 Handy</relaunch>，就會直接回到這裡。",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "返回",

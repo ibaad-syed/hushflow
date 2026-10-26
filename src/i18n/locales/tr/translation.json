@@ -82,7 +82,8 @@
       "hintBoth": "Devam etmek için ikisine de izin verin",
       "hintMicrophone": "Devam etmek için mikrofona izin verin",
       "welcomeBack": "Tekrar hoş geldiniz. Kaldığınız yerden devam ediyoruz.",
-      "relaunch": "Bundan sonra kısayol yanıt vermiyor mu? <relaunch>Handy'yi yeniden başlatın</relaunch>, doğrudan buraya döneceksiniz."
+      "relaunch": "Bundan sonra kısayol yanıt vermiyor mu? <relaunch>Handy'yi yeniden başlatın</relaunch>, doğrudan buraya döneceksiniz.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Geri",

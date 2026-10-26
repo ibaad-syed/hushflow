@@ -82,7 +82,8 @@
       "hintBoth": "続けるには両方を許可してください",
       "hintMicrophone": "続けるにはマイクを許可してください",
       "welcomeBack": "おかえりなさい。前回の続きから始めます。",
-      "relaunch": "このあとショートカットが反応しない場合は、<relaunch>Handy を再起動</relaunch>してください。この画面にすぐ戻れます。"
+      "relaunch": "このあとショートカットが反応しない場合は、<relaunch>Handy を再起動</relaunch>してください。この画面にすぐ戻れます。",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "戻る",

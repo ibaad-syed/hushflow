@@ -82,7 +82,8 @@
       "hintBoth": "आगे बढ़ने के लिए दोनों की अनुमति दें",
       "hintMicrophone": "आगे बढ़ने के लिए माइक्रोफ़ोन की अनुमति दें",
       "welcomeBack": "वापसी पर स्वागत है. जहां छोड़ा था, वहीं से शुरू करते हैं.",
-      "relaunch": "इसके बाद शॉर्टकट जवाब नहीं दे रहा? <relaunch>Handy को दोबारा शुरू करें</relaunch> और आप सीधे यहीं लौट आएंगे."
+      "relaunch": "इसके बाद शॉर्टकट जवाब नहीं दे रहा? <relaunch>Handy को दोबारा शुरू करें</relaunch> और आप सीधे यहीं लौट आएंगे.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "वापस",

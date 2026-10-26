@@ -82,7 +82,8 @@
       "hintBoth": "Разрешете и двете, за да продължите",
       "hintMicrophone": "Разрешете микрофона, за да продължите",
       "welcomeBack": "Добре дошли отново. Продължаваме от където спряхте.",
-      "relaunch": "Бързият клавиш не реагира след това? <relaunch>Рестартирайте Handy</relaunch> и ще се озовете точно тук."
+      "relaunch": "Бързият клавиш не реагира след това? <relaunch>Рестартирайте Handy</relaunch> и ще се озовете точно тук.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Назад",

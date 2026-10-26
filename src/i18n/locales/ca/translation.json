@@ -82,7 +82,8 @@
       "hintBoth": "Permeteu-los tots dos per continuar",
       "hintMicrophone": "Permeteu el micròfon per continuar",
       "welcomeBack": "Us donem la benvinguda de nou. Continuem on ho havíeu deixat.",
-      "relaunch": "La drecera no respon després d'això? <relaunch>Reinicieu el Handy</relaunch> i tornareu a aparèixer just aquí."
+      "relaunch": "La drecera no respon després d'això? <relaunch>Reinicieu el Handy</relaunch> i tornareu a aparèixer just aquí.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Enrere",

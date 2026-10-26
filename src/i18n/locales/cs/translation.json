@@ -82,7 +82,8 @@
       "hintBoth": "Pro pokračování povolte obojí",
       "hintMicrophone": "Pro pokračování povolte mikrofon",
       "welcomeBack": "Vítejte zpět. Pokračujeme tam, kde jste skončili.",
-      "relaunch": "Zkratka po tomhle nereaguje? <relaunch>Restartujte Handy</relaunch> a skončíte hned zase tady."
+      "relaunch": "Zkratka po tomhle nereaguje? <relaunch>Restartujte Handy</relaunch> a skončíte hned zase tady.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Zpět",

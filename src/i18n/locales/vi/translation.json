@@ -82,7 +82,8 @@
       "hintBoth": "Hãy cho phép cả hai để tiếp tục",
       "hintMicrophone": "Hãy cho phép micrô để tiếp tục",
       "welcomeBack": "Chào mừng bạn quay lại. Tiếp tục từ chỗ bạn đã dừng.",
-      "relaunch": "Phím tắt không phản hồi sau bước này? <relaunch>Khởi chạy lại Handy</relaunch> và bạn sẽ quay lại đúng chỗ này."
+      "relaunch": "Phím tắt không phản hồi sau bước này? <relaunch>Khởi chạy lại Handy</relaunch> và bạn sẽ quay lại đúng chỗ này.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Quay lại",

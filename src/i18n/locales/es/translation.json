@@ -82,7 +82,8 @@
       "hintBoth": "Permite ambos para continuar",
       "hintMicrophone": "Permite el micrófono para continuar",
       "welcomeBack": "Te damos la bienvenida de nuevo. Seguimos donde lo dejaste.",
-      "relaunch": "¿El atajo no responde después de esto? <relaunch>Reinicia Handy</relaunch> y volverás justo aquí."
+      "relaunch": "¿El atajo no responde después de esto? <relaunch>Reinicia Handy</relaunch> y volverás justo aquí.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Atrás",

@@ -82,7 +82,8 @@
       "hintBoth": "Tillåt båda för att fortsätta",
       "hintMicrophone": "Tillåt mikrofonen för att fortsätta",
       "welcomeBack": "Välkommen tillbaka. Vi fortsätter där du slutade.",
-      "relaunch": "Svarar inte genvägen efter detta? <relaunch>Starta om Handy</relaunch> så hamnar du direkt här igen."
+      "relaunch": "Svarar inte genvägen efter detta? <relaunch>Starta om Handy</relaunch> så hamnar du direkt här igen.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Tillbaka",

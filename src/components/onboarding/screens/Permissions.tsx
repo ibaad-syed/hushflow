@@ -193,7 +193,7 @@ export const Permissions: React.FC<PermissionsProps> = ({
               status={permissions.accessibility}
               next={next === "accessibility"}
               action={t("onboarding.permissions.allow")}
-              instruction={turnOn}
+              instruction={t("onboarding.permissions.turnOnAccessibility")}
               onRequest={permissions.requestAccessibility}
             />
           )}

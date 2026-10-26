@@ -219,6 +219,12 @@ export const usePermissions = (preview: boolean): Permissions => {
   const requestAccessibility = async () => {
     if (preview) return;
     try {
+      // An entry left from an earlier build can sit in System Settings,
+      // switched on, without applying to this one. Clear ours so macOS adds a
+      // fresh entry the toggle works for.
+      await commands.resetAccessibilityPermission().catch((e) => {
+        console.warn("Could not clear the old Accessibility entry:", e);
+      });
       await requestAccessibilityPermission();
       setAccessibility("waiting");
       startPolling();

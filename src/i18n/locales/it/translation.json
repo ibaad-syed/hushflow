@@ -82,7 +82,8 @@
       "hintBoth": "Consenti entrambi per continuare",
       "hintMicrophone": "Consenti il microfono per continuare",
       "welcomeBack": "Bentornato. Riprendiamo da dove eri rimasto.",
-      "relaunch": "La scorciatoia non risponde dopo questo passaggio? <relaunch>Riavvia Handy</relaunch> e tornerai subito qui."
+      "relaunch": "La scorciatoia non risponde dopo questo passaggio? <relaunch>Riavvia Handy</relaunch> e tornerai subito qui.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Indietro",

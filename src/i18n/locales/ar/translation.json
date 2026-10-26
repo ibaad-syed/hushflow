@@ -82,7 +82,8 @@
       "hintBoth": "اسمح بالإذنين للمتابعة",
       "hintMicrophone": "اسمح بالوصول إلى الميكروفون للمتابعة",
       "welcomeBack": "أهلًا بعودتك. سنكمل من حيث توقفت.",
-      "relaunch": "الاختصار لا يستجيب بعد هذا؟ <relaunch>أعد تشغيل Handy</relaunch> وستعود إلى هنا مباشرة."
+      "relaunch": "الاختصار لا يستجيب بعد هذا؟ <relaunch>أعد تشغيل Handy</relaunch> وستعود إلى هنا مباشرة.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "رجوع",

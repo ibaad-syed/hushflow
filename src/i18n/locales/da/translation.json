@@ -82,7 +82,8 @@
       "hintBoth": "Tillad begge for at fortsætte",
       "hintMicrophone": "Tillad mikrofonen for at fortsætte",
       "welcomeBack": "Velkommen tilbage. Vi fortsætter, hvor du slap.",
-      "relaunch": "Reagerer genvejen ikke efter dette? <relaunch>Genstart Handy</relaunch>, så lander du lige her igen."
+      "relaunch": "Reagerer genvejen ikke efter dette? <relaunch>Genstart Handy</relaunch>, så lander du lige her igen.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Tilbage",

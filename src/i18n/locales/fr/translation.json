@@ -82,7 +82,8 @@
       "hintBoth": "Autorisez les deux pour continuer",
       "hintMicrophone": "Autorisez le microphone pour continuer",
       "welcomeBack": "Content de vous revoir. On reprend là où vous en étiez.",
-      "relaunch": "Le raccourci ne répond pas après ça ? <relaunch>Relancez Handy</relaunch> et vous reviendrez directement ici."
+      "relaunch": "Le raccourci ne répond pas après ça ? <relaunch>Relancez Handy</relaunch> et vous reviendrez directement ici.",
+      "turnOnAccessibility": "Turn on Handy in the list that opens, then come back here. If Handy was already listed, that was an old entry; it has been replaced."
     },
     "shell": {
       "back": "Retour",
