@@ -8,7 +8,7 @@
 
 pub mod catalog;
 pub mod prompt;
-mod server;
+pub(crate) mod server;
 
 use crate::settings::get_settings;
 use anyhow::{anyhow, Result};
@@ -357,6 +357,7 @@ impl CleanupManager {
             // recording wakes it again.
             idle_sleep: timeout.to_seconds(),
             cpu_only: self.cpu_only.load(Ordering::Relaxed),
+            ctx: None,
         }
     }
 
@@ -424,6 +425,30 @@ impl CleanupManager {
             prompt::with_dictionary(base, &settings.custom_words),
             base == prompt::SYSTEM,
         )
+    }
+
+    /// The local model meeting notes run on: the chosen cleanup model if it's
+    /// downloaded, else any downloaded one. With its id and the server binary.
+    pub fn notes_model(&self) -> Result<(PathBuf, String, PathBuf)> {
+        let chosen = get_settings(&self.app).cleanup_engine;
+        let model = catalog::find(&chosen)
+            .filter(|m| self.is_downloaded(m.id))
+            .or_else(|| catalog::MODELS.iter().find(|m| self.is_downloaded(m.id)))
+            .ok_or_else(|| anyhow!("no local cleanup model is downloaded"))?;
+        Ok((
+            self.model_path(model),
+            model.id.to_string(),
+            self.server_binary()?,
+        ))
+    }
+
+    /// Whether the GPU backend failed this run (notes servers start on the CPU too).
+    pub fn cpu_only(&self) -> bool {
+        self.cpu_only.load(Ordering::Relaxed)
+    }
+
+    pub fn models_dir(&self) -> &std::path::Path {
+        &self.dir
     }
 
     fn server_binary(&self) -> Result<PathBuf> {

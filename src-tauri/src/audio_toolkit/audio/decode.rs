@@ -110,8 +110,9 @@ pub fn decode_audio_file(path: &Path) -> Result<Vec<f32>> {
 }
 
 /// Mono audio at the file's rate in, 16 kHz out, one resampler step at a
-/// time, so the file's audio is never held whole at its own rate.
-struct Resampled {
+/// time, so the file's audio is never held whole at its own rate. Live
+/// capture (meeting notes) drains it as it goes with `take_output`.
+pub(crate) struct Resampled {
     rate: u32,
     /// Input frames taken in so far.
     input_len: usize,
@@ -131,7 +132,7 @@ struct Stage {
 }
 
 impl Resampled {
-    fn new(rate: u32) -> Result<Self> {
+    pub(crate) fn new(rate: u32) -> Result<Self> {
         let target = WHISPER_SAMPLE_RATE as usize;
         let stage = if rate as usize == target {
             None
@@ -167,7 +168,7 @@ impl Resampled {
         }
     }
 
-    fn push(&mut self, samples: impl Iterator<Item = f32>) -> Result<()> {
+    pub(crate) fn push(&mut self, samples: impl Iterator<Item = f32>) -> Result<()> {
         let Some(stage) = self.stage.as_mut() else {
             let before = self.output.len();
             self.output.extend(samples);
@@ -185,7 +186,12 @@ impl Resampled {
         Ok(())
     }
 
-    fn finish(mut self) -> Result<Vec<f32>> {
+    /// The 16 kHz audio produced so far, removed from the buffer.
+    pub(crate) fn take_output(&mut self) -> Vec<f32> {
+        std::mem::take(&mut self.output)
+    }
+
+    pub(crate) fn finish(mut self) -> Result<Vec<f32>> {
         let expected = self.expected_len(self.input_len);
         let Some(mut stage) = self.stage.take() else {
             return Ok(self.output);

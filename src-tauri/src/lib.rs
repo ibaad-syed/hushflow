@@ -229,6 +229,14 @@ fn initialize_core_logic(app_handle: &AppHandle) {
         Err(e) => log::error!("Cleanup unavailable: {e}"),
     }
 
+    // Meeting notes (mic + system audio, transcript, local LLM notes).
+    match managers::meeting::MeetingManager::new(app_handle) {
+        Ok(meetings) => {
+            app_handle.manage(Arc::new(meetings));
+        }
+        Err(e) => log::error!("Meetings unavailable: {e}"),
+    }
+
     // Pick the transcription engine (built-in now, Parakeet once downloaded)
     // when the user hasn't chosen one themselves.
     managers::engine_policy::apply(app_handle);
@@ -803,6 +811,16 @@ pub fn run(cli_args: CliArgs) {
             commands::cleanup::set_cleanup_engine,
             commands::cleanup::delete_cleanup_model,
             commands::cleanup::set_cleanup_prompt,
+            commands::meeting::start_meeting,
+            commands::meeting::stop_meeting,
+            commands::meeting::get_active_meeting,
+            commands::meeting::list_meetings,
+            commands::meeting::get_meeting,
+            commands::meeting::save_meeting_notes,
+            commands::meeting::rename_meeting,
+            commands::meeting::regenerate_meeting_notes,
+            commands::meeting::delete_meeting,
+            commands::meeting::meeting_markdown,
         ])
         .events(collect_events![
             managers::history::HistoryUpdatePayload,
@@ -900,6 +918,17 @@ pub fn run(cli_args: CliArgs) {
                 signal_handle::send_transcription_input(app, "transcribe_with_post_process", "CLI");
             } else if args.iter().any(|a| a == "--cancel") {
                 crate::utils::cancel_current_operation(app);
+            } else if args.iter().any(|a| a == "--toggle-meeting") {
+                if let Some(meetings) = app.try_state::<Arc<managers::meeting::MeetingManager>>() {
+                    let result = if meetings.active().is_some() {
+                        meetings.stop().map(|_| ())
+                    } else {
+                        meetings.start().map(|_| ())
+                    };
+                    if let Err(e) = result {
+                        log::warn!("--toggle-meeting: {e}");
+                    }
+                }
             } else {
                 // A second process was launched without remote-control flags
                 // (e.g. the binary run from a shell). On macOS, relaunching the
@@ -1179,6 +1208,9 @@ pub fn run(cli_args: CliArgs) {
         }
         // llama-server doesn't watch its parent, so stop it explicitly.
         tauri::RunEvent::Exit => {
+            if let Some(meetings) = app.try_state::<Arc<managers::meeting::MeetingManager>>() {
+                meetings.stop_now();
+            }
             if let Some(cleanup) = app.try_state::<Arc<managers::cleanup::CleanupManager>>() {
                 cleanup.stop_now();
             }

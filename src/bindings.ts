@@ -1059,6 +1059,81 @@ async setCleanupPrompt(prompt: string | null) : Promise<Result<null, string>> {
     if(e instanceof Error) throw e;
     else return { status: "error", error: e  as any };
 }
+},
+async startMeeting() : Promise<Result<ActiveMeeting, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("start_meeting") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async stopMeeting() : Promise<Result<number, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("stop_meeting") };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async getActiveMeeting() : Promise<ActiveMeeting | null> {
+    return await TAURI_INVOKE("get_active_meeting");
+},
+async listMeetings(query: string | null) : Promise<Result<MeetingSummary[], string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("list_meetings", { query }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async getMeeting(id: number) : Promise<Result<MeetingDetail | null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("get_meeting", { id }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async saveMeetingNotes(id: number, body: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("save_meeting_notes", { id, body }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async renameMeeting(id: number, title: string) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("rename_meeting", { id, title }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async regenerateMeetingNotes(id: number) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("regenerate_meeting_notes", { id }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async deleteMeeting(id: number) : Promise<Result<null, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("delete_meeting", { id }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
+},
+async meetingMarkdown(id: number) : Promise<Result<string, string>> {
+    try {
+    return { status: "ok", data: await TAURI_INVOKE("meeting_markdown", { id }) };
+} catch (e) {
+    if(e instanceof Error) throw e;
+    else return { status: "error", error: e  as any };
+}
 }
 }
 
@@ -1087,6 +1162,11 @@ transcriptionJob: "transcription-job"
 
 /** user-defined types **/
 
+/**
+ * The meeting being recorded, if any.
+ */
+export type ActiveMeeting = { id: number; started_at: number; has_system_audio: boolean }
+export type AiNotes = { id: number; model: string; body_md: string; created_at: number }
 /**
  * The container-level `serde(default)` (backed by the `Default` impl below)
  * guarantees every field — including ones added in the future — falls back to
@@ -1252,6 +1332,21 @@ key_down: number; key_up: number; flags_changed: number; mouse: number; duration
 export type KeyboardImplementation = "tauri" | "handy_keys"
 export type LLMPrompt = { id: string; name: string; prompt: string }
 export type LogLevel = "trace" | "debug" | "info" | "warn" | "error"
+export type MeetingDetail = { meeting: MeetingSummary; segments: MeetingSegment[]; user_notes: string; 
+/**
+ * Every version, newest first.
+ */
+ai_notes: AiNotes[] }
+export type MeetingSegment = { id: number; channel: string; t0_ms: number; t1_ms: number; text: string; 
+/**
+ * The mic picked up the other side (no headphones): hidden, kept.
+ */
+suppressed_echo: boolean }
+export type MeetingSummary = { id: number; title: string; started_at: number; ended_at: number | null; status: string; has_system_audio: boolean; 
+/**
+ * Why AI notes are missing, when they are.
+ */
+notes_error: string | null }
 export type ModelInfo = { id: string; name: string; description: string; filename: string; source: ModelSource; size_mb: number; is_downloaded: boolean; is_downloading: boolean; partial_size: number; accuracy_score: number; speed_score: number; supports_translation: boolean; is_recommended: boolean; supported_languages: string[]; supports_language_selection: boolean; is_custom: boolean; supports_streaming: boolean; supports_language_detection: boolean }
 export type ModelLoadStatus = { is_loaded: boolean; current_model: string | null }
 /**

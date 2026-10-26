@@ -33,6 +33,9 @@ pub struct ServerOptions {
     pub idle_sleep: Option<u64>,
     /// Run on the CPU only, for when the GPU backend can't load the model.
     pub cpu_only: bool,
+    /// Context in tokens; `None` is dictation's 4096. Meeting notes need a
+    /// whole transcript.
+    pub ctx: Option<u32>,
 }
 
 pub struct LlamaServer {
@@ -105,7 +108,8 @@ impl LlamaServer {
             .args(["--host", "127.0.0.1", "--port", &port.to_string()])
             .arg("-m")
             .arg(model)
-            .args(["-c", "4096", "-np", "1", "--jinja"])
+            .args(["-c", &options.ctx.unwrap_or(4096).to_string()])
+            .args(["-np", "1", "--jinja"])
             .args(["--cache-reuse", "256", "--no-webui"])
             .args(["--spec-type", "ngram-simple"])
             .args([

@@ -7,6 +7,7 @@ import {
   FlaskConical,
   History,
   Info,
+  NotebookPen,
   SlidersHorizontal,
   Sparkles,
 } from "lucide-react";
@@ -17,6 +18,7 @@ import {
   AdvancedSettings,
   HistorySettings,
   DictionarySettings,
+  MeetingsSettings,
   AboutSettings,
   PostProcessingSettings,
   ModelsSettings,
@@ -55,6 +57,13 @@ export const SECTIONS_CONFIG = {
     labelKey: "sidebar.history",
     icon: History,
     component: HistorySettings,
+    enabled: () => true,
+  },
+  meetings: {
+    tint: "#ff453a",
+    labelKey: "sidebar.meetings",
+    icon: NotebookPen,
+    component: MeetingsSettings,
     enabled: () => true,
   },
   dictionary: {

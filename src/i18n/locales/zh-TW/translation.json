@@ -17,7 +17,8 @@
     "history": "歷史紀錄",
     "debug": "偵錯",
     "about": "關於",
-    "dictionary": "Dictionary"
+    "dictionary": "Dictionary",
+    "meetings": "Meetings"
   },
   "onboarding": {
     "customModelDescription": "官方不支援",
@@ -1022,5 +1023,53 @@
     "learnMore": "如何解決",
     "recorderBlocked": "目前無法錄製快捷鍵——macOS 的 Secure Input 正在阻擋按鍵事件。請先解決 Secure Input 警告。",
     "dismiss": "關閉"
+  },
+  "meetings": {
+    "intro": "Record a call or meeting. Hushflow transcribes both sides on this computer and writes notes when you stop.",
+    "new": "New meeting",
+    "stop": "Stop",
+    "open": "Open",
+    "back": "All meetings",
+    "titleLabel": "Meeting title",
+    "search": "Search meetings, notes and transcripts",
+    "empty": "No meetings yet.",
+    "noResults": "No meetings match.",
+    "consent": "Let people know you're taking notes: recording laws vary. Audio and notes stay on this computer.",
+    "startFailed": "Couldn't start the meeting: {{error}}",
+    "copied": "Notes and transcript copied as Markdown",
+    "copy": "Copy as Markdown",
+    "regenerate": "Write notes again",
+    "delete": "Delete meeting",
+    "writing": "Writing notes…",
+    "noNotes": "No notes yet.",
+    "notesFailed": "Notes weren't written: {{error}}",
+    "version": "Version {{n}} · {{date}}",
+    "status": {
+      "recording": "Recording",
+      "summarizing": "Writing notes…"
+    },
+    "recording": {
+      "banner": "Meeting in progress",
+      "both": "Recording you and the call. Headphones give the cleanest transcript.",
+      "micOnly": "Recording your microphone only: computer audio isn't available."
+    },
+    "tabs": {
+      "notes": "Notes",
+      "mine": "My notes",
+      "transcript": "Transcript"
+    },
+    "notes": {
+      "placeholder": "Jot down what matters. After the meeting, your notes are filled in from the transcript."
+    },
+    "speaker": {
+      "me": "Me",
+      "them": "Them"
+    },
+    "transcript": {
+      "listening": "Listening… lines appear after each pause.",
+      "empty": "Nothing was transcribed.",
+      "echoHidden_one": "{{count}} line the mic picked up from your speakers is hidden.",
+      "echoHidden_other": "{{count}} lines the mic picked up from your speakers are hidden."
+    }
   }
 }
