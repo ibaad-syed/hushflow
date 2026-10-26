@@ -354,3 +354,33 @@
   }
   showFinal(0);
 })();
+
+// Download buttons fetch the installer itself: the latest release's .dmg
+// (Mac) or -setup.exe (Windows). Until that answers, or if it fails, they
+// open the latest release page.
+(function () {
+  var links = document.querySelectorAll("a[data-dl]");
+  if (!links.length || !window.fetch) return;
+  fetch("https://api.github.com/repos/ibaad-syed/hushflow/releases/latest")
+    .then(function (r) {
+      return r.ok ? r.json() : null;
+    })
+    .then(function (release) {
+      if (!release || !release.assets) return;
+      var find = function (re) {
+        var a = release.assets.filter(function (x) {
+          return re.test(x.name);
+        })[0];
+        return a && a.browser_download_url;
+      };
+      var urls = {
+        mac: find(/aarch64\.dmg$/i) || find(/\.dmg$/i),
+        win: find(/x64-setup\.exe$/i) || find(/\.msi$/i),
+      };
+      links.forEach(function (a) {
+        var url = urls[a.getAttribute("data-dl")];
+        if (url) a.href = url;
+      });
+    })
+    .catch(function () {});
+})();
