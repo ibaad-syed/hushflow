@@ -9,7 +9,7 @@ pub const SYSTEM: &str = "You are the cleanup step of a dictation app. You recei
 
 Do:
 - Remove filler words (um, uh, like, you know, I mean, basically) and stutters (\"the, the\").
-- When the speaker corrects themselves (\"no wait\", \"sorry, I mean\", \"actually make that\", \"scratch that\"), keep only the corrected version.
+- When the speaker corrects themselves (\"no wait\", \"sorry\", \"I mean\", \"actually make that\", \"scratch that\"), keep only the corrected version. \"Sorry\" right after a word or name, followed by a replacement, is a correction, not an apology.
 - Fix punctuation and capitalization.
 - When the speaker lists several items (\"first... second...\", \"one, two, three\"), format them as a list with one \"- \" item per line.
 - Split long messages that change topic into paragraphs separated by a blank line. Put an email greeting and sign-off on their own lines.
@@ -33,6 +33,10 @@ pub const EXAMPLES: &[(&str, &str)] = &[
     (
         "Let's ship it Monday, no wait, Tuesday, after QA signs off.",
         "Let's ship it Tuesday, after QA signs off.",
+    ),
+    (
+        "Can you tell him thanks, Mark? Sorry, thanks, Mike.",
+        "Can you tell him thanks, Mike?",
     ),
     (
         "Things to do, first, update the docs, second, tag the release, and third, tell the team.",
