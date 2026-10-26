@@ -438,6 +438,12 @@ function App() {
                 className={`flex flex-col items-center px-8 py-6 gap-6 ${currentSection === "models" ? "h-full" : ""}`}
               >
                 <SecureInputWarning />
+                {/* Models draws its own header (with "Change languages"). */}
+                {currentSection !== "models" && (
+                  <h1 className="m-0 w-full max-w-3xl text-[20px] font-bold tracking-[-0.01em]">
+                    {t(SECTIONS_CONFIG[currentSection].labelKey)}
+                  </h1>
+                )}
                 {renderSettingsContent(
                   currentSection,
                   setOnboardingPreview,

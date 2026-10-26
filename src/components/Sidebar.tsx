@@ -31,6 +31,8 @@ interface IconProps {
 }
 
 interface SectionConfig {
+  /** Background of the section's icon tile, as in macOS System Settings. */
+  tint: string;
   labelKey: string;
   icon: React.ComponentType<IconProps>;
   /** `null` when App renders the section itself (Debug, with its handlers). */
@@ -40,42 +42,49 @@ interface SectionConfig {
 
 export const SECTIONS_CONFIG = {
   general: {
+    tint: "#8e8e93",
     labelKey: "sidebar.general",
     icon: SlidersHorizontal,
     component: GeneralSettings,
     enabled: () => true,
   },
   history: {
+    tint: "#ff9f0a",
     labelKey: "sidebar.history",
     icon: History,
     component: HistorySettings,
     enabled: () => true,
   },
   models: {
+    tint: "#5e5ce6",
     labelKey: "sidebar.models",
     icon: Cpu,
     component: ModelsSettings,
     enabled: () => true,
   },
   advanced: {
+    tint: "#636366",
     labelKey: "sidebar.advanced",
     icon: Cog,
     component: AdvancedSettings,
     enabled: () => true,
   },
   postprocessing: {
+    tint: "#bf5af2",
     labelKey: "sidebar.postProcessing",
     icon: Sparkles,
     component: PostProcessingSettings,
     enabled: (settings) => settings?.post_process_enabled ?? false,
   },
   debug: {
+    tint: "#ff375f",
     labelKey: "sidebar.debug",
     icon: FlaskConical,
     component: null,
     enabled: (settings) => settings?.debug_mode ?? false,
   },
   about: {
+    tint: "#0a84ff",
     labelKey: "sidebar.about",
     icon: Info,
     component: AboutSettings,
@@ -100,8 +109,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     .map(([id, config]) => ({ id: id as SidebarSection, ...config }));
 
   return (
-    <nav className="flex h-full w-48 shrink-0 flex-col border-e border-line bg-sidebar px-2.5">
-      <HushflowLogo className="px-2 pt-4 pb-5" />
+    <nav className="flex h-full w-[220px] shrink-0 flex-col border-e border-line bg-sidebar px-2.5">
+      <HushflowLogo className="px-2 pt-4 pb-4" />
       <div className="flex w-full flex-col gap-0.5">
         {availableSections.map((section) => {
           const Icon = section.icon;
@@ -112,21 +121,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
               type="button"
               key={section.id}
               aria-current={isActive ? "page" : undefined}
-              className={`flex h-8 w-full cursor-pointer items-center gap-2.5 rounded-md px-2 text-start transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-logo-primary ${
+              className={`flex h-[30px] w-full cursor-pointer items-center gap-2 rounded-[6px] px-1.5 text-start focus:outline-none focus-visible:ring-1 focus-visible:ring-logo-primary ${
                 isActive
-                  ? "bg-line text-text"
-                  : "text-ink-2 hover:bg-wash hover:text-text"
+                  ? "bg-background-ui text-white"
+                  : "text-text hover:bg-wash"
               }`}
               onClick={() => onSectionChange(section.id)}
             >
-              <Icon
-                width={16}
-                height={16}
-                strokeWidth={1.75}
-                className="shrink-0"
-              />
               <span
-                className="truncate text-[13px] font-medium"
+                className="grid size-5 shrink-0 place-items-center rounded-[5px] text-white"
+                style={{ background: section.tint }}
+              >
+                <Icon width={13} height={13} strokeWidth={2.2} />
+              </span>
+              <span
+                className="truncate text-[13px]"
                 title={t(section.labelKey)}
               >
                 {t(section.labelKey)}

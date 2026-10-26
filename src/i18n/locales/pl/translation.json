@@ -392,10 +392,11 @@
         }
       },
       "globeKey": {
-        "title": "The Fn key also opens something else",
-        "description": "macOS runs its own Globe key action when you press Fn. In Keyboard settings, set “Press 🌐 key to” to “Do Nothing”.",
-        "open": "Open Keyboard Settings"
-      }
+        "title": "Fn also triggers the Globe key.",
+        "description": "Set “Press 🌐 key to” to “Do Nothing”.",
+        "open": "Keyboard Settings…"
+      },
+      "shortcutsTitle": "Keyboard shortcuts"
     },
     "models": {
       "title": "Modele",

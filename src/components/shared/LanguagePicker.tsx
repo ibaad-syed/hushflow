@@ -50,7 +50,7 @@ export const LanguageChip: React.FC<LanguageChipProps> = ({
   );
   if (locked)
     return (
-      <span className="inline-flex h-[28px] items-center rounded-full border-[1.5px] border-line-strong bg-background px-[12px] text-small font-semibold text-text">
+      <span className="inline-flex h-[22px] items-center rounded-full border border-line-strong bg-panel px-[9px] text-[12px] font-medium text-text">
         {name}
       </span>
     );
@@ -63,7 +63,7 @@ export const LanguageChip: React.FC<LanguageChipProps> = ({
         e.preventDefault();
         onRemove();
       }}
-      className="group inline-flex h-[28px] cursor-pointer items-center gap-[6px] rounded-full border-[1.5px] border-line-strong bg-background ps-[12px] pe-[6px] text-small font-semibold text-text hover:border-ink-3"
+      className="group inline-flex h-[22px] cursor-pointer items-center gap-[4px] rounded-full border border-line-strong bg-panel ps-[9px] pe-[4px] text-[12px] font-medium text-text hover:border-ink-3"
     >
       {name}
       <span className="grid size-[18px] place-items-center rounded-full leading-none text-ink-2 group-hover:bg-line">
@@ -234,7 +234,7 @@ export const LanguageSearchField: React.FC<{
     // Not a <label>: it would hand clicks to the first chip, which removes it.
     <div
       onClick={() => inputRef.current?.focus({ preventScroll: true })}
-      className={`flex min-h-[46px] cursor-text flex-wrap items-center gap-[4px] px-[8px] py-[7px] text-start ${className}`}
+      className={`flex min-h-[34px] cursor-text flex-wrap items-center gap-[4px] px-[6px] py-[5px] text-start ${className}`}
     >
       {languages.map((code) => (
         <LanguageChip
@@ -262,7 +262,7 @@ export const LanguageSearchField: React.FC<{
         value={picker.query}
         onChange={(e) => picker.setQuery(e.target.value)}
         onKeyDown={onKeyDown}
-        className={`h-[30px] flex-1 border-0 bg-transparent px-[8px] text-text outline-none placeholder:text-ink-3 ${inputClassName}`}
+        className={`h-[22px] flex-1 border-0 bg-transparent px-[6px] text-[13px] text-text outline-none placeholder:text-ink-3 ${inputClassName}`}
       />
     </div>
   );

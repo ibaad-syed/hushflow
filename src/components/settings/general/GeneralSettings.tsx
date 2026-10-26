@@ -28,7 +28,7 @@ export const GeneralSettings: React.FC = () => {
     (getSetting("chinese_script") ?? "as_transcribed") !== "as_transcribed";
   return (
     <div className="max-w-3xl w-full mx-auto space-y-6">
-      <SettingsGroup title={t("settings.general.title")}>
+      <SettingsGroup title={t("settings.general.shortcutsTitle")}>
         <ShortcutInput shortcutId="transcribe" grouped={true} />
         <GlobeKeyNotice />
         <ShortcutActivationSetting descriptionMode="tooltip" grouped={true} />
