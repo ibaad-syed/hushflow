@@ -33,8 +33,12 @@
     var mac = document.querySelector('.hero [data-dl="mac"]');
     var win = document.querySelector('.hero [data-dl="win"]');
     if (mac && win) {
-      mac.classList.replace("btn-primary", "btn-ghost");
-      win.classList.replace("btn-ghost", "btn-primary");
+      // Swap roles: Windows becomes the button, Mac the plain link.
+      var icon = mac.querySelector("svg");
+      if (icon) icon.remove();
+      mac.className = "btn-link";
+      win.className = "btn";
+      mac.textContent = "Download for Mac";
       win.parentNode.insertBefore(win, mac);
     }
   }
@@ -77,6 +81,7 @@
   var EXAMPLES = [
     {
       app: "Messages",
+      context: ["bubble", "Are we still on for the review this week?"],
       said: [
         ["um so", true],
         ["can you,", true],
@@ -89,6 +94,7 @@
     },
     {
       app: "Notes",
+      context: ["title", "Launch checklist"],
       said: [
         ["okay so", true],
         ["for the launch we need", false],
@@ -103,6 +109,7 @@
     },
     {
       app: "Mail",
+      context: ["meta", "To: Sam"],
       said: [
         ["hey sam I'll be there at", false],
         ["like", true],
@@ -121,6 +128,7 @@
   var pill = document.getElementById("demo-pill");
   var pillText = document.getElementById("pill-text");
   var appName = document.getElementById("demo-app");
+  var context = document.getElementById("demo-context");
   var sr = document.getElementById("demo-sr");
   var pauseBtn = document.getElementById("demo-pause");
   var tabs = document.querySelectorAll(".demo-tabs button");
@@ -161,7 +169,6 @@
   // Build the raw transcript as individual word spans.
   function buildRaw(ex) {
     raw.textContent = "";
-    raw.classList.remove("is-small");
     var words = [];
     ex.said.forEach(function (seg) {
       seg[0].split(" ").forEach(function (w) {
@@ -213,6 +220,10 @@
     current = i;
     selectTab(i);
     appName.textContent = ex.app;
+    if (context) {
+      context.className = "context context-" + ex.context[0];
+      context.textContent = ex.context[1];
+    }
     sr.textContent =
       'Example. You say: "' +
       saidText(ex) +
@@ -237,11 +248,10 @@
     s.chipEls.forEach(function (c) {
       c.classList.add("in");
     });
-    raw.classList.add("is-small");
-    stage.textContent = "Hushflow types";
+    stage.textContent = "You said";
     stage.classList.add("is-done");
     out.classList.add("in");
-    pill.className = "pill is-hidden";
+    pill.className = "pill is-rest";
   }
 
   function play(i) {
@@ -249,7 +259,7 @@
     var s = setup(i);
 
     pill.className = "pill is-live";
-    pillText.textContent = "Listening";
+    pillText.textContent = "Transcribing...";
 
     var chain = wait(450, id);
     s.words.forEach(function (w) {
@@ -265,7 +275,7 @@
       })
       .then(function () {
         pill.className = "pill is-thinking";
-        pillText.textContent = "Cleaning up";
+        pillText.textContent = "Processing...";
         var marks = wait(200, id);
         s.words.forEach(function (w) {
           if (!w.dataset.cut) return;
@@ -286,9 +296,8 @@
         return wait(700, id);
       })
       .then(function () {
-        pill.className = "pill is-hidden";
-        raw.classList.add("is-small");
-        stage.textContent = "Hushflow types";
+        pill.className = "pill is-rest";
+        stage.textContent = "You said";
         stage.classList.add("is-done");
         out.classList.add("in");
         return wait(4200, id);

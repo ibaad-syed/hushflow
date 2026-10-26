@@ -8,8 +8,8 @@
       name="description"
       content="Hold a key, speak, let go. Hushflow types what you meant into any app, with fillers and false starts cleaned up. Speech recognition and cleanup run entirely on your computer. Free and open source."
     />
-    <meta name="theme-color" content="#0B0A1F" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#FBF8F2" />
+    <meta name="color-scheme" content="light" />
     <link rel="icon" href="assets/hushflow-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
@@ -34,7 +34,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap"
     />
     <link rel="stylesheet" href="styles.css" />
     <script src="main.js" defer></script>
@@ -43,61 +43,45 @@
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="nav" id="top">
-      <div class="container nav-inner">
+      <div class="nav-bar">
         <a class="brand" href="#top" aria-label="Hushflow home">
-          <img src="assets/hushflow-icon.svg" alt="" width="32" height="32" />
+          <img src="assets/hushflow-icon.svg" alt="" width="30" height="30" />
           <span>Hushflow</span>
         </a>
         <nav aria-label="Primary">
           <ul class="nav-links">
             <li><a href="#how">How it works</a></li>
             <li><a href="#cleanup">Cleanup</a></li>
-            <li><a href="#features">Features</a></li>
+            <li><a href="#privacy">Privacy</a></li>
             <li><a href="#faq">FAQ</a></li>
             <li>
-              <a href="https://github.com/ibaad-syed/hushflow" class="nav-gh">
-                <svg
-                  viewBox="0 0 16 16"
-                  width="16"
-                  height="16"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
-                  />
-                </svg>
-                <span>GitHub</span>
-              </a>
+              <a href="https://github.com/ibaad-syed/hushflow">GitHub</a>
             </li>
           </ul>
         </nav>
-        <a class="btn btn-small btn-primary" href="#download">Download</a>
+        <a class="btn btn-small" href="#download">Download</a>
       </div>
     </header>
 
     <main id="main">
       <!-- Hero -->
-      <section class="hero">
-        <div class="hero-glow" aria-hidden="true"></div>
-        <div class="container hero-inner">
-          <p class="eyebrow">
-            <span class="dot" aria-hidden="true"></span> Free and open source
-            for Mac and Windows
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="hero-intro">
+            Free, open-source dictation for Mac and Windows
           </p>
-          <h1>
+          <h1 id="hero-title">
             Say it messy.<br />
-            <em class="grad-text">Send it clean.</em>
+            <em>Send it clean.</em>
           </h1>
           <p class="lede">
             Hold a key, talk, let go. Hushflow types what you meant into
             whatever app you're in, with the ums, repeats and "no wait"
-            corrections already fixed. All of it runs on your computer, so
-            nothing you say leaves it.
+            corrections already fixed. All of it runs on your computer.
           </p>
           <div class="cta-row">
             <a
-              class="btn btn-primary"
+              class="btn"
               href="https://github.com/ibaad-syed/hushflow/releases"
               data-dl="mac"
             >
@@ -115,125 +99,107 @@
               Download for Mac
             </a>
             <a
-              class="btn btn-ghost"
+              class="btn-link"
               href="https://github.com/ibaad-syed/hushflow/releases"
               data-dl="win"
+              >Download for Windows</a
             >
-              <svg
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                aria-hidden="true"
-              >
-                <path
-                  fill="currentColor"
-                  d="M3 5.5 10.4 4.5v7H3zm8.3-1.1L21 3v8.5h-9.7zM3 12.5h7.4v7L3 18.5zm8.3 0H21V21l-9.7-1.4z"
-                />
-              </svg>
-              Download for Windows
-            </a>
           </div>
           <p class="fine">
-            MIT licensed · No first release yet, so grab the
+            No tagged release yet, so the
             <a
               href="https://github.com/ibaad-syed/hushflow/actions/workflows/main-build.yml"
               >latest build</a
             >
-            from GitHub Actions.
+            comes from GitHub Actions. MIT licensed.
           </p>
+        </div>
 
-          <!-- Animated demo: spoken words resolving into clean text -->
-          <figure class="demo" aria-labelledby="demo-caption">
-            <div class="demo-window">
-              <div class="demo-bar" aria-hidden="true">
-                <span></span><span></span><span></span>
-                <p class="demo-app" id="demo-app">Messages</p>
+        <!-- The product, as it behaves: speech in, the overlay pill, clean text out -->
+        <figure class="demo" aria-labelledby="demo-caption">
+          <div class="desk">
+            <div class="said-col" aria-hidden="true">
+              <p class="said-label" id="demo-stage">You say</p>
+              <p class="demo-raw" id="demo-raw"></p>
+              <div class="demo-chips" id="demo-chips"></div>
+            </div>
+
+            <div class="window">
+              <div class="window-bar" aria-hidden="true">
+                <span class="lights"><i></i><i></i><i></i></span>
+                <p class="window-app" id="demo-app">Messages</p>
               </div>
-
-              <div class="demo-body">
-                <div class="demo-label" aria-hidden="true">
-                  <span class="demo-stage" id="demo-stage">You say</span>
+              <div class="window-body">
+                <div class="context" id="demo-context" aria-hidden="true"></div>
+                <div class="compose">
+                  <div class="demo-out" id="demo-out" aria-hidden="true"></div>
                 </div>
-                <p class="demo-raw" id="demo-raw" aria-hidden="true"></p>
-                <div
-                  class="demo-chips"
-                  id="demo-chips"
-                  aria-hidden="true"
-                ></div>
-                <div class="demo-out" id="demo-out" aria-hidden="true"></div>
-
-                <!-- Static, screen-reader-friendly version of the current example -->
                 <p class="sr-only" id="demo-sr"></p>
-              </div>
-
-              <div class="pill" id="demo-pill" aria-hidden="true">
-                <span class="pill-wave">
-                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
-                  ><i></i>
-                </span>
-                <span class="pill-text" id="pill-text">Listening</span>
               </div>
             </div>
 
-            <figcaption id="demo-caption" class="demo-caption">
+            <div class="pill" id="demo-pill" aria-hidden="true">
+              <span class="pill-dot"></span>
+              <span class="pill-spin"></span>
+              <span class="pill-wave"
+                ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+              ></span>
+              <span class="pill-text" id="pill-text">Processing...</span>
+              <span class="pill-x"
+                ><svg viewBox="0 0 10 10" width="9" height="9">
+                  <path
+                    d="M2 2l6 6M8 2l-6 6"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  /></svg
+              ></span>
+            </div>
+          </div>
+
+          <figcaption id="demo-caption" class="demo-caption">
+            <span
+              >What you say, and what Hushflow types. Cleanup takes about 0.2 s,
+              on device.</span
+            >
+            <span class="demo-controls">
               <span
-                >What you say, and what Hushflow types. Cleanup takes about 0.2
-                s, on device.</span
+                class="demo-tabs"
+                role="group"
+                aria-label="Choose an example"
               >
-              <span class="demo-controls">
-                <span
-                  class="demo-tabs"
-                  role="group"
-                  aria-label="Choose an example"
-                >
-                  <button type="button" data-example="0" aria-pressed="true">
-                    Correction
-                  </button>
-                  <button type="button" data-example="1" aria-pressed="false">
-                    List
-                  </button>
-                  <button type="button" data-example="2" aria-pressed="false">
-                    Message
-                  </button>
-                </span>
-                <button
-                  type="button"
-                  class="demo-pause"
-                  id="demo-pause"
-                  aria-pressed="false"
-                >
-                  Pause
+                <button type="button" data-example="0" aria-pressed="true">
+                  Correction
+                </button>
+                <button type="button" data-example="1" aria-pressed="false">
+                  List
+                </button>
+                <button type="button" data-example="2" aria-pressed="false">
+                  Email
                 </button>
               </span>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <!-- Trust strip: facts, not logos -->
-      <section class="facts" aria-label="At a glance">
-        <ul class="container facts-list">
-          <li>
-            <strong>On-device</strong
-            ><span>speech recognition and cleanup</span>
-          </li>
-          <li><strong>~0.2 s</strong><span>typical cleanup time</span></li>
-          <li>
-            <strong>Any app</strong><span>types where your cursor is</span>
-          </li>
-          <li><strong>MIT</strong><span>free and open source</span></li>
-        </ul>
+              <button
+                type="button"
+                class="demo-pause"
+                id="demo-pause"
+                aria-pressed="false"
+              >
+                Pause
+              </button>
+            </span>
+          </figcaption>
+        </figure>
       </section>
 
       <!-- How it works -->
-      <section class="section" id="how" aria-labelledby="how-title">
-        <div class="container">
-          <div class="section-head">
-            <p class="kicker">How it works</p>
-            <h2 id="how-title">One key. <em>No window to switch to.</em></h2>
+      <section class="band band-ink" id="how" aria-labelledby="how-title">
+        <div class="wrap how">
+          <div class="how-head">
+            <h2 id="how-title">One key, in any app.</h2>
             <p>
-              Hushflow sits quietly in the background. Put your cursor in an
-              email, a doc, a chat or a code editor, and talk.
+              Hushflow stays out of sight until you need it. Put your cursor in
+              an email, a doc, a chat or a code editor, and talk. There's no
+              window to switch to.
             </p>
             <div
               class="platform-toggle"
@@ -249,300 +215,318 @@
             </div>
           </div>
 
-          <ol class="steps">
-            <li class="card step">
+          <ol class="keys-list">
+            <li>
               <div class="keys">
-                <kbd class="k-mac">fn</kbd>
-                <span class="k-win"
-                  ><kbd>Ctrl</kbd><span class="plus">+</span
-                  ><kbd>Win</kbd></span
-                >
+                <kbd class="k-mac k-wide">fn</kbd>
+                <span class="k-win"><kbd>Ctrl</kbd><kbd>Win</kbd></span>
               </div>
-              <h3>Hold to talk</h3>
-              <p>
-                Press and hold, say what you want to write, then let go. Your
-                words land at the cursor.
-              </p>
+              <div>
+                <h3>Hold to talk</h3>
+                <p>
+                  Press and hold, say what you want to write, then let go. Your
+                  words land at the cursor.
+                </p>
+              </div>
             </li>
-            <li class="card step">
+            <li>
               <div class="keys">
+                <kbd class="k-mac k-wide">fn</kbd>
+                <span class="k-win"><kbd>Ctrl</kbd><kbd>Win</kbd></span>
                 <span class="tap">tap</span>
-                <kbd class="k-mac">fn</kbd>
-                <span class="k-win"
-                  ><kbd>Ctrl</kbd><span class="plus">+</span
-                  ><kbd>Win</kbd></span
-                >
               </div>
-              <h3>Tap for hands-free</h3>
-              <p>
-                For longer thoughts, tap instead of holding. It keeps listening
-                until you tap again.
-              </p>
+              <div>
+                <h3>Tap for hands-free</h3>
+                <p>
+                  For longer thoughts, tap instead of holding. It keeps
+                  listening until you tap again.
+                </p>
+              </div>
             </li>
-            <li class="card step">
-              <div class="keys"><kbd>Esc</kbd></div>
-              <h3>Changed your mind?</h3>
-              <p>Press Esc to cancel. Nothing gets typed.</p>
+            <li>
+              <div class="keys"><kbd>esc</kbd></div>
+              <div>
+                <h3>Changed your mind?</h3>
+                <p>Press Esc to cancel. Nothing gets typed.</p>
+              </div>
             </li>
-            <li class="card step">
+            <li>
               <div class="keys">
                 <span class="k-mac"
-                  ><kbd>Ctrl</kbd><span class="plus">+</span><kbd>⌘</kbd
-                  ><span class="plus">+</span><kbd>V</kbd></span
+                  ><kbd>ctrl</kbd><kbd>⌘</kbd><kbd>V</kbd></span
                 >
                 <span class="k-win"
-                  ><kbd>Alt</kbd><span class="plus">+</span><kbd>Shift</kbd
-                  ><span class="plus">+</span><kbd>Z</kbd></span
+                  ><kbd>Alt</kbd><kbd>Shift</kbd><kbd>Z</kbd></span
                 >
               </div>
-              <h3>Paste it again</h3>
-              <p>
-                Clicked away too soon? Paste your last dictation again, wherever
-                you are now.
-              </p>
+              <div>
+                <h3>Paste it again</h3>
+                <p>
+                  Clicked away too soon? Paste your last dictation again,
+                  wherever you are now.
+                </p>
+              </div>
             </li>
           </ol>
-          <p class="note">Every shortcut can be remapped in Settings.</p>
+          <p class="how-note">Every shortcut can be remapped in Settings.</p>
         </div>
       </section>
 
       <!-- Cleanup -->
-      <section
-        class="section section-alt"
-        id="cleanup"
-        aria-labelledby="cleanup-title"
-      >
-        <div class="container">
-          <div class="section-head">
-            <p class="kicker">Clean up my text</p>
-            <h2 id="cleanup-title">
-              Talk the way you think. <em>Read it the way you'd write it.</em>
-            </h2>
-            <p>
-              Turn on one switch and a small language model on your computer
-              tidies each dictation before it's typed. It keeps your words and
-              your meaning; it just drops the noise.
-            </p>
-          </div>
+      <section class="cleanup" id="cleanup" aria-labelledby="cleanup-title">
+        <div class="wrap">
+          <h2 id="cleanup-title" class="big-title">
+            Talk the way you think. Read it the way you'd write it.
+          </h2>
+          <p class="big-sub">
+            Turn on <strong>Clean up my text</strong> and a small language model
+            on your computer tidies each dictation before it's typed. It keeps
+            your words and your meaning, and drops the noise.
+          </p>
 
-          <div class="compare-grid">
-            <article class="card compare">
-              <h3>Fillers and false starts</h3>
-              <p class="said">
-                <span class="x">Um,</span> so
-                <span class="x">I think, I think</span> I think we should
-                <span class="x">like</span> push the launch
-                <span class="x">uh</span> a week.
-              </p>
-              <p class="got">So I think we should push the launch a week.</p>
-            </article>
-
-            <article class="card compare">
-              <h3>Self-corrections</h3>
-              <p class="said">
-                Let's meet <span class="x">Monday, no wait,</span> Tuesday at
-                ten.
-              </p>
-              <p class="got">Let's meet Tuesday at ten.</p>
-            </article>
-
-            <article class="card compare">
-              <h3>Lists and paragraphs</h3>
-              <p class="said">
-                Shopping list <span class="x">uh</span> eggs, spinach, oat milk
-                and <span class="x">um</span> coffee beans
-              </p>
-              <div class="got">
-                <p>Shopping list:</p>
-                <ul>
-                  <li>Eggs</li>
-                  <li>Spinach</li>
-                  <li>Oat milk</li>
-                  <li>Coffee beans</li>
-                </ul>
+          <div class="rows">
+            <article class="row">
+              <div class="panel" aria-hidden="true">
+                <div class="transcript">
+                  <p class="t-said">
+                    <s>Um,</s> so <s>I think, I think</s> I think we should
+                    <s>like</s> push the launch <s>uh</s> a week.
+                  </p>
+                  <p class="t-got">
+                    So I think we should push the launch a week.
+                  </p>
+                </div>
               </div>
-            </article>
-          </div>
-
-          <ul class="cleanup-notes">
-            <li>
-              <strong>Fast.</strong> Gemma 4 E2B runs on your own hardware and
-              finishes in about 0.2 seconds.
-            </li>
-            <li>
-              <strong>Careful.</strong> If the model ever replies to what you
-              said instead of tidying it, Hushflow pastes your exact words
-              instead.
-            </li>
-            <li>
-              <strong>Yours to tune.</strong> The cleanup instructions are
-              editable, and you can pick Qwen 3.5 or Apple Intelligence instead.
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Features -->
-      <section class="section" id="features" aria-labelledby="features-title">
-        <div class="container">
-          <div class="section-head">
-            <p class="kicker">Features</p>
-            <h2 id="features-title">
-              Small app. <em>Everything you need to write by voice.</em>
-            </h2>
-          </div>
-
-          <div class="feature-grid">
-            <article class="card feature feature-wide">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
-                </svg>
-              </div>
-              <h3>Ready the moment you install it</h3>
-              <p>
-                On macOS 26 and later, Hushflow starts with Apple's built-in
-                speech recognizer, so there's nothing to wait for. Meanwhile it
-                downloads NVIDIA's Parakeet model in the background and switches
-                over once it's ready. Prefer one engine? Pick it yourself.
-              </p>
-              <div class="engine-flow" aria-hidden="true">
-                <span class="engine">Apple speech <small>instant</small></span>
-                <span class="arrow"></span>
-                <span class="engine engine-hi"
-                  >Parakeet <small>when downloaded</small></span
-                >
+              <div class="row-copy">
+                <h3>Fillers and false starts</h3>
+                <p>
+                  The ums, the likes, the sentence you started twice. They're
+                  gone before the text appears.
+                </p>
               </div>
             </article>
 
-            <article class="card feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5a2.5 2.5 0 0 0 0 5H19"
-                  />
-                </svg>
+            <article class="row">
+              <div class="panel" aria-hidden="true">
+                <div class="transcript">
+                  <p class="t-said">
+                    Let's meet <s>Monday, no wait,</s> Tuesday at ten.
+                  </p>
+                  <p class="t-got">Let's meet Tuesday at ten.</p>
+                </div>
               </div>
-              <h3>Personal dictionary</h3>
-              <p>
-                Teach it the names, product terms and jargon you use, so they
-                come out right.
-              </p>
+              <div class="row-copy">
+                <h3>Corrections you make out loud</h3>
+                <p>
+                  Say "no wait" and carry on. Hushflow keeps the version you
+                  settled on.
+                </p>
+              </div>
             </article>
 
-            <article class="card feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 8v4l3 2" />
-                  <circle cx="12" cy="12" r="9" />
-                </svg>
+            <article class="row">
+              <div class="panel" aria-hidden="true">
+                <div class="transcript">
+                  <p class="t-said">
+                    Shopping list <s>uh</s> eggs, spinach, oat milk and
+                    <s>um</s> coffee beans
+                  </p>
+                  <div class="t-got">
+                    <p>Shopping list:</p>
+                    <ul>
+                      <li>Eggs</li>
+                      <li>Spinach</li>
+                      <li>Oat milk</li>
+                      <li>Coffee beans</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <h3>History</h3>
-              <p>
-                Every dictation is saved on your computer, so you can find and
-                copy it later.
-              </p>
+              <div class="row-copy">
+                <h3>Lists and paragraphs</h3>
+                <p>
+                  Rattle off a few items and you get a list. Talk for a while
+                  and you get paragraphs.
+                </p>
+              </div>
             </article>
 
-            <article class="card feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
-                  />
-                  <path d="M14 3v6h6M9 14v3M12 12v5M15 15v2" />
-                </svg>
+            <article class="row">
+              <div class="panel" aria-hidden="true">
+                <div class="settings">
+                  <div class="settings-side">
+                    <span class="is-on">General</span>
+                    <span>Models</span>
+                    <span>Dictionary</span>
+                    <span>History</span>
+                    <span>Advanced</span>
+                  </div>
+                  <div class="settings-main">
+                    <div class="set-row">
+                      <div>
+                        <strong>Clean up my text</strong>
+                        <small
+                          >Removes filler words, applies your corrections, and
+                          formats lists and paragraphs before pasting. Runs on
+                          this computer.</small
+                        >
+                      </div>
+                      <span class="switch"></span>
+                    </div>
+                    <div class="set-row">
+                      <div><strong>Cleanup model</strong></div>
+                      <span class="select">Gemma 4 E2B (recommended)</span>
+                    </div>
+                    <div class="set-row">
+                      <div><strong>Instructions</strong></div>
+                      <span class="select">Edit</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h3>File transcription</h3>
-              <p>
-                Transcribe an existing audio recording, processed locally like
-                everything else.
-              </p>
+              <div class="row-copy">
+                <h3>Fast, careful, and yours to tune</h3>
+                <p>
+                  Gemma 4 E2B runs on your own hardware and finishes in about
+                  0.2 seconds. If the model ever replies to what you said
+                  instead of tidying it, Hushflow pastes your exact words. The
+                  instructions are editable, and you can pick Qwen 3.5 or Apple
+                  Intelligence instead.
+                </p>
+              </div>
             </article>
 
-            <article class="card feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 12h2M7 9v6M11 6v12M15 9v6M19 11v2" />
-                </svg>
+            <article class="row">
+              <div class="panel" aria-hidden="true">
+                <div class="dict">
+                  <span>Hushflow</span>
+                  <span>Parakeet</span>
+                  <span>Kubernetes</span>
+                  <span>Siobhan</span>
+                  <span>OKRs</span>
+                  <span class="dict-add">Add a word</span>
+                </div>
               </div>
-              <h3>A slim overlay</h3>
-              <p>
-                A small waveform shows you it's listening, then gets out of the
-                way.
-              </p>
-            </article>
-
-            <article class="card feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" />
-                </svg>
+              <div class="row-copy">
+                <h3>Your words, spelled right</h3>
+                <p>
+                  Teach it the names, product terms and jargon you use, so they
+                  come out right.
+                </p>
               </div>
-              <h3>Light on resources</h3>
-              <p>
-                The cleanup model sleeps after an idle time you choose and wakes
-                up while you speak.
-              </p>
-            </article>
-            <article class="card feature">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <rect x="3" y="4" width="18" height="14" rx="2" />
-                  <path d="M8 21h8M12 8v6" />
-                </svg>
-              </div>
-              <h3>Works in any app</h3>
-              <p>
-                Email, chat, docs or your code editor: the text goes wherever
-                your cursor is.
-              </p>
             </article>
           </div>
         </div>
       </section>
 
       <!-- Privacy -->
+      <section class="privacy" id="privacy" aria-labelledby="privacy-title">
+        <div class="wrap">
+          <div class="privacy-panel">
+            <h2 id="privacy-title">What you say stays on your computer.</h2>
+            <p>
+              Hushflow turns speech into text and cleans it up on your own
+              machine. Your voice and your words aren't sent to a server to be
+              transcribed or rewritten. And because the code is open, you don't
+              have to take that on trust.
+            </p>
+            <ul class="privacy-facts">
+              <li>Local speech recognition</li>
+              <li>Local cleanup model</li>
+              <li>Open source under MIT</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Everything else -->
       <section
-        class="section privacy"
-        id="privacy"
-        aria-labelledby="privacy-title"
+        class="band band-ink"
+        id="features"
+        aria-labelledby="features-title"
       >
-        <div class="container privacy-inner">
-          <img
-            class="privacy-mark"
-            src="assets/hushflow-icon.svg"
-            alt=""
-            width="120"
-            height="120"
-            loading="lazy"
-          />
-          <h2 id="privacy-title">
-            What you say <em>stays on your computer.</em>
-          </h2>
-          <p>
-            Hushflow turns speech into text and cleans it up on your own
-            machine. Your voice and your words aren't sent to a server to be
-            transcribed or rewritten. And because the code is open, you don't
-            have to take that on trust.
-          </p>
-          <ul class="privacy-points">
-            <li>Local speech recognition</li>
-            <li>Local cleanup model</li>
-            <li>Open source under MIT</li>
-          </ul>
+        <div class="wrap">
+          <div class="engine">
+            <div class="engine-copy">
+              <h2 id="features-title">Ready the moment you install it.</h2>
+              <p>
+                On macOS 26 and later, Hushflow starts with Apple's built-in
+                speech recognizer, so there's nothing to wait for. Meanwhile it
+                downloads NVIDIA's Parakeet model in the background and switches
+                over once it's ready. Prefer one engine? Pick it yourself.
+              </p>
+            </div>
+            <div class="models" aria-hidden="true">
+              <p class="models-title">Speech models</p>
+              <div class="model">
+                <div>
+                  <strong>Apple speech</strong>
+                  <small>Built into macOS 26</small>
+                </div>
+                <span class="model-state is-ready">Ready</span>
+              </div>
+              <div class="model">
+                <div>
+                  <strong>Parakeet</strong>
+                  <small>NVIDIA, runs on this computer</small>
+                </div>
+                <span class="model-state">Downloading 64%</span>
+                <span class="model-bar"><i></i></span>
+              </div>
+            </div>
+          </div>
+
+          <dl class="extras">
+            <div>
+              <dt>History</dt>
+              <dd>
+                Every dictation is saved on your computer, so you can find and
+                copy it later.
+              </dd>
+            </div>
+            <div>
+              <dt>File transcription</dt>
+              <dd>
+                Transcribe an existing audio recording, processed locally like
+                everything else.
+              </dd>
+            </div>
+            <div>
+              <dt>A slim overlay</dt>
+              <dd>
+                A small waveform shows you it's listening, then gets out of the
+                way.
+              </dd>
+            </div>
+            <div>
+              <dt>Light on resources</dt>
+              <dd>
+                The cleanup model sleeps after an idle time you choose and wakes
+                up while you speak.
+              </dd>
+            </div>
+            <div>
+              <dt>Your clipboard, left alone</dt>
+              <dd>
+                Hushflow pastes your text, then puts back whatever was on your
+                clipboard before.
+              </dd>
+            </div>
+            <div>
+              <dt>Built on Handy</dt>
+              <dd>
+                A fork of CJ Pais's open-source dictation app, under the same
+                MIT license.
+              </dd>
+            </div>
+          </dl>
         </div>
       </section>
 
       <!-- Download -->
-      <section
-        class="section section-alt"
-        id="download"
-        aria-labelledby="download-title"
-      >
-        <div class="container">
-          <div class="section-head">
-            <p class="kicker">Download</p>
+      <section class="download" id="download" aria-labelledby="download-title">
+        <div class="wrap">
+          <div class="dl-head">
             <h2 id="download-title">Free on Mac and Windows.</h2>
             <p>
               The first tagged release isn't out yet. Until it is, every change
@@ -552,65 +536,60 @@
           </div>
 
           <div class="dl-grid">
-            <article class="card dl" data-os="mac">
+            <article class="dl" data-os="mac">
               <h3>Mac</h3>
-              <p class="dl-meta">Apple Silicon · instant start on macOS 26+</p>
+              <p class="dl-meta">Apple Silicon. Instant start on macOS 26+.</p>
               <div class="dl-actions">
                 <a
-                  class="btn btn-primary"
+                  class="btn"
                   href="https://github.com/ibaad-syed/hushflow/releases"
                   >Releases</a
                 >
                 <a
-                  class="btn btn-ghost"
+                  class="btn-link"
                   href="https://github.com/ibaad-syed/hushflow/actions/workflows/main-build.yml"
                   >Latest build</a
                 >
               </div>
-              <div class="dl-help">
-                <p>
-                  The app isn't code-signed yet. After moving it to
-                  Applications, right-click it and choose Open the first time,
-                  or run:
-                </p>
-                <div class="code">
-                  <code id="xattr-cmd"
-                    >xattr -dr com.apple.quarantine
-                    /Applications/Hushflow.app</code
-                  >
-                  <button type="button" class="copy" data-copy="xattr-cmd">
-                    Copy
-                  </button>
-                </div>
+              <p class="dl-help">
+                The app isn't code-signed yet. After moving it to Applications,
+                right-click it and choose Open the first time, or run:
+              </p>
+              <div class="code">
+                <code id="xattr-cmd"
+                  >xattr -dr com.apple.quarantine
+                  /Applications/Hushflow.app</code
+                >
+                <button type="button" class="copy" data-copy="xattr-cmd">
+                  Copy
+                </button>
               </div>
             </article>
 
-            <article class="card dl" data-os="win">
+            <article class="dl" data-os="win">
               <h3>Windows</h3>
-              <p class="dl-meta">Installer · uses your GPU when there is one</p>
+              <p class="dl-meta">Installer. Uses your GPU when there is one.</p>
               <div class="dl-actions">
                 <a
-                  class="btn btn-primary"
+                  class="btn"
                   href="https://github.com/ibaad-syed/hushflow/releases"
                   >Releases</a
                 >
                 <a
-                  class="btn btn-ghost"
+                  class="btn-link"
                   href="https://github.com/ibaad-syed/hushflow/actions/workflows/main-build.yml"
                   >Latest build</a
                 >
               </div>
-              <div class="dl-help">
-                <p>
-                  The installer isn't code-signed yet. When SmartScreen appears,
-                  choose
-                  <strong>More info</strong>, then <strong>Run anyway</strong>.
-                </p>
-              </div>
+              <p class="dl-help">
+                The installer isn't code-signed yet. When SmartScreen appears,
+                choose <strong>More info</strong>, then
+                <strong>Run anyway</strong>.
+              </p>
             </article>
           </div>
 
-          <p class="note">
+          <p class="dl-note">
             Prefer to build it yourself? You'll need Rust and Bun; the steps are
             in the
             <a href="https://github.com/ibaad-syed/hushflow#build-from-source"
@@ -621,12 +600,9 @@
       </section>
 
       <!-- FAQ -->
-      <section class="section" id="faq" aria-labelledby="faq-title">
-        <div class="container faq-wrap">
-          <div class="section-head">
-            <p class="kicker">FAQ</p>
-            <h2 id="faq-title">Questions, answered.</h2>
-          </div>
+      <section class="faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="wrap faq-wrap">
+          <h2 id="faq-title">Questions, answered.</h2>
 
           <div class="faq">
             <details>
@@ -707,18 +683,17 @@
         </div>
       </section>
 
-      <!-- Closing CTA -->
+      <!-- Closing -->
       <section class="closing" aria-labelledby="closing-title">
-        <div class="container closing-inner">
+        <div class="closing-inner">
           <h2 id="closing-title">
-            Stop typing <em class="grad-text">everything.</em>
+            Stop typing<br />
+            <em>everything.</em>
           </h2>
           <p>Hold a key and say it. Hushflow will tidy it up.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#download">Download Hushflow</a>
-            <a
-              class="btn btn-ghost"
-              href="https://github.com/ibaad-syed/hushflow"
+            <a class="btn" href="#download">Download Hushflow</a>
+            <a class="btn-link" href="https://github.com/ibaad-syed/hushflow"
               >View on GitHub</a
             >
           </div>
@@ -727,46 +702,47 @@
     </main>
 
     <footer class="footer">
-      <div class="container footer-inner">
-        <div class="footer-brand">
-          <a class="brand" href="#top">
-            <img
-              src="assets/hushflow-icon.svg"
-              alt=""
-              width="28"
-              height="28"
-              loading="lazy"
-            />
-            <span>Hushflow</span>
-          </a>
-          <p>
+      <div class="wrap">
+        <div class="footer-top">
+          <p class="footer-blurb">
             Private dictation for Mac and Windows. A fork of
             <a href="https://github.com/cjpais/Handy">Handy</a> by CJ Pais. MIT
             licensed.
           </p>
+          <nav aria-label="Footer">
+            <ul class="footer-links">
+              <li>
+                <a href="https://github.com/ibaad-syed/hushflow">Source code</a>
+              </li>
+              <li>
+                <a href="https://github.com/ibaad-syed/hushflow/releases"
+                  >Releases</a
+                >
+              </li>
+              <li>
+                <a href="https://github.com/ibaad-syed/hushflow/issues"
+                  >Report an issue</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://github.com/ibaad-syed/hushflow/blob/main/LICENSE"
+                  >License</a
+                >
+              </li>
+            </ul>
+          </nav>
         </div>
-        <nav aria-label="Footer">
-          <ul class="footer-links">
-            <li>
-              <a href="https://github.com/ibaad-syed/hushflow">Source code</a>
-            </li>
-            <li>
-              <a href="https://github.com/ibaad-syed/hushflow/releases"
-                >Releases</a
-              >
-            </li>
-            <li>
-              <a href="https://github.com/ibaad-syed/hushflow/issues"
-                >Report an issue</a
-              >
-            </li>
-            <li>
-              <a href="https://github.com/ibaad-syed/hushflow/blob/main/LICENSE"
-                >License</a
-              >
-            </li>
-          </ul>
-        </nav>
+        <a class="wordmark" href="#top" aria-label="Back to top">
+          <img
+            src="assets/hushflow-icon.svg"
+            alt=""
+            width="200"
+            height="200"
+            loading="lazy"
+          />
+          <span>Hushflow</span>
+        </a>
       </div>
     </footer>
   </body>
