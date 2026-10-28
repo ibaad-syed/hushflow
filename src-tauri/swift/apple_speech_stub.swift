@@ -1,7 +1,7 @@
 import Foundation
 
 // Stub used when the macOS SDK predates SpeechAnalyzer (macOS 26). Every entry
-// point reports the engine as unavailable so Handy falls back to its own models.
+// point reports the engine as unavailable so Hushflow falls back to its own models.
 
 private func unavailable() -> UnsafeMutablePointer<AppleSpeechResult> {
     let ptr = UnsafeMutablePointer<AppleSpeechResult>.allocate(capacity: 1)

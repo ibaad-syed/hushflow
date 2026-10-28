@@ -90,7 +90,7 @@ export const useTryEngine = ({ os }: { os: OSType }) => {
     };
   }, []);
 
-  /* ---------- Handy's input ---------- */
+  /* ---------- Hushflow's input ---------- */
 
   // Normally done on Permissions; repeated in case that screen was skipped.
   useEffect(() => {

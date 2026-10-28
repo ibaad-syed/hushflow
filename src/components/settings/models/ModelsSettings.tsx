@@ -20,7 +20,7 @@ import { CleanupInstructions } from "./CleanupInstructions";
 /** Past this many models on disk, the rest fold under "Show N more". */
 const YOURS_LIMIT = 5;
 
-/** Look for model files added outside Handy: quiet, beside its section's name. */
+/** Look for model files added outside Hushflow: quiet, beside its section's name. */
 const Rescan: React.FC = () => {
   const { t } = useTranslation();
   const rescanning = useModelStore((s) => s.isRescanning);

@@ -8,7 +8,7 @@ import {
   LanguageSearchField,
   useLanguagePicker,
 } from "../../shared/LanguagePicker";
-import HandyTextLogo from "../../icons/HandyTextLogo";
+import { BRAND } from "../../icons/HushflowLogo";
 import { OnboardingShell, ScreenHeader } from "../OnboardingShell";
 import { AppLanguageMenu } from "../AppLanguageMenu";
 import { useOnboardingStore } from "../onboardingStore";
@@ -95,7 +95,9 @@ export const Welcome: React.FC<WelcomeProps> = ({ progress, onContinue }) => {
       <div className="flex h-full min-h-0 flex-col items-center px-gutter pt-[6px] pb-[4px] text-center">
         <div className="mb-[10px] inline-flex items-end gap-[8px] leading-none">
           <Mascot size={54} animation={wave ? "wave" : null} />
-          <HandyTextLogo width={112} className="mb-[4px] block" />
+          <span className="mb-[3px] block text-[30px] font-semibold leading-none tracking-[-0.02em] text-text">
+            {BRAND}
+          </span>
         </div>
         <ScreenHeader
           title={t("onboarding.welcome.title")}

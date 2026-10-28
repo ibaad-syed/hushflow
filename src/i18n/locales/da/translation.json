@@ -96,7 +96,7 @@
       "title": "Tal i stedet for at skrive, i enhver app",
       "subtitle": "Vælg de sprog, du vil diktere på",
       "languagesLabel": "Sprog",
-      "noMatch": "Intet sprog matcher »{{query}}«. Handys modeller dækker omkring 100 sprog; flere findes i indstillingerne.",
+      "noMatch": "Intet sprog matcher »{{query}}«. Hushflows modeller dækker omkring 100 sprog; flere findes i indstillingerne.",
       "appLanguage": "Appens sprog",
       "menusIn": "Menuer på <b>{{language}}</b>",
       "chinese": {
@@ -906,7 +906,7 @@
         "ggml": {
           "title": "ggml",
           "description": "Højtydende tensor-bibliotek til maskinlæringsinferens på enheden",
-          "details": "Handys lokale tale-til-tekst funktionalitet er bygget på transcribe.cpp og ggml. Tak for det fantastiske arbejde af Georgi Gerganov og bidragyderne."
+          "details": "Hushflows lokale tale-til-tekst funktionalitet er bygget på transcribe.cpp og ggml. Tak for det fantastiske arbejde af Georgi Gerganov og bidragyderne."
         },
         "handy": {
           "title": "Handy",

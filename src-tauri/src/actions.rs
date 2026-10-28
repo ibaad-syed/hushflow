@@ -835,7 +835,7 @@ impl ShortcutAction for TranscribeAction {
                                 // before the next session can start.
                                 let session = RECORDING_SESSION.load(Ordering::SeqCst);
                                 // Off the main thread: paste sleeps between steps, and a
-                                // paste into Handy's own windows needs the main thread free.
+                                // paste into Hushflow's own windows needs the main thread free.
                                 std::thread::Builder::new()
                                     .name("paste".into())
                                     .spawn(move || {

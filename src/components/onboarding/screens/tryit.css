@@ -105,7 +105,7 @@
   color: var(--color-ink-3);
 }
 
-/* ---------- Handy on the window's corner ---------- */
+/* ---------- Hushflow on the window's corner ---------- */
 /* The glove on the window's bottom corner, the bubble beside it. Never on the
    Windows taskbar. */
 .try-guide {
@@ -255,7 +255,7 @@
   padding: 14px 18px 15px;
   transition: opacity 220ms ease;
 }
-/* Dimmed while Handy transcribes. */
+/* Dimmed while Hushflow transcribes. */
 .try-say[data-dim] {
   opacity: 0.45;
 }

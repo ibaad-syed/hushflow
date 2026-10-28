@@ -1,5 +1,7 @@
 # Handy
 
+> **Upstream reference.** This is the README of [Handy](https://github.com/cjpais/Handy) by CJ Pais, which Hushflow is forked from, kept for its troubleshooting, CLI and integration notes. Names and paths here are upstream's: in Hushflow the app is called Hushflow, its bundle identifier (and data folder name) is `com.hushflow.app`, and the executable is still named `handy`. The Secure Input section under Troubleshooting was added for Hushflow.
+
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.com/invite/WVBeWsNXK4)
 
 **A free, open source, and extensible speech-to-text application that works completely offline.**
@@ -271,6 +273,14 @@ Signature and comment signature verified
 Do not use `gpg` for these `.sig` files.
 
 ## Troubleshooting
+
+### Shortcuts Stopped Working on macOS (Secure Input)
+
+While macOS Secure Input is on, the system withholds key events from every other app, so keyed shortcuts stop firing (modifier-only shortcuts such as Fn may still work). Password fields turn it on briefly, which is normal. When it stays on, the app shows a warning naming the app that holds it, if one is visible.
+
+1. Leave any focused password field, or quit the app named in the warning.
+2. In Terminal or iTerm2, turn off **Secure Keyboard Entry** (in the app's menu).
+3. If no app holds it (often a stuck `loginwindow`), lock the screen and unlock it, or log out and back in.
 
 ### Previous Clipboard Content Is Pasted Instead of the Transcription
 

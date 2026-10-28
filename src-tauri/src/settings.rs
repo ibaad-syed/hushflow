@@ -317,7 +317,7 @@ impl SoundTheme {
 }
 
 /// UI appearance mode. `System` follows the OS `prefers-color-scheme`; `Light`
-/// and `Dark` force one of the two palettes Handy already ships.
+/// and `Dark` force one of the two palettes Hushflow already ships.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Type)]
 #[serde(rename_all = "snake_case")]
 pub enum Theme {
@@ -383,7 +383,7 @@ impl std::ops::DerefMut for SecretMap {
     }
 }
 
-/* still handy for composing the initial JSON in the store ------------- */
+/* still useful for composing the initial JSON in the store ------------- */
 /// The container-level `serde(default)` (backed by the `Default` impl below)
 /// guarantees every field — including ones added in the future — falls back to
 /// its `get_default_settings()` value when missing from a stored settings
@@ -1360,7 +1360,7 @@ fn apply_settings_migrations(
         updated = true;
     }
     if stored_schema_version < 3 {
-        // Update checks shipped off while the fork still pointed at Handy's
+        // Update checks shipped off while the fork still pointed at upstream Handy's
         // releases; nobody chose that. Turn them on once, now that Hushflow
         // publishes signed releases.
         settings.update_checks_enabled = true;
@@ -1596,7 +1596,7 @@ mod tests {
             "overlay_position": "bottom",
             "debug_mode": false,
             "log_level": 2,
-            "custom_words": ["Handy", "cjpais"],
+            "custom_words": ["Hushflow", "cjpais"],
             "model_unload_timeout": "min5",
             "word_correction_threshold": 0.18,
             "history_limit": 5,
@@ -1706,14 +1706,14 @@ mod tests {
         let map = stored.as_object_mut().unwrap();
         map.insert("paste_delay_ms".into(), serde_json::json!("sixty"));
         map.insert("sound_theme".into(), serde_json::json!(42));
-        map.insert("custom_words".into(), serde_json::json!(["handy"]));
+        map.insert("custom_words".into(), serde_json::json!(["hushflow"]));
 
         assert!(serde_json::from_value::<AppSettings>(stored.clone()).is_err());
 
         let salvaged = salvage_settings(&stored);
         assert_eq!(salvaged.paste_delay_ms, default_paste_delay_ms());
         assert_eq!(salvaged.sound_theme, default_sound_theme());
-        assert_eq!(salvaged.custom_words, vec!["handy".to_string()]);
+        assert_eq!(salvaged.custom_words, vec!["hushflow".to_string()]);
     }
 
     #[test]

@@ -9,7 +9,7 @@ import Speech
 
 private typealias ResultPointer = UnsafeMutablePointer<AppleSpeechResult>
 
-/// Handy captures 16 kHz mono Float32; SpeechAnalyzer may want something else.
+/// Hushflow captures 16 kHz mono Float32; SpeechAnalyzer may want something else.
 private let inputFormat = AVAudioFormat(
     commonFormat: .pcmFormatFloat32, sampleRate: 16_000, channels: 1, interleaved: false)!
 
@@ -67,7 +67,7 @@ private enum Engine {
         }
     }
 
-    /// Converts Handy's 16 kHz mono samples into the analyzer's preferred format.
+    /// Converts Hushflow's 16 kHz mono samples into the analyzer's preferred format.
     static func buffer(
         _ samples: UnsafeBufferPointer<Float>, to format: AVAudioFormat,
         converter: AVAudioConverter?
@@ -193,7 +193,7 @@ private final class StreamSession: @unchecked Sendable {
     let format: AVAudioFormat
     let converter: AVAudioConverter?
     var results: Task<String, Error>?
-    /// Feed calls arrive on whatever thread Handy's recorder uses; keep them ordered.
+    /// Feed calls arrive on whatever thread Hushflow's recorder uses; keep them ordered.
     let feedQueue = DispatchQueue(label: "apple-speech.feed")
 
     init(

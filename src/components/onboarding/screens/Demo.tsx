@@ -27,7 +27,7 @@ type PillState = "hidden" | "rec" | "work";
 type Pointer = "rest" | "field" | "gone";
 /** The sentence's lit phrase: click, press and talk, the words appear. */
 type Phrase = 0 | 1 | 2;
-/** `lift` is a tap's first key-up, while Handy keeps listening. */
+/** `lift` is a tap's first key-up, while Hushflow keeps listening. */
 type Beat = "reset" | "point" | "click" | "press" | "lift" | "release" | "land";
 
 /**
@@ -43,7 +43,7 @@ const CHAPTERS: Record<
       [0, "reset"],
       [300, "point"], //    the glide takes 850ms
       [1200, "click"],
-      [2400, "press"], //   the keys held, Handy listens: 2s
+      [2400, "press"], //   the keys held, Hushflow listens: 2s
       [4400, "release"],
       [5200, "land"], //    the words stay 2s
     ],
@@ -56,7 +56,7 @@ const CHAPTERS: Record<
       [300, "point"],
       [1200, "click"],
       [2400, "press"],
-      [2580, "lift"], //    a tap; Handy keeps listening: 2.8s
+      [2580, "lift"], //    a tap; Hushflow keeps listening: 2.8s
       [5400, "press"],
       [5580, "release"], // the second tap
       [6180, "land"], //    the words stay 2s

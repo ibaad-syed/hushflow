@@ -79,7 +79,7 @@ pub fn cancel_history_entry_transcription(jobs: State<'_, Arc<TranscriptionJobMa
 }
 
 /// Adds an audio or video file to History and queues its transcription.
-/// Fails without adding anything if the file has no audio Handy can read.
+/// Fails without adding anything if the file has no audio Hushflow can read.
 #[tauri::command]
 #[specta::specta]
 pub async fn transcribe_file(
