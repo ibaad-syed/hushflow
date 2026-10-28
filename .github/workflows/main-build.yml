@@ -41,6 +41,7 @@ jobs:
       target: ${{ matrix.target }}
       build-args: ${{ matrix.args }}
       upload-artifacts: true
-      # Mac only: Windows has no signing certificate yet.
-      sign-binaries: ${{ contains(matrix.platform, 'macos') }}
+      # Releases sign and notarize; per-push builds skip it so they don't
+      # wait on Apple's notarization queue.
+      sign-binaries: false
     secrets: inherit
