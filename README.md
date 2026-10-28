@@ -37,7 +37,7 @@ bun run tauri dev
 
 `bun run tauri build` also signs update bundles, which needs the maintainer's key. Without it, build with `bun run tauri build -c '{"bundle":{"createUpdaterArtifacts":false}}'`.
 
-Platform details are in [BUILD.md](BUILD.md); the upstream Handy README (troubleshooting, CLI flags, integrations) is kept at [docs/HANDY_README.md](docs/HANDY_README.md).
+Platform details are in [BUILD.md](BUILD.md); the upstream Handy README (troubleshooting, CLI flags, integrations) is kept at [docs/UPSTREAM_README.md](docs/UPSTREAM_README.md).
 
 ## License
 
