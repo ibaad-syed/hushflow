@@ -136,14 +136,16 @@ impl HistoryManager {
         Ok(())
     }
 
-    /// Bring the schema up to date. A newer Handy's database opens as is:
+    /// Bring the schema up to date. A newer Hushflow's database opens as is:
     /// migrations only add columns, and every query names its columns.
     fn apply_migrations(conn: &mut Connection) -> Result<()> {
         match Migrations::new(MIGRATIONS.to_vec()).to_latest(conn) {
             Err(rusqlite_migration::Error::MigrationDefinition(
                 MigrationDefinitionError::DatabaseTooFarAhead,
             )) => {
-                warn!("history.db is from a newer version of Handy; opening it without migrating")
+                warn!(
+                    "history.db is from a newer version of Hushflow; opening it without migrating"
+                )
             }
             other => other?,
         }
@@ -785,7 +787,7 @@ mod tests {
     }
 
     #[test]
-    fn a_database_from_a_newer_handy_still_opens() {
+    fn a_database_from_a_newer_hushflow_still_opens() {
         let mut conn = Connection::open_in_memory().expect("open in-memory db");
         HistoryManager::apply_migrations(&mut conn).expect("migrate");
         conn.execute(

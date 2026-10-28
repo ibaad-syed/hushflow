@@ -5,14 +5,14 @@ import { LANGUAGES } from "@/lib/constants/languages";
 declare global {
   interface Window {
     /** Injected before scripts run (`system_languages.rs`); absent in a browser. */
-    __HANDY_SYSTEM_LANGUAGES__?: {
+    __HUSHFLOW_SYSTEM_LANGUAGES__?: {
       languages: string[];
       chinese_script: ChineseScript | null;
     };
   }
 }
 
-const system = () => window.__HANDY_SYSTEM_LANGUAGES__;
+const system = () => window.__HUSHFLOW_SYSTEM_LANGUAGES__;
 const locale = () => navigator.language || "en-US";
 
 export const isChinese = (code: string) => code === "zh" || code === "yue";
@@ -27,7 +27,7 @@ export const suggestedLanguages = (): string[] => {
     : ["en"];
 };
 
-/** The Chinese characters Handy writes. */
+/** The Chinese characters Hushflow writes. */
 export type ChineseScriptChoice = "zh-Hans" | "zh-Hant" | "zh-HK";
 
 export const CHINESE_SCRIPTS: {

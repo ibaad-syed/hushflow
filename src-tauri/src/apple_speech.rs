@@ -135,7 +135,7 @@ mod tests {
             eprintln!("Apple speech recognition unavailable; skipping");
             return;
         }
-        let dir = std::env::temp_dir().join("handy-apple-speech-test");
+        let dir = std::env::temp_dir().join("hushflow-apple-speech-test");
         std::fs::create_dir_all(&dir).unwrap();
         let wav = dir.join("hello.wav");
         let said = std::process::Command::new("say")

@@ -17,7 +17,7 @@ struct Read {
     problem: Option<String>,
 }
 
-/// Read once: they rarely change while Handy runs.
+/// Read once: they rarely change while Hushflow runs.
 static READ: Lazy<Read> = Lazy::new(read);
 
 /// The OS's preferred languages, most preferred first, as BCP-47 tags
@@ -103,7 +103,7 @@ struct Suggestion {
     chinese_script: Option<ChineseScript>,
 }
 
-/// Injects the suggestion as `window.__HANDY_SYSTEM_LANGUAGES__`, since onboarding
+/// Injects the suggestion as `window.__HUSHFLOW_SYSTEM_LANGUAGES__`, since onboarding
 /// needs it synchronously before a command could answer.
 pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
     let tags = system_languages().iter().map(String::as_str);
@@ -113,7 +113,7 @@ pub fn init<R: tauri::Runtime>() -> tauri::plugin::TauriPlugin<R> {
     };
     let json = serde_json::to_string(&suggestion).expect("suggestion serializes");
     tauri::plugin::Builder::new("system-languages")
-        .js_init_script(format!("window.__HANDY_SYSTEM_LANGUAGES__ = {json};"))
+        .js_init_script(format!("window.__HUSHFLOW_SYSTEM_LANGUAGES__ = {json};"))
         .build()
 }
 

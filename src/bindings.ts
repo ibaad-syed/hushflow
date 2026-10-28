@@ -955,7 +955,7 @@ async cancelHistoryEntryTranscription(id: number) : Promise<void> {
 },
 /**
  * Adds an audio or video file to History and queues its transcription.
- * Fails without adding anything if the file has no audio Handy can read.
+ * Fails without adding anything if the file has no audio Hushflow can read.
  */
 async transcribeFile(path: string) : Promise<Result<HistoryEntry, string>> {
     try {
@@ -1368,7 +1368,7 @@ notes_error: string | null }
 export type ModelInfo = { id: string; name: string; description: string; filename: string; source: ModelSource; size_mb: number; is_downloaded: boolean; is_downloading: boolean; partial_size: number; accuracy_score: number; speed_score: number; supports_translation: boolean; is_recommended: boolean; supported_languages: string[]; supports_language_selection: boolean; is_custom: boolean; supports_streaming: boolean; supports_language_detection: boolean }
 export type ModelLoadStatus = { is_loaded: boolean; current_model: string | null }
 /**
- * Where a model comes from and how Handy obtains it — the routing discriminant
+ * Where a model comes from and how Hushflow obtains it — the routing discriminant
  * for downloading and on-disk resolution.
  */
 export type ModelSource = 
@@ -1393,7 +1393,7 @@ sha256: string | null } } |
 "Local" | 
 /**
  * Provided by the operating system (Apple's SpeechAnalyzer). No file;
- * always installed, never downloaded or deleted by Handy.
+ * always installed, never downloaded or deleted by Hushflow.
  */
 "System"
 export type ModelUnloadTimeout = "never" | "immediately" | "min_2" | "min_5" | "min_10" | "min_15" | "hour_1" | "sec_15"
@@ -1536,7 +1536,7 @@ export type StreamTextEvent = { committed: string; tentative: string }
 export type StreamWorkKind = "transcribing" | "polishing"
 /**
  * UI appearance mode. `System` follows the OS `prefers-color-scheme`; `Light`
- * and `Dark` force one of the two palettes Handy already ships.
+ * and `Dark` force one of the two palettes Hushflow already ships.
  */
 export type Theme = "system" | "light" | "dark"
 export type TranscribeAcceleratorSetting = "auto" | "cpu" | "gpu"
