@@ -8,7 +8,7 @@ interface MascotProps {
   animation?: "wave" | "slap" | null;
 }
 
-/** The app mark where onboarding used to show Handy's mascot. */
+/** The app mark, as onboarding shows it. */
 export const Mascot: React.FC<MascotProps> = ({ size, animation = null }) => (
   <span
     key={animation ?? "still"}

@@ -13,7 +13,7 @@ import {
   type OSType,
 } from "@/lib/utils/keyboard";
 
-interface HandyKeysEvent {
+interface KeyRecorderEvent {
   modifiers: string[];
   key: string | null;
   is_key_down: boolean;
@@ -36,7 +36,7 @@ export const useShortcutCapture = (
 ) => {
   const { t } = useTranslation();
   const { getSetting, updateBinding } = useSettings();
-  const handyKeys =
+  const nativeKeys =
     !inert && getSetting("keyboard_implementation") === "handy_keys";
   const [capturing, setCapturing] = useState(false);
   const [partial, setPartial] = useState("");
@@ -44,11 +44,11 @@ export const useShortcutCapture = (
   onDoneRef.current = onDone;
 
   // What the capture holds in the backend, released on end or unmount.
-  const held = useRef<"handyKeys" | "bindings" | null>(null);
+  const held = useRef<"nativeKeys" | "bindings" | null>(null);
   const release = useCallback(async () => {
     const was = held.current;
     held.current = null;
-    if (was === "handyKeys")
+    if (was === "nativeKeys")
       await commands.stopHandyKeysRecording().catch(console.error);
     else if (was === "bindings")
       await commands.resumeAllBindings().catch(console.error);
@@ -85,7 +85,7 @@ export const useShortcutCapture = (
   /** Resolves to whether capture began. */
   const start = useCallback(async () => {
     if (held.current) return false;
-    if (handyKeys) {
+    if (nativeKeys) {
       // Refused while macOS Secure Input is on (no key events would arrive);
       // the backend also shows the warning banner the toast points at.
       const result = await commands
@@ -106,7 +106,7 @@ export const useShortcutCapture = (
         }
         return false;
       }
-      held.current = "handyKeys";
+      held.current = "nativeKeys";
     } else if (!inert) {
       await commands.suspendAllBindings().catch(console.error);
       held.current = "bindings";
@@ -114,7 +114,7 @@ export const useShortcutCapture = (
     setPartial("");
     setCapturing(true);
     return true;
-  }, [bindingId, handyKeys, inert, t]);
+  }, [bindingId, nativeKeys, inert, t]);
 
   const cancel = useCallback(() => {
     if (capturing) finish();
@@ -134,11 +134,11 @@ export const useShortcutCapture = (
 
   // handy-keys: the backend reports keys while recording.
   useEffect(() => {
-    if (!capturing || !handyKeys) return;
+    if (!capturing || !nativeKeys) return;
     let keyed = "";
     let modifierOnly = "";
     let stopped = false;
-    const pending = listen<HandyKeysEvent>("handy-keys-event", (event) => {
+    const pending = listen<KeyRecorderEvent>("handy-keys-event", (event) => {
       if (stopped) return;
       const { hotkey_string, is_key_down, key, modifiers } = event.payload;
       if (is_key_down && hotkey_string) {
@@ -163,11 +163,11 @@ export const useShortcutCapture = (
       stopped = true;
       pending.then((unlisten) => unlisten());
     };
-  }, [capturing, handyKeys, commit]);
+  }, [capturing, nativeKeys, commit]);
 
   // Tauri shortcuts: this window's own key events.
   useEffect(() => {
-    if (!capturing || handyKeys) return;
+    if (!capturing || nativeKeys) return;
     const pressed = new Set<string>();
     const recorded: string[] = [];
     const onDown = (e: KeyboardEvent) => {
@@ -193,7 +193,7 @@ export const useShortcutCapture = (
       window.removeEventListener("keydown", onDown);
       window.removeEventListener("keyup", onUp);
     };
-  }, [capturing, handyKeys, commit, escapeCancels, osType]);
+  }, [capturing, nativeKeys, commit, escapeCancels, osType]);
 
   return { capturing, partial, start, cancel };
 };

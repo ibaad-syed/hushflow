@@ -1,5 +1,5 @@
 /**
- * The CJK subset font, for Handy's own CJK strings only (language names,
+ * The CJK subset font, for Hushflow's own CJK strings only (language names,
  * Demo's lines): text outside the subset would mix fonts mid-line.
  */
 const CJK =

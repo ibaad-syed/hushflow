@@ -110,7 +110,7 @@ export const Permissions: React.FC<PermissionsProps> = ({
       : "onboarding.permissions.turnOnWindows",
   );
 
-  const relaunchHandy = async () => {
+  const relaunchApp = async () => {
     if (preview) return;
     set({ step: "permissions", welcomeBack: true });
     await relaunch();
@@ -207,7 +207,7 @@ export const Permissions: React.FC<PermissionsProps> = ({
         >
           <Trans
             i18nKey="onboarding.permissions.relaunch"
-            components={{ relaunch: <TextLink onClick={relaunchHandy} /> }}
+            components={{ relaunch: <TextLink onClick={relaunchApp} /> }}
           />
         </p>
       </ScreenMain>

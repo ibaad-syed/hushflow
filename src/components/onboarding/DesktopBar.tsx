@@ -21,7 +21,7 @@ const Tux = () => (
   </svg>
 );
 
-/** The drawn menu bar (macOS) or taskbar (Windows, Linux) holding Handy's icon. */
+/** The drawn menu bar (macOS) or taskbar (Windows, Linux) holding Hushflow's icon. */
 export const DesktopBar: React.FC<{
   os: OSType;
   size: "demo" | "try";
