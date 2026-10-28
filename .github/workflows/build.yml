@@ -247,6 +247,18 @@ jobs:
           echo "CERT_ID=$CERT_ID" >> $GITHUB_ENV
           echo "Certificate imported."
 
+      # Notarization rejects any unsigned Mach-O in the bundle, and Tauri only
+      # signs the app binary, so sign the bundled llama-server and its libraries.
+      - name: Sign bundled llama.cpp binaries
+        if: contains(inputs.platform, 'macos') && inputs.sign-binaries
+        run: |
+          for f in src-tauri/resources/llama/*; do
+            if file "$f" | grep -q Mach-O; then
+              codesign --force --options runtime --timestamp --keychain build.keychain --sign "$CERT_ID" "$f"
+            fi
+          done
+          codesign --verify --strict src-tauri/resources/llama/llama-server
+
       - name: Patch asset name pattern
         id: patch-release-name
         shell: bash

@@ -58,7 +58,8 @@ jobs:
       platform: ${{ matrix.platform }}
       target: ${{ matrix.target }}
       build-args: ${{ matrix.args }}
-      sign-binaries: false
+      # Mac only: Windows has no signing certificate yet.
+      sign-binaries: ${{ contains(matrix.platform, 'macos') }}
       asset-prefix: "hushflow"
       upload-artifacts: false
       release-id: ${{ needs.create-release.outputs.release-id }}

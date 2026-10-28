@@ -41,5 +41,6 @@ jobs:
       target: ${{ matrix.target }}
       build-args: ${{ matrix.args }}
       upload-artifacts: true
-      sign-binaries: false
+      # Mac only: Windows has no signing certificate yet.
+      sign-binaries: ${{ contains(matrix.platform, 'macos') }}
     secrets: inherit
