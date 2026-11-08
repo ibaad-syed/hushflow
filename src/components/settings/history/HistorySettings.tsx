@@ -63,6 +63,12 @@ const PAGE_SIZE = 30;
 // Long text folds to this many lines until "Show more".
 const FOLDED_LINES = 4;
 
+/** What was pasted: the cleaned text when cleanup ran, else the transcript. */
+const pastedText = (entry: HistoryEntry) =>
+  entry.post_processed_text?.trim()
+    ? entry.post_processed_text
+    : entry.transcription_text;
+
 interface HeaderButtonProps {
   onClick: () => void;
   label: string;
@@ -289,7 +295,7 @@ export const HistorySettings: React.FC = () => {
                 entry={entry}
                 job={jobs[entry.id]}
                 onToggleSaved={() => toggleSaved(entry.id)}
-                onCopyText={() => copyToClipboard(entry.transcription_text)}
+                onCopyText={() => copyToClipboard(pastedText(entry))}
                 getAudioUrl={getAudioUrl}
                 deleteAudio={deleteAudioEntry}
                 retryTranscription={commands.retryHistoryEntryTranscription}
@@ -368,7 +374,8 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
   useEffect(() => {
     if (!retrying) setCancelling(false);
   }, [retrying]);
-  const hasTranscription = entry.transcription_text.trim().length > 0;
+  const text = pastedText(entry);
+  const hasTranscription = text.trim().length > 0;
   const folded = hasTranscription && !retrying && !expanded;
 
   // Offer "Show more" only when the folded text is actually cut off.
@@ -380,7 +387,7 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
     const observer = new ResizeObserver(measure);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [folded, entry.transcription_text]);
+  }, [folded, text]);
 
   const handleLoadAudio = useCallback(
     () => getAudioUrl(entry.file_name),
@@ -526,7 +533,7 @@ const HistoryEntryComponent: React.FC<HistoryEntryProps> = ({
           {retrying
             ? progressText
             : hasTranscription
-              ? entry.transcription_text
+              ? text
               : entry.source_name
                 ? // Cancelled, interrupted by a quit, or failed.
                   t("settings.history.notTranscribed")
