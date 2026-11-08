@@ -7,7 +7,8 @@
     "model": "モデル",
     "quit": "終了",
     "cancel": "キャンセル",
-    "secureInputWarning": "⚠ Secure Input でショートカットがブロック中"
+    "secureInputWarning": "⚠ Secure Input でショートカットがブロック中",
+    "installUpdate": "アップデート v{{version}} をインストール..."
   },
   "sidebar": {
     "general": "一般",
@@ -882,6 +883,12 @@
       "version": {
         "title": "バージョン",
         "description": "Hushflow の現在のバージョン"
+      },
+      "updates": {
+        "title": "アップデート",
+        "description": "Hushflow は数時間ごとに新しいバージョンを確認します。",
+        "checkNow": "今すぐ確認",
+        "install": "v{{version}} をインストール"
       },
       "whatsNewUpdates": {
         "label": "新機能を表示",

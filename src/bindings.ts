@@ -543,6 +543,12 @@ async runKeyboardDiagnostic(durationSecs: number | null) : Promise<Result<Keyboa
     else return { status: "error", error: e  as any };
 }
 },
+/**
+ * The update check's result, so the tray can offer the new version.
+ */
+async setAvailableUpdate(version: string | null) : Promise<void> {
+    await TAURI_INVOKE("set_available_update", { version });
+},
 async triggerUpdateCheck() : Promise<Result<null, string>> {
     try {
     return { status: "ok", data: await TAURI_INVOKE("trigger_update_check") };

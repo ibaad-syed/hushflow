@@ -7,7 +7,8 @@
     "model": "模型",
     "quit": "退出",
     "cancel": "取消",
-    "secureInputWarning": "⚠ 快捷键被 Secure Input 阻止"
+    "secureInputWarning": "⚠ 快捷键被 Secure Input 阻止",
+    "installUpdate": "安装更新 v{{version}}..."
   },
   "sidebar": {
     "general": "通用",
@@ -882,6 +883,12 @@
       "version": {
         "title": "版本",
         "description": "Hushflow 的当前版本"
+      },
+      "updates": {
+        "title": "更新",
+        "description": "Hushflow 每隔几小时检查一次新版本。",
+        "checkNow": "立即检查",
+        "install": "安装 v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "显示新功能",

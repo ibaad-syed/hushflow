@@ -7,7 +7,8 @@
     "model": "मोडेल",
     "quit": "बाहिर निस्कनुहोस्",
     "cancel": "रद्द गर्नुहोस्",
-    "secureInputWarning": "⚠ Secure Input ले सर्टकटहरू रोकेको छ"
+    "secureInputWarning": "⚠ Secure Input ले सर्टकटहरू रोकेको छ",
+    "installUpdate": "अपडेट v{{version}} स्थापना गर्नुहोस्..."
   },
   "sidebar": {
     "general": "सामान्य",
@@ -882,6 +883,12 @@
       "version": {
         "title": "संस्करण",
         "description": "Hushflow को हालको संस्करण"
+      },
+      "updates": {
+        "title": "अपडेटहरू",
+        "description": "Hushflow ले प्रत्येक केही घण्टामा नयाँ संस्करण जाँच गर्छ।",
+        "checkNow": "अहिले जाँच्नुहोस्",
+        "install": "v{{version}} स्थापना गर्नुहोस्"
       },
       "whatsNewUpdates": {
         "label": "नयाँ के छ देखाउनुहोस्",

@@ -7,7 +7,8 @@
     "model": "النموذج",
     "quit": "إنهاء",
     "cancel": "إلغاء",
-    "secureInputWarning": "⚠ الاختصارات محجوبة بواسطة Secure Input"
+    "secureInputWarning": "⚠ الاختصارات محجوبة بواسطة Secure Input",
+    "installUpdate": "تثبيت التحديث v{{version}}..."
   },
   "sidebar": {
     "general": "عام",
@@ -882,6 +883,12 @@
       "version": {
         "title": "الإصدار",
         "description": "الإصدار الحالي من Hushflow"
+      },
+      "updates": {
+        "title": "التحديثات",
+        "description": "يتحقق Hushflow من وجود إصدارات جديدة كل بضع ساعات.",
+        "checkNow": "تحقق الآن",
+        "install": "تثبيت v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "إظهار الجديد",

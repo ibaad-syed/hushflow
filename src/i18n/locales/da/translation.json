@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Afslut",
     "cancel": "Annuller",
-    "secureInputWarning": "⚠ Genveje blokeret af Secure Input"
+    "secureInputWarning": "⚠ Genveje blokeret af Secure Input",
+    "installUpdate": "Installer opdatering v{{version}}..."
   },
   "sidebar": {
     "general": "Generelt",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Version",
         "description": "Nuværende version af Hushflow"
+      },
+      "updates": {
+        "title": "Opdateringer",
+        "description": "Hushflow søger efter nye versioner med få timers mellemrum.",
+        "checkNow": "Søg nu",
+        "install": "Installer v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Vis nyheder",

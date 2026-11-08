@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Zamknij",
     "cancel": "Anuluj",
-    "secureInputWarning": "⚠ Skróty zablokowane przez Secure Input"
+    "secureInputWarning": "⚠ Skróty zablokowane przez Secure Input",
+    "installUpdate": "Zainstaluj aktualizację v{{version}}..."
   },
   "sidebar": {
     "general": "Ogólne",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Wersja",
         "description": "Aktualna wersja Hushflow"
+      },
+      "updates": {
+        "title": "Aktualizacje",
+        "description": "Hushflow sprawdza dostępność nowych wersji co kilka godzin.",
+        "checkNow": "Sprawdź teraz",
+        "install": "Zainstaluj v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Pokaż nowości",

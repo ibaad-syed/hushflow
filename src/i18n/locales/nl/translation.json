@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Afsluiten",
     "cancel": "Annuleren",
-    "secureInputWarning": "⚠ Sneltoetsen geblokkeerd door Secure Input"
+    "secureInputWarning": "⚠ Sneltoetsen geblokkeerd door Secure Input",
+    "installUpdate": "Update v{{version}} installeren..."
   },
   "sidebar": {
     "general": "Algemeen",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Versie",
         "description": "Huidige versie van Hushflow"
+      },
+      "updates": {
+        "title": "Updates",
+        "description": "Hushflow zoekt om de paar uur naar nieuwe versies.",
+        "checkNow": "Nu zoeken",
+        "install": "v{{version}} installeren"
       },
       "whatsNewUpdates": {
         "label": "Toon 'Wat is er nieuw'",

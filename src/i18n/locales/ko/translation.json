@@ -7,7 +7,8 @@
     "model": "모델",
     "quit": "종료",
     "cancel": "취소",
-    "secureInputWarning": "⚠ Secure Input으로 단축키가 차단됨"
+    "secureInputWarning": "⚠ Secure Input으로 단축키가 차단됨",
+    "installUpdate": "업데이트 v{{version}} 설치..."
   },
   "sidebar": {
     "general": "일반",
@@ -882,6 +883,12 @@
       "version": {
         "title": "버전",
         "description": "Hushflow의 현재 버전"
+      },
+      "updates": {
+        "title": "업데이트",
+        "description": "Hushflow는 몇 시간마다 새 버전을 확인합니다.",
+        "checkNow": "지금 확인",
+        "install": "v{{version}} 설치"
       },
       "whatsNewUpdates": {
         "label": "새 소식 표시",

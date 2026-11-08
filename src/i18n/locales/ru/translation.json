@@ -7,7 +7,8 @@
     "model": "Модель",
     "quit": "Выход",
     "cancel": "Отмена",
-    "secureInputWarning": "⚠ Сочетания клавиш заблокированы Secure Input"
+    "secureInputWarning": "⚠ Сочетания клавиш заблокированы Secure Input",
+    "installUpdate": "Установить обновление v{{version}}..."
   },
   "sidebar": {
     "general": "Общие",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Версия",
         "description": "Текущая версия Hushflow"
+      },
+      "updates": {
+        "title": "Обновления",
+        "description": "Hushflow проверяет наличие новых версий каждые несколько часов.",
+        "checkNow": "Проверить сейчас",
+        "install": "Установить v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Показывать новинки",

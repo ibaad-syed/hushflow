@@ -323,6 +323,10 @@ fn initialize_core_logic(app_handle: &AppHandle) {
                     let _ = app.emit("check-for-updates", ());
                 }
             }
+            "install_update" => {
+                show_main_window(app);
+                let _ = app.emit("install-update", ());
+            }
             "copy_last_transcript" => {
                 tray::copy_last_transcript(app);
             }
@@ -394,6 +398,13 @@ fn initialize_core_logic(app_handle: &AppHandle) {
 
     // Create the recording overlay window (hidden by default)
     utils::create_recording_overlay(app_handle);
+}
+
+/// The update check's result, so the tray can offer the new version.
+#[tauri::command]
+#[specta::specta]
+fn set_available_update(app: AppHandle, version: Option<String>) {
+    tray::set_available_update(&app, version);
 }
 
 #[tauri::command]
@@ -747,6 +758,7 @@ pub fn run(cli_args: CliArgs) {
             shortcut::handy_keys::stop_handy_keys_recording,
             secure_input::get_secure_input_status,
             secure_input::run_keyboard_diagnostic,
+            set_available_update,
             trigger_update_check,
             show_main_window_command,
             commands::cancel_operation,

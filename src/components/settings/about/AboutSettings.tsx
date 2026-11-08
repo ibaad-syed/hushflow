@@ -10,6 +10,53 @@ import { AppLanguageSelector } from "../AppLanguageSelector";
 import { ShowWhatsNewOnUpdate } from "../ShowWhatsNewOnUpdate";
 import { ThemeSelector } from "../ThemeSelector";
 import { LogDirectory } from "../debug";
+import { useUpdateStore } from "@/stores/updateStore";
+import {
+  useUpdateChecksEnabled,
+  useUpdateStatusText,
+} from "../../update-checker/UpdateChecker";
+
+/** Check for a new version now, or install the one found. */
+const Updates: React.FC = () => {
+  const { t } = useTranslation();
+  const { enabled } = useUpdateChecksEnabled();
+  const { checking, installing, availableVersion, check, install } =
+    useUpdateStore();
+  const status = useUpdateStatusText();
+  if (!enabled) return null;
+  return (
+    <SettingContainer
+      title={t("settings.about.updates.title")}
+      description={t("settings.about.updates.description")}
+      grouped={true}
+    >
+      <div className="flex items-center gap-3">
+        {status && <span className="text-sm text-ink-2">{status}</span>}
+        {availableVersion ? (
+          <Button
+            variant="primary"
+            size="md"
+            disabled={installing}
+            onClick={install}
+          >
+            {t("settings.about.updates.install", {
+              version: availableVersion,
+            })}
+          </Button>
+        ) : (
+          <Button
+            variant="secondary"
+            size="md"
+            disabled={checking}
+            onClick={() => check(true)}
+          >
+            {t("settings.about.updates.checkNow")}
+          </Button>
+        )}
+      </div>
+    </SettingContainer>
+  );
+};
 
 export const AboutSettings: React.FC = () => {
   const { t } = useTranslation();
@@ -42,6 +89,8 @@ export const AboutSettings: React.FC = () => {
           {/* eslint-disable-next-line i18next/no-literal-string */}
           <span className="text-sm font-mono">v{version}</span>
         </SettingContainer>
+
+        <Updates />
 
         <ShowWhatsNewOnUpdate descriptionMode="tooltip" grouped={true} />
 

@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Quit",
     "cancel": "Cancel",
-    "secureInputWarning": "⚠ Shortcuts blocked by Secure Input"
+    "secureInputWarning": "⚠ Shortcuts blocked by Secure Input",
+    "installUpdate": "Install Update v{{version}}..."
   },
   "sidebar": {
     "general": "General",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Version",
         "description": "Current version of Hushflow"
+      },
+      "updates": {
+        "title": "Updates",
+        "description": "Hushflow checks for new versions every few hours.",
+        "checkNow": "Check Now",
+        "install": "Install v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Show What's New",

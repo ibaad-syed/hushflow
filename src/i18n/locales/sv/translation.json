@@ -7,7 +7,8 @@
     "model": "Modell",
     "quit": "Avsluta",
     "cancel": "Avbryt",
-    "secureInputWarning": "⚠ Kortkommandon blockeras av Secure Input"
+    "secureInputWarning": "⚠ Kortkommandon blockeras av Secure Input",
+    "installUpdate": "Installera uppdatering v{{version}}..."
   },
   "sidebar": {
     "general": "Allmänt",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Version",
         "description": "Nuvarande version av Hushflow"
+      },
+      "updates": {
+        "title": "Uppdateringar",
+        "description": "Hushflow söker efter nya versioner med några timmars mellanrum.",
+        "checkNow": "Sök nu",
+        "install": "Installera v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Visa nyheter",

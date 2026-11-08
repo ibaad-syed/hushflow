@@ -7,7 +7,8 @@
     "model": "Modello",
     "quit": "Esci",
     "cancel": "Annulla",
-    "secureInputWarning": "⚠ Scorciatoie bloccate da Secure Input"
+    "secureInputWarning": "⚠ Scorciatoie bloccate da Secure Input",
+    "installUpdate": "Installa aggiornamento v{{version}}..."
   },
   "sidebar": {
     "general": "Generale",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Versione",
         "description": "Versione attuale di Hushflow"
+      },
+      "updates": {
+        "title": "Aggiornamenti",
+        "description": "Hushflow cerca nuove versioni ogni poche ore.",
+        "checkNow": "Controlla ora",
+        "install": "Installa v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Mostra novità",

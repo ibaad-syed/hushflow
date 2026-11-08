@@ -7,7 +7,8 @@
     "model": "Модель",
     "quit": "Вийти",
     "cancel": "Скасувати",
-    "secureInputWarning": "⚠ Комбінації клавіш заблоковано Secure Input"
+    "secureInputWarning": "⚠ Комбінації клавіш заблоковано Secure Input",
+    "installUpdate": "Встановити оновлення v{{version}}..."
   },
   "sidebar": {
     "general": "Загальні",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Версія",
         "description": "Поточна версія Hushflow"
+      },
+      "updates": {
+        "title": "Оновлення",
+        "description": "Hushflow перевіряє наявність нових версій кожні кілька годин.",
+        "checkNow": "Перевірити зараз",
+        "install": "Встановити v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Показувати новини",

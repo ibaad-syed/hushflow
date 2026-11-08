@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Ukončit",
     "cancel": "Zrušit",
-    "secureInputWarning": "⚠ Zkratky blokuje Secure Input"
+    "secureInputWarning": "⚠ Zkratky blokuje Secure Input",
+    "installUpdate": "Nainstalovat aktualizaci v{{version}}..."
   },
   "sidebar": {
     "general": "Obecné",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Verze",
         "description": "Aktuální verze Hushflow"
+      },
+      "updates": {
+        "title": "Aktualizace",
+        "description": "Hushflow kontroluje nové verze každých několik hodin.",
+        "checkNow": "Zkontrolovat nyní",
+        "install": "Nainstalovat v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Zobrazovat novinky",

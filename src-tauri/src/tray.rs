@@ -66,6 +66,8 @@ struct MenuInputs {
     downloaded_models: Vec<(String, String)>,
     locale: String,
     update_checks_enabled: bool,
+    /// A newer release the app found, offered in place of "Check for Updates".
+    update_version: Option<String>,
 }
 
 /// Complete description of what the tray should look like.
@@ -235,6 +237,21 @@ pub fn refresh_tray_icon(app: &AppHandle) {
     sync_tray(app);
 }
 
+/// The newer release the settings window's update check found, if any.
+static AVAILABLE_UPDATE: Mutex<Option<String>> = Mutex::new(None);
+
+/// Records the release the update check found (or that there is none) so the
+/// menu offers to install it.
+pub fn set_available_update(app: &AppHandle, version: Option<String>) {
+    if let Ok(mut current) = AVAILABLE_UPDATE.lock() {
+        if *current == version {
+            return;
+        }
+        *current = version;
+    }
+    update_tray_menu(app);
+}
+
 /// Re-syncs the tray after something the menu depends on changed (model
 /// list/selection/loaded state, language, settings).
 pub fn update_tray_menu(app: &AppHandle) {
@@ -347,6 +364,7 @@ fn compute_desired(app: &AppHandle, icon_state: TrayIconState) -> TrayDesired {
             downloaded_models,
             locale: settings.app_language,
             update_checks_enabled: settings.update_checks_enabled,
+            update_version: AVAILABLE_UPDATE.lock().ok().and_then(|v| v.clone()),
         },
     }
 }
@@ -508,13 +526,22 @@ fn build_menu(app: &AppHandle, inputs: &MenuInputs) -> tauri::Result<(Menu<tauri
         true,
         settings_accelerator,
     )?;
-    let check_updates_i = MenuItem::with_id(
-        app,
-        "check_updates",
-        &strings.check_updates,
-        inputs.update_checks_enabled,
-        None::<&str>,
-    )?;
+    let check_updates_i = match inputs.update_version.as_deref() {
+        Some(version) if inputs.update_checks_enabled => MenuItem::with_id(
+            app,
+            "install_update",
+            strings.install_update.replace("{{version}}", version),
+            true,
+            None::<&str>,
+        )?,
+        _ => MenuItem::with_id(
+            app,
+            "check_updates",
+            &strings.check_updates,
+            inputs.update_checks_enabled,
+            None::<&str>,
+        )?,
+    };
     let copy_last_transcript_i = MenuItem::with_id(
         app,
         "copy_last_transcript",
@@ -710,6 +737,7 @@ mod tests {
             downloaded_models: vec![("small".to_string(), "Small".to_string())],
             locale: "en".to_string(),
             update_checks_enabled: true,
+            update_version: None,
         }
     }
 

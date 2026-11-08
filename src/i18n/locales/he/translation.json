@@ -7,7 +7,8 @@
     "model": "מודל",
     "quit": "יציאה",
     "cancel": "ביטול",
-    "secureInputWarning": "⚠ קיצורי המקשים חסומים על ידי Secure Input"
+    "secureInputWarning": "⚠ קיצורי המקשים חסומים על ידי Secure Input",
+    "installUpdate": "התקנת עדכון v{{version}}..."
   },
   "sidebar": {
     "general": "כללי",
@@ -882,6 +883,12 @@
       "version": {
         "title": "גרסה",
         "description": "הגרסה הנוכחית של Hushflow"
+      },
+      "updates": {
+        "title": "עדכונים",
+        "description": "Hushflow בודק אם יש גרסאות חדשות כל כמה שעות.",
+        "checkNow": "בדיקה עכשיו",
+        "install": "התקנת v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "הצג מה חדש",

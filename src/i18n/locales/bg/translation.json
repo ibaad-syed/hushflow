@@ -7,7 +7,8 @@
     "model": "Модел",
     "quit": "Изход",
     "cancel": "Отказ",
-    "secureInputWarning": "⚠ Бързите клавиши са блокирани от Secure Input"
+    "secureInputWarning": "⚠ Бързите клавиши са блокирани от Secure Input",
+    "installUpdate": "Инсталиране на актуализация v{{version}}..."
   },
   "sidebar": {
     "general": "Общи",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Версия",
         "description": "Текуща версия на Hushflow"
+      },
+      "updates": {
+        "title": "Актуализации",
+        "description": "Hushflow проверява за нови версии на всеки няколко часа.",
+        "checkNow": "Провери сега",
+        "install": "Инсталирай v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Показвай новостите",

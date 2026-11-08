@@ -7,7 +7,8 @@
     "model": "Modelo",
     "quit": "Salir",
     "cancel": "Cancelar",
-    "secureInputWarning": "⚠ Atajos bloqueados por Secure Input"
+    "secureInputWarning": "⚠ Atajos bloqueados por Secure Input",
+    "installUpdate": "Instalar actualización v{{version}}..."
   },
   "sidebar": {
     "general": "General",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Versión",
         "description": "Versión actual de Hushflow"
+      },
+      "updates": {
+        "title": "Actualizaciones",
+        "description": "Hushflow busca nuevas versiones cada pocas horas.",
+        "checkNow": "Buscar ahora",
+        "install": "Instalar v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Mostrar novedades",

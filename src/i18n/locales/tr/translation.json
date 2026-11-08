@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Çıkış",
     "cancel": "İptal",
-    "secureInputWarning": "⚠ Kısayollar Secure Input tarafından engelleniyor"
+    "secureInputWarning": "⚠ Kısayollar Secure Input tarafından engelleniyor",
+    "installUpdate": "v{{version}} Güncellemesini Yükle..."
   },
   "sidebar": {
     "general": "Genel",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Sürüm",
         "description": "Hushflow'nin mevcut sürümü"
+      },
+      "updates": {
+        "title": "Güncellemeler",
+        "description": "Hushflow birkaç saatte bir yeni sürümleri denetler.",
+        "checkNow": "Şimdi Denetle",
+        "install": "v{{version}} Sürümünü Yükle"
       },
       "whatsNewUpdates": {
         "label": "Yenilikleri Göster",

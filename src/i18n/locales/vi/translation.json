@@ -7,7 +7,8 @@
     "model": "Mô hình",
     "quit": "Thoát",
     "cancel": "Hủy",
-    "secureInputWarning": "⚠ Phím tắt bị Secure Input chặn"
+    "secureInputWarning": "⚠ Phím tắt bị Secure Input chặn",
+    "installUpdate": "Cài đặt bản cập nhật v{{version}}..."
   },
   "sidebar": {
     "general": "Chung",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Phiên bản",
         "description": "Phiên bản hiện tại của Hushflow"
+      },
+      "updates": {
+        "title": "Cập nhật",
+        "description": "Hushflow kiểm tra phiên bản mới vài giờ một lần.",
+        "checkNow": "Kiểm tra ngay",
+        "install": "Cài đặt v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Hiển thị điểm mới",

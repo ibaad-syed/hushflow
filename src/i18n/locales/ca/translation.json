@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Surt",
     "cancel": "Cancel·la",
-    "secureInputWarning": "⚠ Dreceres blocades per l'entrada segura"
+    "secureInputWarning": "⚠ Dreceres blocades per l'entrada segura",
+    "installUpdate": "Instal·la l'actualització v{{version}}..."
   },
   "sidebar": {
     "general": "General",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Versió",
         "description": "Versió actual del Hushflow"
+      },
+      "updates": {
+        "title": "Actualitzacions",
+        "description": "Hushflow cerca versions noves cada poques hores.",
+        "checkNow": "Comprova-ho ara",
+        "install": "Instal·la la v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Mostra les novetats",

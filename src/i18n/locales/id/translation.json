@@ -7,7 +7,8 @@
     "model": "Model",
     "quit": "Keluar",
     "cancel": "Batal",
-    "secureInputWarning": "⚠ Pintasan diblokir oleh Secure Input"
+    "secureInputWarning": "⚠ Pintasan diblokir oleh Secure Input",
+    "installUpdate": "Instal Pembaruan v{{version}}..."
   },
   "sidebar": {
     "general": "Umum",
@@ -882,6 +883,12 @@
       "version": {
         "title": "Versi",
         "description": "Versi Hushflow saat ini"
+      },
+      "updates": {
+        "title": "Pembaruan",
+        "description": "Hushflow memeriksa versi baru setiap beberapa jam.",
+        "checkNow": "Periksa Sekarang",
+        "install": "Instal v{{version}}"
       },
       "whatsNewUpdates": {
         "label": "Tampilkan Yang Baru",
