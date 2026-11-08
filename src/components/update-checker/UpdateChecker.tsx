@@ -13,6 +13,10 @@ import {
   PORTABLE_RELEASES_URL,
 } from "./portableInstaller";
 
+/** How often a running app looks for a new release, besides at launch. It
+ *  lives in the tray for days, so launch alone would miss releases. */
+const CHECK_INTERVAL_MS = 4 * 60 * 60 * 1000;
+
 interface UpdateCheckerProps {
   className?: string;
 }
@@ -62,6 +66,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     }
 
     checkForUpdates();
+    const interval = setInterval(checkForUpdates, CHECK_INTERVAL_MS);
 
     // Listen for update check events
     const updateUnlisten = listen("check-for-updates", () => {
@@ -69,6 +74,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     });
 
     return () => {
+      clearInterval(interval);
       if (upToDateTimeoutRef.current) {
         clearTimeout(upToDateTimeoutRef.current);
       }
