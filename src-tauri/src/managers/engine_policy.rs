@@ -1,10 +1,10 @@
 //! Automatic transcription-engine selection.
 //!
-//! In [`TranscriptionEngineMode::Automatic`], a new user can dictate at once on
-//! the OS's built-in engine (Apple's SpeechAnalyzer on macOS 26+) while the
-//! default Parakeet model downloads in the background; once it is on disk and
-//! the user isn't mid-dictation, the app switches to it. Without a built-in
-//! engine the download is the only way in, and the switch happens the same way.
+//! In [`TranscriptionEngineMode::Automatic`], a new user dictates on the OS's
+//! built-in engine (Apple's SpeechAnalyzer on macOS 26+) with nothing to
+//! download. Without a built-in engine the default Parakeet model downloads and
+//! is selected once it is on disk. A default model already on disk is
+//! preferred either way.
 
 use crate::catalog;
 use crate::commands::models::switch_active_model;
@@ -24,11 +24,6 @@ use tauri::{AppHandle, Manager};
 pub enum Plan {
     /// Use this model now.
     Select(&'static str),
-    /// Use the built-in engine now and fetch the default model to switch to.
-    SelectAndUpgrade {
-        now: &'static str,
-        later: &'static str,
-    },
     /// Nothing usable yet: fetch the default model, then select it.
     DownloadThenSelect(&'static str),
     /// Already on the best available engine.
@@ -48,10 +43,11 @@ pub fn plan(
             Plan::Select(default_model)
         };
     }
-    if system_available && selected != APPLE_SPEECH_MODEL_ID {
-        return Plan::SelectAndUpgrade {
-            now: APPLE_SPEECH_MODEL_ID,
-            later: default_model,
+    if system_available {
+        return if selected == APPLE_SPEECH_MODEL_ID {
+            Plan::Stay
+        } else {
+            Plan::Select(APPLE_SPEECH_MODEL_ID)
         };
     }
     Plan::DownloadThenSelect(default_model)
@@ -97,10 +93,6 @@ fn run(app: &AppHandle) {
     match step {
         Plan::Stay => {}
         Plan::Select(model) => select_when_idle(app, model),
-        Plan::SelectAndUpgrade { now, later } => {
-            select_when_idle(app, now);
-            download_then_select(app, later);
-        }
         Plan::DownloadThenSelect(model) => download_then_select(app, model),
     }
 }
@@ -158,21 +150,14 @@ mod tests {
     const PARAKEET: &str = "handy-computer/parakeet-unified-en-0.6b-gguf/x.gguf";
 
     #[test]
-    fn new_mac_starts_on_apple_and_upgrades() {
+    fn new_mac_uses_apple_without_a_download() {
         assert_eq!(
             plan(PARAKEET, false, true, ""),
-            Plan::SelectAndUpgrade {
-                now: APPLE_SPEECH_MODEL_ID,
-                later: PARAKEET
-            }
+            Plan::Select(APPLE_SPEECH_MODEL_ID)
         );
-    }
-
-    #[test]
-    fn already_on_apple_only_downloads() {
         assert_eq!(
             plan(PARAKEET, false, true, APPLE_SPEECH_MODEL_ID),
-            Plan::DownloadThenSelect(PARAKEET)
+            Plan::Stay
         );
     }
 

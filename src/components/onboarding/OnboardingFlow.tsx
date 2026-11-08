@@ -128,13 +128,16 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
   if (!permissions.checked) return null;
 
   // Automatic mode already put a built-in engine in use (Apple's, on macOS
-  // 26+) while the recommended model downloads behind it: nothing to pick
-  // or wait for. Picking a model anyway (Try it's "change") still works.
+  // 26+) that speaks the user's languages: nothing to download, pick or wait
+  // for. Picking a model anyway (Try it's "change") still works.
   const builtIn = modelInfos.find(
     (m) =>
       m.source === "System" &&
       m.id === settings?.selected_model &&
-      settings?.transcription_engine_mode === "automatic",
+      settings?.transcription_engine_mode === "automatic" &&
+      store.languages.every((l) =>
+        m.supported_languages.includes(l.split("-")[0]),
+      ),
   );
   const skipModel = !preview && !!builtIn && !store.downloadId;
   const steps = STEP_ORDER.filter(
